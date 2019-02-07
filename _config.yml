@@ -19,6 +19,8 @@ linkedin_username: paulushc
 youtube_username: paulushc
 
 # Build settings
+excerpt_separator: <!--more-->
+show_excerpts: true
 markdown: kramdown
 theme: minima
 plugins:

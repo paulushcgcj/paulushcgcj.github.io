@@ -2,7 +2,8 @@
 layout: post
 title:  "Um Novo Começo!"
 date:   2019-02-01 09:08:09 -0200
-categories: blog personal
+categories: [blog, personal]
+excerpt_separator: <!--more-->
 author: paulushc
 ---
 ![Cruz Family Logo](/assets/2019-02-01-a-new-start-cruzlogo.png)
@@ -10,6 +11,8 @@ author: paulushc
 **Bom dia bom dia bom dia.**
 
 Este é um novo começo pra esse blog. Ele vai servir como ponto inicial nessa nova jornada na nossa vida, e digo nossa pois minha esposa e eu vamos tentar atualizar esse espaço sempre que possivel. Varias coisas vão começar a mudar a partir desta `data`, então marquem em seus calendarios.
+
+<!--more-->
 
 Outro ponto a ser discutido, vocês vão reparar (e eu espero que sim) que o icone do blog é um lobo, e isso é algo interessante. Recentemente estavamos discutindo sobre um simbolo pra nossa familia, algo que represente a familia **Cruz** como unica e mostre como somos, e então após algumas pesquisas, encontramos o lobo como um excelente representante. Encontramos um site com alguns significados e um deles realmente se encaixou com o que esperavamos, e foi com o seguinte texto que realmente compramos a ideia do lobo:
 
