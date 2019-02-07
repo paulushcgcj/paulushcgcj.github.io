@@ -14,11 +14,15 @@ description: >-
   Paulo Gomes, desenvolvedor, gamer, pai.
 baseurl: "" 
 url: "https://paulushcgcj.github.io/" 
-twitter_username: pauloeada
 github_username:  paulushcgcj
+linkedin_username: paulushc
+youtube_username: paulushc
 
 # Build settings
 markdown: kramdown
 theme: minima
 plugins:
-  - jekyll-feed
+  - jekyll-feed  
+  - jekyll-gist
+  - jekyll-seo-tag
+  - jekyll-sitemap

@@ -3,6 +3,7 @@ layout: post
 title:  "Um Novo Começo!"
 date:   2019-02-01 09:08:09 -0200
 categories: blog personal
+author: paulushc
 ---
 
 Bom dia bom dia bom dia.
