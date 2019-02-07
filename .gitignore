@@ -1,9 +1,12 @@
-_site
-.sass-cache
+
+# Created by https://www.gitignore.io/api/sas,ruby,jekyll
+# Edit at https://www.gitignore.io/?templates=sas,ruby,jekyll
+
+### Jekyll ###
+_site/
+.sass-cache/
+.jekyll-cache/
 .jekyll-metadata
-
-
-# Created by https://www.gitignore.io/api/sass,ruby
 
 ### Ruby ###
 *.gem
@@ -57,8 +60,22 @@ build-iPhoneSimulator/
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
 
-### Sass ###
-.sass-cache/
-*.css.map
+### SAS ###
+# Binary data formats
+*.sas7baud
+*.sas7bdat
+*.sas7bvew
+*.sas7bndx
+*.sas7bcat
+*.sas7bacs
+*.sas7bfdb
+*.sas7bmdb
+*.sas7bdmd
+*.sas7bitm
+*.sas7butl
+*.sas7bput
+*.sas7bbak
 
-# End of https://www.gitignore.io/api/sass,ruby
+# End of https://www.gitignore.io/api/sas,ruby,jekyll
+
+start.sh
