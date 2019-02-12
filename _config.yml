@@ -22,7 +22,7 @@ youtube_username: paulushc
 excerpt_separator: <!--more-->
 show_excerpts: true
 markdown: kramdown
-theme: minima
+theme: jekyll-theme-architect
 plugins:
   - jekyll-feed  
   - jekyll-gist
