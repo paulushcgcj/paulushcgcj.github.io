@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.6.3"
-gem "minima", "~> 2.0"
+gem "jekyll", "~> 3.9.0"
+gem "minima", "~> 2.5", ">= 2.5.0"
 #gem "github-pages", group: :jekyll_plugins
 
 # Some other themes
@@ -15,7 +15,7 @@ gem 'jekyll-sitemap' # https://github.com/jekyll/jekyll-sitemap
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  gem "jekyll-feed", "~> 0.6"
+  gem "jekyll-feed", "~> 0.11", ">= 0.11.0"
 end
 
 # https://github.com/KrzysiekJ/jekyll-i18n_tags
