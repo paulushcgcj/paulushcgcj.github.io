@@ -45,6 +45,8 @@ analytics:
   google:
     tracking_id: G-18H5PNLF34
     anonymize_ip: true
+  clarity:
+    tracking_id: ltlz8ufv2v
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 defaults:  
   - scope:
