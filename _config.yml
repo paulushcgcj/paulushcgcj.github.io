@@ -48,6 +48,12 @@ analytics:
   clarity:
     tracking_id: ltlz8ufv2v
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
 defaults:  
   - scope:
       path: ""

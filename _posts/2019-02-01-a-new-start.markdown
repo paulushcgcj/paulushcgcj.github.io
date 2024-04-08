@@ -5,11 +5,11 @@ categories: [blog, personal]
 author: paulushc
 permalink: /blog/a-fresh-start
 header:
+    teaser: /assets/2019-02-01-a-new-start-cruzlogo.png
     overlay_image: /assets/2019-02-01-a-new-start-cruzlogo.png
     overlay_filter: 0.5
     show_overlay_excerpt: false
 ---
-
 **Top of the morning for you**
 
 This is a new beginning for this blog. It will serve as a starting point on this new journey in our lives, and I say wow because my wife and I will try to update this space whenever possible. Several things will start to change from this `date`, so mark your calendars.

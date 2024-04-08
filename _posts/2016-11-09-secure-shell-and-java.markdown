@@ -4,13 +4,19 @@ date:   2016-11-09 15:00:00 -0300
 categories: [article, tech, java, ssh]
 author: paulushc
 permalink: /articles/secure-shell-and-java
+header:
+    teaser: /assets/2016-11-09-secure-shell-and-java-cover.jpeg
+    overlay_image: /assets/2016-11-09-secure-shell-and-java-cover.jpeg
+    overlay_filter: 0.5
+    show_overlay_excerpt: false
 ---
-![Secure Shell and Java](/assets/2016-11-09-secure-shell-and-java-cover.jpeg)
 Some time ago, I was debating with some friends about writing an article for the comunity,but I never thought on what is be interesting, so I decided to write about a subject that we use a lot at my company, but using Java code, Secure Shell, or SSH.
+
+<!--more-->
 
 Secure Shell (SSH) is a criptografic network protocol, used in network service operations on a secure way over an unsecure network. It’s kind of a tunnel that you and the remote server (don’t need to be a remote machine, can be your local machine), but with a security guard at the front that don’t let anyone pass. So you ask me, “but Paulo, what’s the real utility of this on my app?”, so let’s get started.
 
-<!--more-->
+
 
 ## The Problem
 

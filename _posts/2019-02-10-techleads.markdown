@@ -1,15 +1,15 @@
 ---
 title:  "Techleads"
 date:   2019-02-10 12:11:32 -0200
-categories: [blog, personal,tech,softskill]
+categories: [article, personal,tech,softskill]
 author: paulushc
 permalink: /articles/techleads
 header:
+    teaser: /assets/2019-02-10-techleads-cover.jpg
     overlay_image: /assets/2019-02-10-techleads-cover.jpg
     overlay_filter: 0.5
     show_overlay_excerpt: false
 ---
-
 I recently started thinking about the role of techlead, after all today I occupy this role and I would like to share here some of my reflections on what it means to be a techlead.
 
 <!--more-->
