@@ -1,10 +1,9 @@
 ---
-layout: post
 title:  "Multi Database Application with Spring Boot"
 date:   2017-02-06 15:00:00 -0200
 categories: [article, tech, java, spring]
-excerpt_separator: <!--more-->
 author: paulushc
+permalink: /articles/multidb-with-spring1
 ---
 ![Multi Database Application with Spring Boot](/assets/2017-02-06-multidatabase-application-with-springboot-cover.png)
 

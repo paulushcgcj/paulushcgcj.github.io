@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Dunno",
+            "type": "shell",
+            "command": "bundle",
+            "dependsOn": "Install"
+        },
+        {
+            "label": "Update",
+            "type": "shell",
+            "command": "bundle update",
+            "dependsOn": "Dunno"
+        },
+        {
+            "label": "Serve",
+            "type": "shell",
+            "command": "bundle exec jekyll serve",
+            "problemMatcher": [],
+            "dependsOn": "Update"
+        },
+        {
+            "label": "Install",
+            "type": "shell",
+            "command": "bundle install"
+        }
+    ]
+}

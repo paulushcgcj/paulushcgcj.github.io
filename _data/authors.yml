@@ -1,0 +1,14 @@
+paulushc:
+  name        : "Paulo Cruz"
+  bio         : "Just a random dev guy"
+  avatar      : "/assets/bio/bio-photo-paulo.jpeg"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:paulushc@gmail.com"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://paulushcgcj.github.io"
+    - label: "LinkedIn"
+      icon: "fas fa-fw fa-linkedin-square"
+      url: "https://www.linkedin.com/in/paulushc/"

@@ -1,30 +1,75 @@
-# Site settings
-
 paulushc:
-  name: Paulo Gomes
+  name: Paulo Cruz
   email: paulushc@gmail.com
   web: https://www.linkedin.com/in/paulushc/
 adafpc:
   name: Ada Ferreira
-  web: https://www.twitter.com/adafpc
+  web: https://www.linkedin.com/in/adafpc/
 
-title: Paulo Gomes
+title: Paulo Cruz
+title_separator: "|"
+subtitle: The artifact of my crazy mind
+logo: "/assets/icon88x88.png"
 email: paulushc@gmail.com
-description: >- 
-  Paulo Gomes, desenvolvedor, gamer, pai.
-baseurl: "" 
+description: >- # this means to ignore newlines until "baseurl:"
+  Developer, Father, Board Game Player, that's the background
+
+  Honestly, I'm a 30ish years old developer, who at a certain point in my life realized that software development is like Lego Bricks. I've always loved to build stuff with this bricks, and building software for me is 90% fun and 10% job.
+
+  Coding for life. I love writing code, and as a developer, the world is an infinite source of inspiration. Every time I see some problem, I stop to think of a way to solve this problem with some kind of software, code or script. As a person, It's my responsibility to share all my knowledge with the world. This way, even if I die, my ideas will pass on.
+  If you like to code, build plastic brick's towers and play some video and board games, just come with me on my magical journey through this big project called life.
+baseurl: ""
 url: "https://paulushcgcj.github.io/" 
 github_username:  paulushcgcj
 linkedin_username: paulushc
-youtube_username: paulushc
+youtube_username: omundocruz
 
 # Build settings
+theme: minimal-mistakes-jekyll
+minimal_mistakes_skin: "dark"
 excerpt_separator: <!--more-->
 show_excerpts: true
-markdown: kramdown
-theme: jekyll-theme-architect
 plugins:
   - jekyll-feed  
   - jekyll-gist
   - jekyll-seo-tag
   - jekyll-sitemap
+exclude:
+  - .devcontainer/
+  - .vscode/
+
+search: true
+search_full_content: true
+analytics:
+  provider: google
+  google:
+    tracking_id: G-18H5PNLF34
+    anonymize_ip: true
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+defaults:  
+  - scope:
+      path: ""
+      type: posts
+    values:
+      show_date: true
+      layout: single
+      author_profile: true
+      read_time: true
+      breadcrumbs: true
+      comments: false
+      share: true
+      related: true
+      toc: true
+      toc_sticky: true
+      sidebar:
+        nav: "base"
+      header:    
+        overlay_filter: 0.5
+        show_overlay_excerpt: false
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      read_time: false
+      author_profile: false

@@ -1,10 +1,9 @@
 ---
-layout: post
 title:  "Secure Shell (SSH) and Java"
 date:   2016-11-09 15:00:00 -0300
 categories: [article, tech, java, ssh]
-excerpt_separator: <!--more-->
 author: paulushc
+permalink: /articles/secure-shell-and-java
 ---
 ![Secure Shell and Java](/assets/2016-11-09-secure-shell-and-java-cover.jpeg)
 Some time ago, I was debating with some friends about writing an article for the comunity,but I never thought on what is be interesting, so I decided to write about a subject that we use a lot at my company, but using Java code, Secure Shell, or SSH.

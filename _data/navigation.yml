@@ -1,0 +1,17 @@
+main:
+  - title: Articles
+    description: All articles
+    url: /articles/
+  - title: Blog Posts
+    description: Blog posts, usually with personal stuff
+    url: /blog/
+  - title: CV
+    description: My updated CV
+    url: /cv/
+  - title: About
+    url: /about/
+base:
+  - title: Useful Links
+    children:
+      - title: "My CV"
+        url: /cv/
