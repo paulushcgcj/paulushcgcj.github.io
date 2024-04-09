@@ -5,6 +5,9 @@ main:
   - title: Blog Posts
     description: Blog posts, usually with personal stuff
     url: /blog/
+  - title: Wolfpack
+    description: The family "business" of making games for fun
+    url: /wolfpack/
   - title: CV
     description: My updated CV
     url: /cv/

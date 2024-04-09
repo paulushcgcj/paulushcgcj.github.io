@@ -5,8 +5,8 @@ categories: [article, personal,tech,softskill]
 author: paulushc
 permalink: /articles/techleads
 header:
-    teaser: /assets/2019-02-10-techleads-cover.jpg
-    overlay_image: /assets/2019-02-10-techleads-cover.jpg
+    teaser: /assets/2019/02/articles/techleads-cover.jpg
+    overlay_image: /assets/2019/02/articles/techleads-cover.jpg
     overlay_filter: 0.5
     show_overlay_excerpt: false
 ---

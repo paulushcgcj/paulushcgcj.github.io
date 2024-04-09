@@ -5,8 +5,8 @@ categories: [article, tech, java, ssh]
 author: paulushc
 permalink: /articles/secure-shell-and-java
 header:
-    teaser: /assets/2016-11-09-secure-shell-and-java-cover.jpeg
-    overlay_image: /assets/2016-11-09-secure-shell-and-java-cover.jpeg
+    teaser: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg
+    overlay_image: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg
     overlay_filter: 0.5
     show_overlay_excerpt: false
 ---
