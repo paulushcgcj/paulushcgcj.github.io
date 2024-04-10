@@ -22,7 +22,7 @@ Another point to be discussed, you will notice (and I hope you will) that the bl
 
 So we started discussing how to assemble and what to put, and we ended up with the image below. The color gray was also chosen to represent a certain somberness, considering that opulence is not our strong suit (anyone who knows me knows that I walk around like a beggar). The phrase just below the family name demonstrates an ideal that I have tried to follow since I had to take over the reins, never running away from challenges, never running away from responsibility. It's harder than it seems, but you can't run away from everything in life.
 
-![Logo](/assets/2019/02/blog/a-new-start-cruzlogo.png)
+![Logo](/assets/2019/02/blog/logo-01.png)
 
 What does this new beginning represent? I can't say at the moment, but it was something big enough to change the direction of our lives once and for all. From now on nothing can stop us.
 

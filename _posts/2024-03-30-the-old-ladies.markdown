@@ -5,7 +5,7 @@ categories: [game, wolfpack,puzzle,multiplatform]
 author: paulushc
 permalink: /wolfpack/theoldladies
 header:
-    teaser: /assets/2024/03/wolfpack/theoldladies-teaser.jpg
+    teaser: /assets/2024/03/wolfpack/theoldladies-teaser.jpeg
     overlay_image: /assets/2024/03/wolfpack/theoldladies.jpg
     overlay_filter: 0.5
     show_overlay_excerpt: false
