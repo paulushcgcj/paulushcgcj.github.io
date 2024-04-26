@@ -5,7 +5,7 @@ categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
 permalink: /articles/database-encryption-pt2
 header:
-    teaser: /assets/2024/04/articles/dbcrypt-02-cover.jpg
+    teaser: /assets/2024/04/articles/dbcrypt-02-teaser.jpg
     overlay_image: /assets/2024/04/articles/dbcrypt-02-cover.jpg
     overlay_filter: 0.5
     show_overlay_excerpt: false
