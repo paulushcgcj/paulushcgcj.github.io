@@ -34,7 +34,7 @@ Let's begin with a self-signed certificate to use during our example, and keep i
 openssl req -x509 -nodes -newkey rsa:4096 -keyout server.key -out server.crt -days 365
 ```
 
-This will generate two files, `server.key` and `server.crt` files. Those files will be used in our Postgres server. Let's continue from the previous article dockerfile. This is what we had when we left the last article:
+This will generate two files, `server.key` and `server.crt` files. Those files will be used in our Postgres server. Let's continue from the previous article Dockerfile. This is what we had when we left the last article:
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
@@ -49,7 +49,7 @@ HEALTHCHECK --interval=35s --timeout=4s CMD pg_isready -d db_prod
 USER postgres
 ```
 
-Nothing new here. What we're going to do is restructure the Dockerfile and add the certificates into it. This is not the safest approach, but worry not, we will fix this later. Once we add the certificates to the Dockerfile, we need to change the the initialization instruction to enable SSL connection. The default approach for it would be to add the configuration parameters into `postgres.conf ` but as we are using a docker, and some of the files are generated during container startup, we can't add or modify the configuration file beforehand.
+Nothing new here. What we're going to do is restructure the Dockerfile and add the certificates into it. This is not the safest approach, but worry not, we will fix this later. Once we add the certificates to the Dockerfile, we need to change the initialization instruction to enable SSL connection. The default approach for it would be to add the configuration parameters into `postgres.conf ` but as we are using a docker, and some of the files are generated during container startup, we can't add or modify the configuration file beforehand.
 
 ```dockerfile
 # Copy SSL certificates to the container
@@ -61,7 +61,7 @@ RUN chown postgres:postgres /certs/server.crt /certs/server.key
 RUN chmod 0600 /certs/server.key /certs/server.crt
 ```
 
-We copied both files into the container and changed the the owner and permission of the file to allow postgres to use it. We're copying it to a random folder so we don't interfere with the server initialization. Now let's initialize the server with some extra parameters. Those parameter will enable SSL and pass the certificate files.
+We copied both files into the container and changed the owner and permission of the file to allow postgres to use it. We're copying it to a random folder so we don't interfere with the server initialization. Now let's initialize the server with some extra parameters. Those parameters will enable SSL and pass the certificate files.
 
 ```dockerfile
 # Start the database setting the SSL certificates
@@ -139,7 +139,7 @@ hostssl all all 127.0.0.1/32 scram-sha-256
 hostssl all all ::1/128 scram-sha-256
 ```
 
-First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be secured by password. This local connection is usually used by initialization scripts and such, but can be used when connection to the database.
+First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be secured by password. This local connection is usually used by initialization scripts and such but can be used when connection to the database.
 
 > Due to the local connection configuration, the database can detect some localhost test and validation to be local, ignoring some of the other parameters.
 
@@ -164,7 +164,7 @@ RUN echo "cp /certs/pg_hba.conf /var/lib/postgresql/data/pg_hba.conf" > /docker-
 RUN chmod +x /docker-entrypoint-initdb.d/01-pg_hba.sh
 ```
 
-With those changes, we are now able to to limit the access to the database to SSL secure connections only. Now our dockerfile should look like this.
+With those changes, we are now able to limit the access to the database to SSL secure connections only. Now our Dockerfile should look like this.
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
@@ -209,7 +209,7 @@ CMD [ "postgres","-c","ssl=on", "-c","ssl_cert_file=/certs/server.crt","-c","ssl
 
 # Securing the certificate
 
-The way we pass the certificate files to the image is pretty straightforward, but it's also extremely insecure, as anyone with access to our image will be able to copy our certificate files and use it for malicious activities using our key. To prevent that we will instead of bake it into the image, we will expect it to be received as a volume mapping, but not straight to the final folder. First, let's remove the copy commands and the other related ones from the file. We should end up with a dockerfile like this.
+The way we pass the certificate files to the image is pretty straightforward, but it's also extremely insecure, as anyone with access to our image will be able to copy our certificate files and use it for malicious activities using our key. To prevent that we will instead of bake it into the image, we will expect it to be received as a volume mapping, but not straight to the final folder. First, let's remove the copy commands and the other related ones from the file. We should end up with a Dockerfile like this.
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
@@ -277,9 +277,10 @@ RUN chmod +x /docker-entrypoint-initdb.d/04-certificate.sh
 With this script in place, our application will copy the certificate files to the expected place, making the parameters `ssl_cert_file=/certs/server.crt` and `ssl_key_file=/certs/server.key` irrelevant. Another point is, as we have set previously the `CMD` instruction, now our database will try to spin up enabling the SSL certificates before we have properly set them up. This will then cause problems and the database will not be initialize because:
 
 1 - The certificates are now owned by the database user until the init script is executed
+
 2 - The SSL will be turned on during initial initialization of the database, and the certificate files are not yet present.
 
-This could be quite challenging to fix, but we can do that one step at a time. First we need to remove the `CMD` instruction and this will give us the following dockerfile.
+This could be quite challenging to fix, but we can do that one step at a time. First, we need to remove the `CMD` instruction, and this will give us the following Dockerfile.
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
