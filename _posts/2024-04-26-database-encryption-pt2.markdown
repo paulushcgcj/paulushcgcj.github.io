@@ -139,7 +139,7 @@ hostssl all all 127.0.0.1/32 scram-sha-256
 hostssl all all ::1/128 scram-sha-256
 ```
 
-First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be thrusted. This local connection is usually used by initialization scripts and such, but can be used when connection to the database.
+First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be secured by password. This local connection is usually used by initialization scripts and such, but can be used when connection to the database.
 
 > Due to the local connection configuration, the database can detect some localhost test and validation to be local, ignoring some of the other parameters.
 
