@@ -50,6 +50,7 @@ Here are some screenshots of The Old Ladies in action:
 ![Screenshot 1](/assets/2024/03/wolfpack/oldladies-Screenshot_1.png)
 ![Screenshot 2](/assets/2024/03/wolfpack/oldladies-Screenshot_2.png)
 ![Screenshot 3](/assets/2024/03/wolfpack/oldladies-Screenshot_3.png)
+*Original screenshots by the author.*
 
 
 # Changelog

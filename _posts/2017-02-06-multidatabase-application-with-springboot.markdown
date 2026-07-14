@@ -20,12 +20,14 @@ At first, you will come with the same idea as we already have used for at least 
 ## Centralize the solution
 
 ![Because one is always better then a dozen](/assets/2017/02/articles/multidatabase-application-with-springboot-img1.jpeg)
+*Original diagram by the author.*
 
 One of the things that we thought at the time was to build a single application to handle every call to every server/database/environment, unifying all the requests on a single robust server, and turning our managing life much easier. As good spring developers, we looked for the best approach for this, and looking on how spring work with dependency injection and his mumbo jumbo things, we found our solution, and it’s simple as making a juice.
 
 ## Building our App
 
 ![Because one is always better then a dozen](/assets/2017/02/articles/multidatabase-application-with-springboot-img2.png)
+*Original diagram by the author.*
 
 For this application, we will use some of the spring boot packages. From now on, I will assume that you have the same dependencies in your pom.xml as I have. To help you out with this, the spring guys have built an awesome tool to help you start fast, it is [spring initializr](https://start.spring.io/) and we will set our group and artifact name as we like, and we will use the following dependencies for this example:
 
@@ -249,6 +251,7 @@ Once again, a clean class, we have the RestController Annotation to mark this cl
 Run it and you will see a result just like mine.
 
 ![Results](/assets/2017/02/articles/multidatabase-application-with-springboot-img3.png)
+*Original screenshot by the author.*
 
 OK, now it’s time to add the other databases to the game. Inside our config package, create 2 more classes, called DatabaseSecond and DatabaseThird, and the let’s build something similar to the DatabaseMain. Duplicate the DatabaseMain.java file, refactor it renaming it to DatabaseSecond and DatabaseThird. After that remove the annotations `@EnableTransactionManagement`, `@ComponentScan`, `@EnableJpaRepositories` and `@Primary` from the 2 new classes, and rename all the mainXXX stuff to second and third. After that, fill the database.properties with the other connection parameters, just like mine and we are ready to go.
 
@@ -350,6 +353,7 @@ public class MultiPersonRest {
 Make some modifications on your database, so you can check if it works, and you will get the differences like in my test. To test it, I’ve built another call to my rest controller, adding a call to a single result, using the ID as parameter.
 
 ![Each call](/assets/2017/02/articles/multidatabase-application-with-springboot-img4.png)
+*Original screenshot by the author.*
 
 ## The Conclusion
 
