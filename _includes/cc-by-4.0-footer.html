@@ -1,0 +1,12 @@
+{% if page.license %}
+<hr>
+<p style="font-size: 0.9em; color: #666; margin-top: 2em;">
+  {% if page.license == "CC-BY-4.0" %}
+    This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Please attribute the original author and link to this post.
+  {% elsif page.license == "proprietary" %}
+    This content is republished with permission. Original rights belong to the respective publisher.
+  {% else %}
+    This post is licensed under {{ page.license }}.
+  {% endif %}
+</p>
+{% endif %}
