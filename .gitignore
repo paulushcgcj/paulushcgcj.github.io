@@ -120,3 +120,7 @@ build-iPhoneSimulator/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,ruby,jekyll,macos
+
+CLAUDE.md
+.opencode/
+_drafts/
