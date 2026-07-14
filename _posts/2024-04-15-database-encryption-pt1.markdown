@@ -3,6 +3,7 @@ title:  "Database Encryption Pt1 - Column Encryption"
 date:   2024-04-15 12:00:00 -0700
 categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
+license: CC-BY-4.0
 permalink: /articles/database-encryption-pt1
 header:
     teaser: /assets/2024/04/articles/dbcrypt-01-cover.png

@@ -3,6 +3,7 @@ title:  "Secure Shell (SSH) and Java"
 date:   2016-11-09 15:00:00 -0300
 categories: [article, tech, java, ssh]
 author: paulushc
+license: CC-BY-4.0
 permalink: /articles/secure-shell-and-java
 header:
     teaser: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg

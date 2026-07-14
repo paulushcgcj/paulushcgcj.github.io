@@ -3,6 +3,7 @@ title:  "Techleads"
 date:   2019-02-10 12:11:32 -0200
 categories: [article, personal,tech,softskill]
 author: paulushc
+license: CC-BY-4.0
 permalink: /articles/techleads
 header:
     teaser: /assets/2019/02/articles/techleads-cover.jpg

@@ -3,6 +3,7 @@ title:  "Multi Database Application with Spring Boot"
 date:   2017-02-06 15:00:00 -0200
 categories: [article, tech, java, spring]
 author: paulushc
+license: CC-BY-4.0
 permalink: /articles/multidb-with-spring1
 header:
     teaser: /assets/2017/02/articles/multidatabase-application-with-springboot-cover.png

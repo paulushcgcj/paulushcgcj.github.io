@@ -3,6 +3,7 @@ title:  "A new start!"
 date:   2019-02-01 09:08:09 -0200
 categories: [blog, personal]
 author: paulushc
+license: CC-BY-4.0
 permalink: /blog/a-fresh-start
 header:
     teaser: /assets/2019/02/blog/a-new-start-cruzlogo.png
