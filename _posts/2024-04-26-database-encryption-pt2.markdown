@@ -50,7 +50,7 @@ HEALTHCHECK --interval=35s --timeout=4s CMD pg_isready -d db_prod
 USER postgres
 ```
 
-Nothing new here. What we're going to do is restructure the Dockerfile and add the certificates into it. This is not the safest approach, but worry not, we will fix this later. Once we add the certificates to the Dockerfile, we need to change the initialization instruction to enable SSL connection. The default approach for it would be to add the configuration parameters into `postgres.conf ` but as we are using a docker, and some of the files are generated during container startup, we can't add or modify the configuration file beforehand.
+Nothing new here. What we're going to do is restructure the Dockerfile and add the certificates into it. This is not the safest approach, but worry not, we will fix this later. Once we add the certificates to the Dockerfile, we need to change the initialization instruction to enable SSL connection. The default approach for it would be to add the configuration parameters into `postgres.conf` but as we are using a docker, and some of the files are generated during container startup, we can't add or modify the configuration file beforehand.
 
 ```dockerfile
 # Copy SSL certificates to the container
@@ -101,7 +101,7 @@ CMD [ "postgres","-c","ssl=on", "-c","ssl_cert_file=/certs/server.crt","-c","ssl
 
 # Securing the application connection
 
-Securing the application connection is pretty simples. We just need to enable the SSL through the connection string, so this part is pretty simple. Let's begin with the JDBC version first:
+Securing the application connection is pretty simple. We just need to enable the SSL through the connection string, so this part is pretty simple. Let's begin with the JDBC version first:
 
 ```yaml
 spring:  
@@ -140,11 +140,11 @@ hostssl all all 127.0.0.1/32 scram-sha-256
 hostssl all all ::1/128 scram-sha-256
 ```
 
-First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be secured by password. This local connection is usually used by initialization scripts and such but can be used when connection to the database.
+First thing, we set connections without SSL (by setting `hostnossl`) connection to any database, any IP and any user to be rejected. As Postgres uses a top-down approach, once it finds a match it will stop processing, that's the reason we set the reject first. Then we set the hostssl connection to be allowed, and the third one allow for local connection to be secured by password. This local connection is usually used by initialization scripts and such but can be used when connecting to the database.
 
 > Due to the local connection configuration, the database can detect some localhost test and validation to be local, ignoring some of the other parameters.
 
-With this configuration in mind, we need a way to set it. Problem is, if we just map the new file to the folder where it is supposed to be, the container will not initialize properly. We need to set the entries using the init scripts. Let's do this then by setting a temporary file that we will then use it to replace the existing one then.
+With this configuration in mind, we need a way to set it. Problem is, if we just map the new file to the folder where it is supposed to be, the container will not initialize properly. We need to set the entries using the init scripts. Let's do this then by setting a temporary file that we will then use it to replace the existing one.
 
 ```dockerfile
 # Set the pg_hba.conf file and add the permissions
@@ -210,7 +210,7 @@ CMD [ "postgres","-c","ssl=on", "-c","ssl_cert_file=/certs/server.crt","-c","ssl
 
 # Securing the certificate
 
-The way we pass the certificate files to the image is pretty straightforward, but it's also extremely insecure, as anyone with access to our image will be able to copy our certificate files and use it for malicious activities using our key. To prevent that we will instead of bake it into the image, we will expect it to be received as a volume mapping, but not straight to the final folder. First, let's remove the copy commands and the other related ones from the file. We should end up with a Dockerfile like this.
+The way we pass the certificate files to the image is pretty straightforward, but it's also extremely insecure, as anyone with access to our image will be able to copy our certificate files and use it for malicious activities using our key. To prevent that instead of baking it into the image, we will expect it to be received as a volume mapping, but not straight to the final folder. First, let's remove the copy commands and the other related ones from the file. We should end up with a Dockerfile like this.
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
@@ -264,7 +264,7 @@ services:
 			- ./database/server.key:/certs/server.key
 ```
 
-Now that the user is providing the certificate files, we need to have a way to use it in our application. In the past, we just provided the certificate file path during application boot, but with the certificates being provided externally, the files now are not owner by the database user. To fix that, we will instead of providing the file, we will instead copy them to the default place where the certificates are expected.
+Now that the user is providing the certificate files, we need to have a way to use it in our application. In the past, we just provided the certificate file path during application boot, but with the certificates being provided externally, the files are now not owned by the database user. To fix that, we will instead of providing the file, we will instead copy them to the default place where the certificates are expected.
 
 ```dockerfile
 # Copy the certificates to the container
@@ -275,7 +275,7 @@ RUN echo "chown postgres:postgres /var/lib/postgresql/data/server.key" >> /docke
 RUN chmod +x /docker-entrypoint-initdb.d/04-certificate.sh
 ```
 
-With this script in place, our application will copy the certificate files to the expected place, making the parameters `ssl_cert_file=/certs/server.crt` and `ssl_key_file=/certs/server.key` irrelevant. Another point is, as we have set previously the `CMD` instruction, now our database will try to spin up enabling the SSL certificates before we have properly set them up. This will then cause problems and the database will not be initialize because:
+With this script in place, our application will copy the certificate files to the expected place, making the parameters `ssl_cert_file=/certs/server.crt` and `ssl_key_file=/certs/server.key` irrelevant. Another point is, as we have set previously the `CMD` instruction, now our database will try to spin up enabling the SSL certificates before we have properly set them up. This will then cause problems and the database will not be initialized because:
 
 1 - The certificates are now owned by the database user until the init script is executed
 
@@ -370,7 +370,7 @@ HEALTHCHECK --interval=35s --timeout=4s CMD pg_isready -d db_prod
 USER postgres
 ```
 
-I've named all scripts into an order, to make the execution more predictable, as the init scripts run in order based on name, so nothing easier than setting a numeric order for our files. The second script is the one we use to enable SSL and reload the configuration. Is the reload required? No is not, as the database will shut down and restart after that, but it's a good sanity check nonetheless. This solve our problem of not being able to change the files manually or having to manually change it after the database is started.
+I've named all scripts into an order, to make the execution more predictable, as the init scripts run in order based on name, so nothing easier than setting a numeric order for our files. The second script is the one we use to enable SSL and reload the configuration. Is the reload required? No, it's not, as the database will shut down and restart after that, but it's a good sanity check nonetheless. This solves our problem of not being able to change the files manually or having to manually change it after the database is started.
 
 # Passing the certificates
 

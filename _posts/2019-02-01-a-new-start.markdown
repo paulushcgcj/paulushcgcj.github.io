@@ -13,7 +13,7 @@ header:
 ---
 **Top of the morning for you**
 
-This is a new beginning for this blog. It will serve as a starting point on this new journey in our lives, and I say wow because my wife and I will try to update this space whenever possible. Several things will start to change from this `date`, so mark your calendars.
+This is a new beginning for this blog. It will serve as a starting point on this new journey in our lives, and I say wow because my wife and I will try to update this space whenever possible. Several things will start to change from this date, so mark your calendars.
 
 <!--more-->
 

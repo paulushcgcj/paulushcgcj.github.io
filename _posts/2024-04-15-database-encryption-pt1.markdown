@@ -56,11 +56,11 @@ create table if not exists secure.person (
 );
 ```
 
-The above table is pretty simple, but contains a lot of information that we consider PII (Personal Identifiable Information), and if you don't know what PII is, check this link on  [Province of British Columbia (gov.bc.ca)](https://www2.gov.bc.ca/assets/gov/business/business-management/protecting-personal-information/pipa-guide.pdf) website. 
+The above table is pretty simple, but contains a lot of information that we consider PII (Personal Identifiable Information), and if you don't know what PII is, check this link on [Province of British Columbia (gov.bc.ca)](https://www2.gov.bc.ca/assets/gov/business/business-management/protecting-personal-information/pipa-guide.pdf) website. 
 
 > Simply put, personal information is any recorded information about an identifiable individual other than their business contact information. Personal information includes information that can be used to identify an individual through association or inference.
 
-Let's insert some information into the database so we can have something to be consumed by our API. The simple plain text example below represents the great majority of databases around the globe that persists PII. Depending on how you handle the database security (and to be frank, if you already handle database security and PII data, you would probably not be reading this article) you can keep the content as text and secure the database using another approach, but nothing prevents you from adding multiple layers of security one on top of the other.
+Let's insert some information into the database so we can have something to be consumed by our API. The simple plain text example below represents the great majority of databases around the globe that persist PII. Depending on how you handle the database security (and to be frank, if you already handle database security and PII data, you would probably not be reading this article) you can keep the content as text and secure the database using another approach, but nothing prevents you from adding multiple layers of security one on top of the other.
 
 ```sql
 insert into secure.person (first_name, last_name, email, gender) values ('Ulrich', 'Setterfield', 'usetterfield0@scientificamerican.com', 'Male') on conflict (email) do nothing;  
@@ -85,7 +85,7 @@ As this article is meant to help reactive and non-reactive users, you will find 
 >  By the end of this section, you should have something like [the content of tag v1.1.0](https://github.com/paulushcgcj/article-database-encryption/releases/tag/v1.1.0)
 
 
-To allow the usage of the pgcrypto extension, we need to enable the pgcrypto extension in our database. To allow for encryption, we need to enable pgcrypto first:
+To allow for encryption, we need to enable the pgcrypto extension in our database:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -98,7 +98,7 @@ We can add it as part of the initialization of our database in our dockerfile li
 RUN echo "CREATE EXTENSION IF NOT EXISTS pgcrypto;" >> /docker-entrypoint-initdb.d/init.sql
 ```
 
-So we will end-up with a dockerfile exactly like this one:
+So we will end up with a dockerfile exactly like this one:
 
 ```dockerfile
 FROM postgres:16.2-alpine3.19
@@ -144,7 +144,7 @@ insert into secure.person_tmp (first_name, last_name, email, gender) values (pgp
 insert into secure.person_tmp (first_name, last_name, email, gender) values (pgp_sym_encrypt('Imogene', 'AES_KEY'), pgp_sym_encrypt('Simmill', 'AES_KEY'), pgp_sym_encrypt('isimmill4@e-recht24.de', 'AES_KEY'), pgp_sym_encrypt('Female', 'AES_KEY'));
 ```
 
-This will insert the same entries we had insert before into our non-encrypted table. This will allow us to have a fair comparison between both tables. Noticed that we are using the `gpg_sym_encrypt` function from `pgcrypto` in order to encrypt the data being passed with the provided key. The `AES_KEY` is the key we will use to encrypt the data. According to the documentation, it can be a text or an encryption key. Keep in mind that for the purpose of this example, I will use as a value and refer to it as the `AES_KEY`, but make sure to use a proper and secure key and handle it with care.
+This will insert the same entries we had insert before into our non-encrypted table. This will allow us to have a fair comparison between both tables. Notice that we are using the `pgp_sym_encrypt` function from `pgcrypto` in order to encrypt the data being passed with the provided key. The `AES_KEY` is the key we will use to encrypt the data. According to the documentation, it can be a text or an encryption key. Keep in mind that for the purpose of this example, I will use as a value and refer to it as the `AES_KEY`, but make sure to use a proper and secure key and handle it with care.
 
 # Consuming the secured data
 
@@ -165,7 +165,7 @@ This should return the same result as the original table with the original data 
 
 # Migrating existing table
 
-My approach is more reasonable and safer. I would start by creating a temporary table with the correct structure as mentioned on [[#Secure data]] topic, with a random name.
+My approach is more reasonable and safer. I would start by creating a temporary table with the correct structure as mentioned on the securing data topic, with a random name.
 Then I would do an insert from a select that encrypts the data into the new temp table
 
 ```sql
@@ -292,7 +292,7 @@ Can't be simpler than that right? Right! But notice that we are providing the en
 
 One approach is to add it to the Postgres configuration file and read it using the `current_setting` function, but this requires you to bake the key into the database load, exposing it for possible attacks. More info on [PostgreSQL: Documentation: 16: 20.1. Setting Parameters](https://www.postgresql.org/docs/current/config-setting.html). Instead, we will make use of the `current_setting` as before but we will read it from the current session, and we will set the value in the session using the JDBC connection string. 
 
-Postgres support an options argument where it can receive some arguments that are then passed down to the current session, check [Initializing the Driver | pgJDBC (postgresql.org)](https://jdbc.postgresql.org/documentation/use/#connection-parameters) for more information. This approach is better as it will not expose the parameter to the entire database, making whoever is connection to your database using other session unaware of the available values being passed, but at the same time exposes the value as part of the connection string, so make sure to not expose it during your application execution. Make sure to read the value from a secure place though.
+Postgres support an options argument where it can receive some arguments that are then passed down to the current session, check [Initializing the Driver | pgJDBC (postgresql.org)](https://jdbc.postgresql.org/documentation/use/#connection-parameters) for more information. This approach is better as it will not expose the parameter to the entire database, making whoever is connected to your database using another session unaware of the available values being passed, but at the same time exposes the value as part of the connection string, so make sure to not expose it during your application execution. Make sure to read the value from a secure place though.
 
 First let's change our connection string. Originally it was like this:
 
@@ -339,11 +339,11 @@ First, we will need to change the field type of our encrypted data. We can keep 
 private byte[] firstName;
 ```
 
-This will make things kinda hard to managed on the entity level, in case we want to change some data directly on the entity, forcing us to add some extra hops in order to deal with the data itself. This is due to the lack of support that hibernate adds as can be seen in the [previous section](#Traditional JDBC non-reactive) with the `@ColumnTransformer` annotation.
+This will make things kinda hard to managed on the entity level, in case we want to change some data directly on the entity, forcing us to add some extra hops in order to deal with the data itself. This is due to the lack of support that hibernate adds as can be seen in the [previous section](#traditional-jdbc-non-reactive) with the `@ColumnTransformer` annotation.
 
 Next, we will have to manually call the encrypt and decrypt query in order to encrypt/decrypt the data. We have a lot of options when it comes to data conversion using r2dbc, but the problem is the lifecycle. The converter lives as part of the r2dbc instantiation lifecycle, so if we inject the database connection (it can be straight with the `R2dbcEntityTemplate` or by injecting a `Repository`) it will create a circular dependency, and even though there are ways to remediate this, it's not a clean solution.
 
-We decided to use an individual component that can be injected into our service class and deal with the conversion there. Keep in mind that the code organization used throughout this article is just a suggestion based on what I'm used to use, so take the names and organization with a grain of salt. This specific component will handle encryption/decryption by itself, and it can be as generic as receiving just the byte array and returning a string or as specialized as  receiving the actual entity and returning it with some `@Transient` field filled with the data, it's up to you.
+We decided to use an individual component that can be injected into our service class and deal with the conversion there. Keep in mind that the code organization used throughout this article is just a suggestion based on what I'm used to use, so take the names and organization with a grain of salt. This specific component will handle encryption/decryption by itself, and it can be as generic as receiving just the byte array and returning a string or as specialized as receiving the actual entity and returning it with some `@Transient` field filled with the data, it's up to you.
 
 ```java
 @Component  
@@ -438,7 +438,7 @@ public Mono<PersonDto> findById(Long id) {
 
 Not as simple as the JDBC version, but not so complicated too. This makes the encryption and decryption a breeze, even though it makes some of our entities less legible as we will be dealing with byte arrays, but that's not a big deal in terms of code being added. Keep in mind also that we are trying to avoid adding any extra dependency or library into the equation to make this example as easier as possible to understand. You could be using a different library set that can or cannot already add some functionality that makes this process easier.
 
-Now as the last required change, we will set the key into the connection session as we did with the JDBC version. This time we will have to change it twice, as flyway still uses jdbc connections behind the scene.
+Now as the last required change, we will set the key into the connection session as we did with the JDBC version. This time we will have to change it twice, as flyway still uses jdbc connections behind the scenes.
 
 ```yaml
 spring:

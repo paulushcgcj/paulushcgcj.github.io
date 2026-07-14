@@ -11,18 +11,18 @@ header:
     overlay_filter: 0.5
     show_overlay_excerpt: false
 ---
-In my time writing some APIs and micro services, I’ve faced some problems with multi database environments. On the company I’ve worked at that time, we have a lot of environments for a lot of different clients, but they always used the same database model, but on different servers. You can ask, but why? Well, some of our clients had some restrictions, based on region, and other requirements, and that’s not the point. At the beginning, this was not a problem, but came a time, where we need to connect to every single database to get/put some data, but how?
+In my time writing some APIs and micro services, I’ve faced some problems with multi database environments. On the company I’ve worked at that time, we had a lot of environments for a lot of different clients, but they always used the same database model, but on different servers. You can ask, but why? Well, some of our clients had some restrictions, based on region, and other requirements, and that’s not the point. At the beginning, this was not a problem, but came a time, where we needed to connect to every single database to get/put some data, but how?
 
 <!--more-->
 
-At first, you will come with the same idea as we already have used for at least 8 years, we can have an instance of the same application running on multiple servers, each one inside the environment, or we can have multiple instances of the same application running on a centralized server. Both will force us having a lot of the same code running alongside each other, and that’s not one of the best approaches in terms of maintenance, and to check later, we will have to do a lot of checks on different servers. How can we solve this?
+At first, you will come up with the same idea we already used for at least 8 years, we can have an instance of the same application running on multiple servers, each one inside the environment, or we can have multiple instances of the same application running on a centralized server. Both will force us to have a lot of the same code running alongside each other, and that’s not one of the best approaches in terms of maintenance, and to check later, we will have to do a lot of checks on different servers. How can we solve this?
 
 ## Centralize the solution
 
 ![Because one is always better then a dozen](/assets/2017/02/articles/multidatabase-application-with-springboot-img1.jpeg)
 *Original diagram by the author.*
 
-One of the things that we thought at the time was to build a single application to handle every call to every server/database/environment, unifying all the requests on a single robust server, and turning our managing life much easier. As good spring developers, we looked for the best approach for this, and looking on how spring work with dependency injection and his mumbo jumbo things, we found our solution, and it’s simple as making a juice.
+One of the things that we thought at the time was to build a single application to handle every call to every server/database/environment, unifying all the requests on a single robust server, and turning our managing life much easier. As good spring developers, we looked for the best approach for this, and looking on how spring work with dependency injection and its mumbo-jumbo things, we found our solution, and it’s simple as making a juice.
 
 ## Building our App
 
@@ -35,17 +35,17 @@ For this application, we will use some of the spring boot packages. From now on,
 - PostgreSQL
 - Rest Repositories
 
-I’ve selected PostgreSQL, but you can use with any database connector you like, because nothing will change, even with NoSQL databases this will do. On the time this article was written, spring boot 1.4.3 was the release of the time, so let’s stick with this version (but nothing will prevent you from using another version, I’ve used this approach since 1.3.X). To manage our project dependencies, I’m using maven, but you can stick with gradle too if you prefer.
+I’ve selected PostgreSQL, but you can use with any database connector you like, because nothing will change, even with NoSQL databases this will do. At the time this article was written, Spring Boot 1.4.3 was the release of the time, so let’s stick with this version (but nothing will prevent you from using another version, I’ve used this approach since 1.3.X). To manage our project dependencies, I’m using maven, but you can stick with gradle too if you prefer.
 
-After assembling your tools, let’s begin with some planing after going into the dirty work. On this example, we will have multiple databases on multiple servers running the same database structure on each one. We can assume that we have multiple environments, or multiple clients or even different levels of deployment that we need to connect to test, query or insert new data. To make our tests more easy to set up, instead of having several different databases on multiple servers, we will have 2 or more database instances on the same server, because, this is not “important” in a code point of view. Let’s assume that we have 3 databases and we are running our application on a centralized server (127.0.0.1) with access to all of this databases.
+After assembling your tools, let’s begin with some planning after going into the dirty work. On this example, we will have multiple databases on multiple servers running the same database structure on each one. We can assume that we have multiple environments, or multiple clients or even different levels of deployment that we need to connect to test, query or insert new data. To make our tests easier to set up, instead of having several different databases on multiple servers, we will have 2 or more database instances on the same server, because, this is not “important” in a code point of view. Let’s assume that we have 3 databases and we are running our application on a centralized server (127.0.0.1) with access to all of these databases.
 
 - server A (jdbc:postgresql://127.0.0.1:5432/db1)
 - server B (jdbc:postgresql://127.0.0.1:5432/db2) 
 - server C (jdbc:postgresql://127.0.0.1:5432/db3)
 
-Based on the request data, we will identify the correct database, and them we will change our connection to use the correct database. This identification will be automatic, based on some parameter that will arrive on the request. Once we have the correct database, we will then change the request to this hibernate connection, and everything will go on as expected on a single database connection. This identification can be based on the request IP, some identification parameter on the request or anything you like it, but the premise to this is that you can change the database anytime, based on some parameter on your request, in a way that your client will never know or see.
+Based on the request data, we will identify the correct database, and then we will change our connection to use the correct database. This identification will be automatic, based on some parameter that will arrive on the request. Once we have the correct database, we will then change the request to this hibernate connection, and everything will go on as expected on a single database connection. This identification can be based on the request IP, some identification parameter on the request or anything you like it, but the premise to this is that you can change the database anytime, based on some parameter on your request, in a way that your client will never know or see.
 
-To manage multiple database connections, we will use the `@Qualifier` annotation, so we can call every connection by it’s name. In our example, we will make the connection change based on the request URL, and we will control it using our hosts files to fake our DNS, so we can have multiple URLs calling to the same server in an easy way. To do that, you will have to edit certain files depending on the OS you use.
+To manage multiple database connections, we will use the `@Qualifier` annotation, so we can call every connection by its name. In our example, we will make the connection change based on the request URL, and we will control it using our hosts files to fake our DNS, so we can have multiple URLs calling to the same server in an easy way. To do that, you will have to edit certain files depending on the OS you use.
 
     Mac OS, sudo nano /private/etc/hosts
 
@@ -55,7 +55,7 @@ To manage multiple database connections, we will use the `@Qualifier` annotation
 
 Our database will be consisted of one simple table just to exemplify. We will use [mockaroo](https://www.mockaroo.com/) website to randomly generate some mock data to begin with. This website is amazing for generating some test data to play with, and you can generate 1000 lines per file for free, and this can help you accelerate your tests with some random data.
 
-As IDE, I will use IntelliJ IDEA, from Jetbrains, an awesome IDE, but you can use whenever IDE you prefer, and you can ever use none, any text editor will do, but I do prefer IntelliJ because it’s simple, clean, fast and reliable.
+As IDE, I will use IntelliJ IDEA, from Jetbrains, an awesome IDE, but you can use whatever IDE you prefer, and you can ever use none, any text editor will do, but I do prefer IntelliJ because it’s simple, clean, fast and reliable.
 
 ## Writing it down
 
@@ -111,7 +111,7 @@ public class Person {
 }
 ```
 
-Now, let’s build some code to pull it out of the database, let’s build our Data Access Object, and for most of our time as developers, we used to write a lot of DAO code, but now with spring and it’s magic tricks, we can resume all of that code with a simple interface. Create a repository package, and inside it, create an interface called PersonRepository.java.
+Now, let’s build some code to pull it out of the database, let’s build our Data Access Object, and for most of our time as developers, we used to write a lot of DAO code, but now with spring and its magic tricks, we can resume all of that code with a simple interface. Create a repository package, and inside it, create an interface called PersonRepository.java.
 
 ```java
 @Service
@@ -119,14 +119,14 @@ public interface PersonRepository extends CrudRepository<Person,Long> {
 }
 ```
 
-Hold on a minute buddy, where is all that database connection stuff, where are those ton of lines of code to connect, pull and parse an object. Calm down, let’s explain it a little bit. Using Spring Data magic, we can extend our repository interface with CrudRepository, and pass to this Generic interface which object we want to pull (in our case the Person) and what is the type of it’s primary key (a Long type), and this way, this interface will be automatic implemented by spring data, and we will not need to write a dozen of lines of code just to build a query. We will see how easy is to consume this interface very soon.
+Hold on a minute buddy, where is all that database connection stuff, where are those ton of lines of code to connect, pull and parse an object. Calm down, let’s explain it a little bit. Using Spring Data magic, we can extend our repository interface with CrudRepository, and pass to this Generic interface which object we want to pull (in our case the Person) and what is the type of its primary key (a Long type), and this way, this interface will be automatic implemented by spring data, and we will not need to write a dozen of lines of code just to build a query. We will see how easy is to consume this interface very soon.
 
 Now it’s time to connect to our database. Let’s begin with some configuration class. Create a config package, and create a java class called DatabaseMain.java inside it. This will be our main connection, and from now on, we will write down a lot of annotations in this class.
 
 ```java
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("ord.paulushc")
+@ComponentScan("org.paulushc")
 @PropertySource("file:./database.properties")
 @EnableJpaRepositories(
         basePackages = "org.paulushc",
@@ -209,7 +209,7 @@ public class DatabaseMain {
 }
 ```
 
-Holly Jolly, that’s a huge class right? Let’s split it a little bit. From lines 22 to 29, we have some annotations to mark this class as a configuration class, so spring boot will pick this class to load while it’s starting. Second, we have EnableTransactionManagement, so we set this connection to support transactions, then we have ComponentScan, a spring annotation that tell spring boot to scan the listed package to pick all the classes bellow this annotation to manage it when possible (when annotated to be honest). After that, we have PropertySource, an annotation that bind a file, so we don’t need to implement a class to read all the configurations from our config file. Easy don’t you think? And last, we have EnableJpaRepositories, and this is an important annotation. With this, we are telling hibernate that this class is a repository, and we are setting the base packages, or the package from where hibernate will begin to scan for `@Entity` classes, we also set the name of our Entity Manager and Transaction Manager, the guys responsible for managing the connections and transactions.
+Holly Jolly, that’s a huge class right? Let’s split it a little bit. From lines 22 to 29, we have some annotations to mark this class as a configuration class, so spring boot will pick this class to load while it’s starting. Second, we have EnableTransactionManagement, so we set this connection to support transactions, then we have ComponentScan, a spring annotation that tell spring boot to scan the listed package to pick all the classes below this annotation to manage it when possible (when annotated to be honest). After that, we have PropertySource, an annotation that bind a file, so we don’t need to implement a class to read all the configurations from our config file. Easy don’t you think? And last, we have EnableJpaRepositories, and this is an important annotation. With this, we are telling hibernate that this class is a repository, and we are setting the base packages, or the package from where hibernate will begin to scan for `@Entity` classes, we also set the name of our Entity Manager and Transaction Manager, the guys responsible for managing the connections and transactions.
 
 After that, we have a lot of `@Value` annotations. This annotation bind a value from the config file we have passed through `@PropertySource` annotation, to a property. We just need to bind a parameter to a property using this annotation. Then we begin with our configurations. First we build the data source, or the connection to the database. With this bean (as you have noticed we annotate this class with `@Bean` so we mark it to spring boot manage it, remember the ComponentScan annotation?), we can pass it to other managed beans to connect to our database. After this, we build our entity manager bean, passing down the connection (data source), and passing the package to scan property. We also build the transaction manager, the session factory and we finish it passing the hibernate properties as well. Looks big but in the end, it’s very simple. We are just making a connection to the database, nothing too complicated at the end. But did you noticed the `@Primary` annotation on every managed bean? We will discuss it later.
 
@@ -246,14 +246,14 @@ public class PersonRest {
 }
 ```
 
-Once again, a clean class, we have the RestController Annotation to mark this class as a rest controller, so we are not returning HTML content, but we are returning some JSON content instead. We put some RequestMapping annotations, so we can map some URLs to our calls. We bind our repository here using `@Autowired` annotation, so spring will have our repository ready to be used. But look inside the getAll method, and …… there is just one single line. That’s all. Of course we are not expecting any exceptions, remember, this is just an example, on a real world you will have some more lines to catch some exceptions and so on. But for brevity, we are just returning all the lines. The findAll method is automaticaly generated from our CrudRepository interface, and this way, we don’t need to implement anything. Much more easy don’t you think?
+Once again, a clean class, we have the RestController Annotation to mark this class as a rest controller, so we are not returning HTML content, but we are returning some JSON content instead. We put some RequestMapping annotations, so we can map some URLs to our calls. We bind our repository here using `@Autowired` annotation, so spring will have our repository ready to be used. But look inside the getAll method, and …… there is just one single line. That’s all. Of course we are not expecting any exceptions, remember, this is just an example, on a real world you will have some more lines to catch some exceptions and so on. But for brevity, we are just returning all the lines. The findAll method is automatically generated from our CrudRepository interface, and this way, we don’t need to implement anything. Much easier don’t you think?
 
 Run it and you will see a result just like mine.
 
 ![Results](/assets/2017/02/articles/multidatabase-application-with-springboot-img3.png)
 *Original screenshot by the author.*
 
-OK, now it’s time to add the other databases to the game. Inside our config package, create 2 more classes, called DatabaseSecond and DatabaseThird, and the let’s build something similar to the DatabaseMain. Duplicate the DatabaseMain.java file, refactor it renaming it to DatabaseSecond and DatabaseThird. After that remove the annotations `@EnableTransactionManagement`, `@ComponentScan`, `@EnableJpaRepositories` and `@Primary` from the 2 new classes, and rename all the mainXXX stuff to second and third. After that, fill the database.properties with the other connection parameters, just like mine and we are ready to go.
+OK, now it’s time to add the other databases to the game. Inside our config package, create 2 more classes, called DatabaseSecond and DatabaseThird, and let’s build something similar to the DatabaseMain. Duplicate the DatabaseMain.java file, refactor it renaming it to DatabaseSecond and DatabaseThird. After that remove the annotations `@EnableTransactionManagement`, `@ComponentScan`, `@EnableJpaRepositories` and `@Primary` from the 2 new classes, and rename all the mainXXX stuff to second and third. After that, fill the database.properties with the other connection parameters, just like mine and we are ready to go.
 
 ```properties
 #Main Database Connection
@@ -320,7 +320,7 @@ public class EntityManagerUtils {
 
 The first thing you will notice is that we have 3 autowired EntityManager, and you ask me why. This will be the entry points to our databases, and this class will be the router. Take a good look at the `@Qualifier` annotations on each entity manager, and you will recognize the names, they are the very same names we give to our entity managers during database config classes creation. We use the `@Qualifier` annotation to mark this dependency injection and flag it, so spring will not autowired the wrong connection for us. The getEm method, use a rudimentary method of binding each connection to a rule, and as I stated, we will use the URLs to route the databases. The getJpaFactory, will make the change to our JpaRepository so it will know the right database to connect.
 
-To test it, let’s build a new rest repository, this time called MultiPersonRest, and let’s copy our base repository to speed up the things a little. With this step done, we can make some changes to the first RequestMapping anotation, changing from /person to /multiperson.If you run it right now, you will get the same result we had on the previous controller. To achieve our multi database part, we need some changes. First, let’s make a method that routes the call to the correct database, using our EntityManagerUtils. Then we will make some modifications to our getAll method and the we will build another one to test.
+To test it, let’s build a new rest repository, this time called MultiPersonRest, and let’s copy our base repository to speed up the things a little. With this step done, we can make some changes to the first RequestMapping annotation, changing from /person to /multiperson.If you run it right now, you will get the same result we had on the previous controller. To achieve our multi database part, we need some changes. First, let’s make a method that routes the call to the correct database, using our EntityManagerUtils. Then we will make some modifications to our getAll method and the we will build another one to test.
 
 ```java
 @RestController
@@ -357,6 +357,6 @@ Make some modifications on your database, so you can check if it works, and you 
 
 ## The Conclusion
 
-We build a multi database app in some minutes (OK you must have taken more than a couple of minutes reading and making this app right?) and you can see that it’s much more simple than you have first imagined. Apart from a normal project, we have some more database connections, and we have built just a single class to manage the database. You don’t need to use it with databases containing the same structure as I have stated, you can use multiple databases, containing different data, such as one for your clients and basic records, one for your sells, one for your client tickets and so on. Don’t forget to comment and share this article with your friends, and let me know if I made any mistake, and share some of your experiences with me, so we can discuss your difficulties and thoughts.
+We build a multi database app in some minutes (OK you must have taken more than a couple of minutes reading and making this app right?) and you can see that it’s much more simple than you have first imagined. Apart from a normal project, we have some more database connections, and we have built just a single class to manage the database. You don’t need to use it with databases containing the same structure as I have stated, you can use multiple databases, containing different data, such as one for your clients and basic records, one for your sales, one for your client tickets and so on. Don’t forget to comment and share this article with your friends, and let me know if I made any mistake, and share some of your experiences with me, so we can discuss your difficulties and thoughts.
 
 Check out the [repository](https://github.com/paulushcgcj/multidbspring) with the full code if you want it.

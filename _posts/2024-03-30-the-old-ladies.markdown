@@ -15,9 +15,9 @@ The Old Ladies is a tic-tac-toe game developed using MonoGame. It is a classic g
 
 <!--more-->
 
-This is the first game I've made and it's just my exploratory take on how to write games with MonoGame. It'e been a fun and exciting experience, as I've been strugling with game development for a few years. For context (if you didn't noticed yet) I'm a seasoned software developer, been working in a lot of big and small projects since 2010 and writing software was never an issue for me, but games.... games hit me differently.
+This is the first game I've made and it's just my exploratory take on how to write games with MonoGame. It's been a fun and exciting experience, as I've been struggling with game development for a few years. For context (if you haven't noticed yet) I'm a seasoned software developer, been working in a lot of big and small projects since 2010 and writing software was never an issue for me, but games.... games hit me differently.
 
-After a ton of frustrated attempts of making a simple game, I've decided to start a simple and small game, a simple puzzle to get used to the framework and platform itself. The language, C# is one of the first languages I've learned, but never mastered, but it was always a language that I kept in my heart, so this wasn't a blocker for me. MonoGame is a new take on the former XNA framework created by Microsoft. This is something I've always liked, as it gave me the tools to make whatever I want, instead of giving me a more restrict approach. So now let's get back to the game.
+After a ton of frustrated attempts of making a simple game, I've decided to start a simple and small game, a simple puzzle to get used to the framework and platform itself. The language, C# is one of the first languages I've learned, but never mastered, but it was always a language that I kept in my heart, so this wasn't a blocker for me. MonoGame is a new take on the former XNA framework created by Microsoft. This is something I've always liked, as it gave me the tools to make whatever I want, instead of giving me a more restrictive approach. So now let's get back to the game.
 
 
 ## Features
