@@ -59,21 +59,153 @@ As IDE, I will use IntelliJ IDEA, from Jetbrains, an awesome IDE, but you can us
 
 First things first. Let’s run that SQL file in our database, to create and populate our database. Don’t forget to check first your SQL file, because some DBMS use different kind of data types. Inside the repository, you will find a SQL folder, with 2 SQL files, one called PERSONS_Original.sql and other called PERSONS.sql, note that I’ve changed the PERSONS.sql to fit the PostgreSQL data types, but I let the original file as well just for comparison.
 
-{% gist 61fd88afc93f6e4994d339bdb4868035 %}
+```sql
+create table PERSONS (
+    id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(50),
+    gender VARCHAR(50)
+);
+insert into PERSONS (id, first_name, last_name, email, gender) values (1, 'Donald', 'Watkins', 'dwatkins0@sfgate.com', 'Male');
+insert into PERSONS (id, first_name, last_name, email, gender) values (2, 'Angela', 'Hall', 'ahall1@hostgator.com', 'Female');
+insert into PERSONS (id, first_name, last_name, email, gender) values (3, 'Victor', 'Jacobs', 'vjacobs2@slate.com', 'Male');
+insert into PERSONS (id, first_name, last_name, email, gender) values (4, 'Raymond', 'Jenkins', 'rjenkins3@rediff.com', 'Male');
+```
 
 OK let’s start it. First we will import our package from Spring initializr, to gain some time. After importing, let’s first create our model, our database representation in code. Create a new package inside your current package, and call it “models”. This way, we will begin to separate some of our code in groups, or packages. Packages are nothing more than folders inside our structure, but they receive a different name. Create our Person.java class inside it, and write down the properties representing all the database fields. We will use some annotations to mark some of our properties, like `@NotEmpty` and `@NotNull`, so we will gain some level of data validation before we save it. We will use a generation strategy for our primary key, so we will not need to worry about some primary key duplication. To mark this class as an entity, we will use the `@Entity` and the `@Table` annotations, to mark this class and bind it to the right table in our database. You will notice that I use CamelCase on my property names, because I’m used to it. Alright, let’s see our first class implemented.
 
-{% gist 8ad4d74c6c58cd7a19e68899554bbfe3 %}
+```java
+@Entity
+@Table(name="PERSONS")
+public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private Long id;
+
+    @NotEmpty
+    @NotNull
+    @Column(name="first_name",length = 50)
+    private String firstName;
+
+    @NotEmpty
+    @NotNull
+    @Column(name="last_name",length = 50)
+    private String lastName;
+
+    @NotEmpty
+    @NotNull
+    @Column(length = 50)
+    private String email;
+
+    @NotEmpty
+    @NotNull
+    @Column(name="gender",length = 50)
+    private String gender;
+
+    ..... Edited for brevity ...
+}
+```
 
 Now, let’s build some code to pull it out of the database, let’s build our Data Access Object, and for most of our time as developers, we used to write a lot of DAO code, but now with spring and it’s magic tricks, we can resume all of that code with a simple interface. Create a repository package, and inside it, create an interface called PersonRepository.java.
 
-{% gist 0329d261dbd1d763d1a42dbd938db0b9 %}
+```java
+@Service
+public interface PersonRepository extends CrudRepository<Person,Long> {
+}
+```
 
 Hold on a minute buddy, where is all that database connection stuff, where are those ton of lines of code to connect, pull and parse an object. Calm down, let’s explain it a little bit. Using Spring Data magic, we can extend our repository interface with CrudRepository, and pass to this Generic interface which object we want to pull (in our case the Person) and what is the type of it’s primary key (a Long type), and this way, this interface will be automatic implemented by spring data, and we will not need to write a dozen of lines of code just to build a query. We will see how easy is to consume this interface very soon.
 
 Now it’s time to connect to our database. Let’s begin with some configuration class. Create a config package, and create a java class called DatabaseMain.java inside it. This will be our main connection, and from now on, we will write down a lot of annotations in this class.
 
-{% gist cf0691ba8f4924819808a609d24834c4 %}
+```java
+@Configuration
+@EnableTransactionManagement
+@ComponentScan("ord.paulushc")
+@PropertySource("file:./database.properties")
+@EnableJpaRepositories(
+        basePackages = "org.paulushc",
+        entityManagerFactoryRef = "mainEntityManager",
+        transactionManagerRef = "mainTransactionManager")
+public class DatabaseMain {
+
+    @Value("${main.db.driver}")
+    private String driver;
+    @Value("${main.db.url}")
+    private String url;
+    @Value("${main.db.username}")
+    private String username;
+    @Value("${main.db.password}")
+    private String password;
+    @Value("${hibernate.dialect}")
+    private String dialect;
+    @Value("${hibernate.show_sql}")
+    private boolean showSQL;
+    @Value("${hibernate.format_sql}")
+    private boolean formatSQL;
+    @Value("${entitymanager.packages.to.scan}")
+    private String packageScan;
+    @Value("${connection.release_mode}")
+    private String releaseMode;
+
+    @Bean(name = "mainDataSource")
+    @Primary
+    public DataSource mainDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        return dataSource;
+    }
+
+    @Bean(name = "mainEntityManager")
+    @Primary
+    public LocalContainerEntityManagerFactoryBean mainEntityManager() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(mainDataSource());
+        em.setPackagesToScan(new String[] { packageScan });
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(hibernateProperties());
+
+        return em;
+    }
+
+    @Bean(name = "mainTransactionManager")
+    @Primary
+    public PlatformTransactionManager mainTransactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(mainEntityManager().getObject());
+        return transactionManager;
+    }
+
+    @Bean(name = "mainSessionFactory")
+    @Primary
+    public LocalSessionFactoryBean mainSessionFactory() {
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(mainDataSource());
+        sessionFactoryBean.setPackagesToScan(packageScan);
+        sessionFactoryBean.setHibernateProperties(hibernateProperties());
+        return sessionFactoryBean;
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.hbm2ddl.auto", false);
+        properties.put("hibernate.dialect", dialect);
+        properties.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        properties.put("hibernate.show_sql",showSQL);
+        properties.put("hibernate.format_sql",formatSQL);
+        properties.put("entitymanager.packages.to.scan",packageScan);
+        properties.put("connection.release_mode",releaseMode);
+        return properties;
+    }
+}
+```
 
 Holly Jolly, that’s a huge class right? Let’s split it a little bit. From lines 22 to 29, we have some annotations to mark this class as a configuration class, so spring boot will pick this class to load while it’s starting. Second, we have EnableTransactionManagement, so we set this connection to support transactions, then we have ComponentScan, a spring annotation that tell spring boot to scan the listed package to pick all the classes bellow this annotation to manage it when possible (when annotated to be honest). After that, we have PropertySource, an annotation that bind a file, so we don’t need to implement a class to read all the configurations from our config file. Easy don’t you think? And last, we have EnableJpaRepositories, and this is an important annotation. With this, we are telling hibernate that this class is a repository, and we are setting the base packages, or the package from where hibernate will begin to scan for `@Entity` classes, we also set the name of our Entity Manager and Transaction Manager, the guys responsible for managing the connections and transactions.
 
@@ -81,11 +213,36 @@ After that, we have a lot of `@Value` annotations. This annotation bind a value 
 
 Now create a file in root of our project called database.properties and put all this `@Value` content inside it, and fill all the parameter with the connection information. Use mine as example and after finish it, let’s move to our first test.
 
-{% gist 5f5c2cea6b0e83f4cf6c39cc4006f259 %}
+```properties
+#Main Database Connection
+main.db.driver=org.postgresql.Driver
+main.db.url=jdbc:postgresql://127.0.0.1:5432/multidb1
+main.db.username=multidbusr
+main.db.password=secret
+
+#Hibernate Configurations
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+hibernate.show_sql=false
+hibernate.format_sql=false
+entitymanager.packages.to.scan=org.paulushc
+connection.release_mode=auto
+```
 
 As a lazy developer, I always go through the smaller road, as Bill Gates said, “[I choose a lazy person to do a hard job. Because a lazy person will find an easy way to do it.](https://www.goodreads.com/quotes/568877-i-choose-a-lazy-person-to-do-a-hard-job)”, so to test our code, I choose to make a rest repository, so we can test if we are getting all the results from out query. Let’s build it. Create a package called rest, and create our PersonRest.java
 
-{% gist 7d318f9791e152039bf1a0b12f43644c %}
+```java
+@RestController
+@RequestMapping(value = "/person")
+public class PersonRest {
+
+    @Autowired private PersonRepository repository;
+
+    @RequestMapping(value = "/all")
+    public Iterable<Person> getAll(){
+        return repository.findAll();
+    }
+}
+```
 
 Once again, a clean class, we have the RestController Annotation to mark this class as a rest controller, so we are not returning HTML content, but we are returning some JSON content instead. We put some RequestMapping annotations, so we can map some URLs to our calls. We bind our repository here using `@Autowired` annotation, so spring will have our repository ready to be used. But look inside the getAll method, and …… there is just one single line. That’s all. Of course we are not expecting any exceptions, remember, this is just an example, on a real world you will have some more lines to catch some exceptions and so on. But for brevity, we are just returning all the lines. The findAll method is automaticaly generated from our CrudRepository interface, and this way, we don’t need to implement anything. Much more easy don’t you think?
 
@@ -95,17 +252,100 @@ Run it and you will see a result just like mine.
 
 OK, now it’s time to add the other databases to the game. Inside our config package, create 2 more classes, called DatabaseSecond and DatabaseThird, and the let’s build something similar to the DatabaseMain. Duplicate the DatabaseMain.java file, refactor it renaming it to DatabaseSecond and DatabaseThird. After that remove the annotations `@EnableTransactionManagement`, `@ComponentScan`, `@EnableJpaRepositories` and `@Primary` from the 2 new classes, and rename all the mainXXX stuff to second and third. After that, fill the database.properties with the other connection parameters, just like mine and we are ready to go.
 
-{% gist 4c79bbbc0c30c9c5a22399420682b5e0 %}
+```properties
+#Main Database Connection
+main.db.driver=org.postgresql.Driver
+main.db.url=jdbc:postgresql://127.0.0.1/multidb1
+main.db.username=multidbusr
+main.db.password=secret
+
+#Second Database Connection
+second.db.driver=org.postgresql.Driver
+second.db.url=jdbc:postgresql://127.0.0.1/multidb2
+second.db.username=multidbusr
+second.db.password=secret
+
+#Third Database Connection
+third.db.driver=org.postgresql.Driver
+third.db.url=jdbc:postgresql://127.0.0.1/multidb3
+third.db.username=multidbusr
+third.db.password=secret
+
+#Hibernate Configurations
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+hibernate.show_sql=false
+hibernate.format_sql=false
+entitymanager.packages.to.scan=org.paulushc
+connection.release_mode=auto
+```
 
 Now let’s put some magic on it. Let’s make this a multidatabase repository. Let’s create a helper class called EntityManagerUtils.java inside an utils package.
 
-{% gist 48674539f160a44ed34bd65ef4047afa %}
+```java
+@Component
+public class EntityManagerUtils {
+
+    @Autowired
+    @Qualifier("mainEntityManager")
+    private EntityManager mainDatabase;
+
+    @Autowired
+    @Qualifier("secondEntityManager")
+    private EntityManager secondDatabase;
+
+    @Autowired
+    @Qualifier("thirdEntityManager")
+    private EntityManager thirdDatabase;
+
+    public EntityManager getEm(String url){
+
+        if(url.contains("main"))
+            return mainDatabase;
+        if(url.contains("second"))
+            return secondDatabase;
+        if(url.contains("third"))
+            return thirdDatabase;
+        return mainDatabase;
+    }
+
+    public JpaRepositoryFactory getJpaFactory(String url){
+        return new JpaRepositoryFactory( getEm(url) );
+    }
+
+}
+```
 
 The first thing you will notice is that we have 3 autowired EntityManager, and you ask me why. This will be the entry points to our databases, and this class will be the router. Take a good look at the `@Qualifier` annotations on each entity manager, and you will recognize the names, they are the very same names we give to our entity managers during database config classes creation. We use the `@Qualifier` annotation to mark this dependency injection and flag it, so spring will not autowired the wrong connection for us. The getEm method, use a rudimentary method of binding each connection to a rule, and as I stated, we will use the URLs to route the databases. The getJpaFactory, will make the change to our JpaRepository so it will know the right database to connect.
 
 To test it, let’s build a new rest repository, this time called MultiPersonRest, and let’s copy our base repository to speed up the things a little. With this step done, we can make some changes to the first RequestMapping anotation, changing from /person to /multiperson.If you run it right now, you will get the same result we had on the previous controller. To achieve our multi database part, we need some changes. First, let’s make a method that routes the call to the correct database, using our EntityManagerUtils. Then we will make some modifications to our getAll method and the we will build another one to test.
 
-{% gist 018879a32758bf7c805645c826417daa %}
+```java
+@RestController
+@RequestMapping(value = "/multiperson")
+public class MultiPersonRest {
+
+    @Autowired private PersonRepository repository;
+    @Autowired private HttpServletRequest context;
+    @Autowired private EntityManagerUtils emUtils;
+
+    @RequestMapping(value = "/all")
+    public Iterable<Person> getAll(){
+        setRepository( context.getRequestURL().toString() );
+        return repository.findAll();
+    }
+
+    @RequestMapping(value = "/single/{id}")
+    public Person getSingle(@PathVariable("id") Long id){
+        setRepository( context.getRequestURL().toString() );
+        return repository.findOne(id);
+    }
+
+    private void setRepository(String url){
+        repository = emUtils.getJpaFactory(url).getRepository(PersonRepository.class);
+    }
+
+}
+```
 
 Make some modifications on your database, so you can check if it works, and you will get the differences like in my test. To test it, I’ve built another call to my rest controller, adding a call to a single result, using the ID as parameter.
 

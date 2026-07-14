@@ -41,25 +41,140 @@ We implemented a group of classes that we used to help on the library use, in a 
 
 This class is responsible for organizing all the jsch code in a single place, on a simple way and making it easy to maintain, so during our construction, we will learn a lot about the library. The first step, is making a constructor, so we can pass our connection data, like user name, password, host and port. This way, we already have all the data needed during all the process, and we aliminate all the need of being asking all the time the connection data.
 
-{% gist feec315ce5c0c8bf2f1d1f8514dbf06e %}
+```java
+public ShellConnectionStream(String usuario,String senha, String host, int porta) {
+
+		try {
+			ssh = new JSch();			
+			this.usuario = usuario;
+			this.senha = senha;
+			this.porta = porta;
+			this.host = host;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+}
+```
 
 On the next step, we create a way to start and end a connection with the server, because, we want a flexibility level, so we can open a connection, execute a lot of stuff and close only at the very end, so we can save some of the handshake time.
 
-{% gist ae3cd558f0ac381b10b12f41b761d8a3 %}
+```java
+public boolean connect() throws JSchException {
+
+		try {
+			
+			session = ssh.getSession(this.usuario, this.host, this.porta);			
+			session.setPassword(this.senha);
+			session.setConfig("StrictHostKeyChecking", "no");
+			session.connect(30000);
+			setSession(session);
+			setReady(true);
+			
+			return true;
+		} catch (Exception e) {
+			setReady(false);
+		}		
+		return false;
+	}
+  
+  public void close() {
+
+		if (channel != null)
+			channel.disconnect();
+
+		if (session != null)
+			session.disconnect();
+		
+		setReady(false);
+	}
+```
 
 Now it’s the show time. Basicly, we want to build a lib that we can achieve 2 things at principle, upload/download and command execution. But why “only” these 2 functionalities? Because they are the very base of almost anything and they are enough for what we wanna do.
 
-{% gist 73bf109c21db0a9c6e014e5e7b0a6ede %}
+```java
+public String write(String comando) {
+
+		try {			
+			
+			channel = session.openChannel("exec");						
+			((ChannelExec) channel).setCommand(comando);			
+			setCommandOutput(channel.getInputStream());			
+			channel.connect(30000);
+
+			StringBuilder sBuilder = new StringBuilder();
+			String lido = reader.readLine();
+			
+			while (lido != null) {				
+				sBuilder.append(lido);				
+				sBuilder.append("\n");
+				lido = reader.readLine();
+			}
+
+			return sBuilder.toString();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+```
 
 The way we implemented, the command is executed, and return something that we forward to the user (as you can see, it’s just a string that is returned at the end of the execution). This way, the user can execute a listing command like ‘ls’ and process the return of this command, or execute a command to move a file, that will not return anything, but he didn’t expect anything at all, so no problem.
 
 Next, we will download and upload files, because this is one of the main factors to use this library anyway, as you can see at the begining, our main motivation was to exchange files with our server, so let’s get it on.
 
-{% gist c1c223cc19f0b4da612d8775c826f91b %}
+```java
+public boolean upload(String origem,String dirDestino) {
+
+		try {
+			File origem_ = new File(origem);			
+			dirDestino = dirDestino.replace(" ", "_");
+			String destino = dirDestino.concat("/").concat(origem_.getName());						
+			return upload(origem, destino, dirDestino);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean upload(String origem,String destino,String dirDestino) {
+
+		try {			
+			ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");			
+			sftp.connect();			
+			dirDestino = dirDestino.replace(" ", "_");									
+			sftp.cd(dirDestino);
+			sftp.put(origem, destino);			
+			sftp.disconnect();
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+```
 
 As you can see, it’s not hard, it’s just a put call to sftp, which have a lot of overloads, but we prefer to use an exemple where we first change to the directory and then we send the file, using it’s full path just to be sure that we will save the file at the correct place. At the same time, we replace all the whithespaces with other valid character, because it can be a problem if we have a whitespace at our path. You can use this time to replace other special characters as well. Another point that need some atention, is that we used a string with the file path, but we can use an inputstream or a file, but we stick with the string path, because this way,we don’t neet to read the file before the library, if the library itself could do it for you before sending. The user feedback is given as a boolean value, so he can check if it was a success.
 
-{% gist f4e16d906517bbc97dd2eb264da12c92 %}
+```java
+public boolean download(String arquivoRemoto, String arquivoLocal){
+		
+		try {			
+			ChannelSftp sftp = (ChannelSftp) session.openChannel("sftp");			
+			sftp.connect();						
+			sftp.get(arquivoRemoto, arquivoLocal);			
+			sftp.disconnect();
+			return true;
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+```
 
 Same logic is used to download a file, it’s like a reverse upload, changing only the put method with get, the library will save the remote file on the given path, and we return a boolean to the user on the same fashion.
 
@@ -69,23 +184,120 @@ Simple, isn’t if? But belive me, this library could save us a lot of time and 
 
 Now, on the next step, we will create a simple way of consuming this class, unifying some repeated code on a single place, creating key functionalities to our dayli use. Let’s start with something simple, like creating a directory.
 
-{% gist dd291dd07e5b10b90fa4028c993e6739 %}
+```java
+public static void criaDir(String usuario,String senha, String host, int porta, String dirDestino) {
+		ShellConnectionStream ssh = new ShellConnectionStream(usuario, senha, host, porta);
+		try{
+			ssh.connect();
+			if(ssh.isReady()) {
+				ssh.write("mkdir -p " + dirDestino);
+				ssh.close();
+			}
+		}catch(Exception e){ e.printStackTrace(); }		
+		
+	}
+```
 
 Simple right? And how we sill consume it?
 
-{% gist c3ebb8e41567001da001d70672179c0d %}
+```java
+package org.paulushc.ssh;
+
+import java.util.Arrays;
+
+public class SSHUso {
+
+	private static String usuario = "usuario";
+	private static String senha = "senha";
+	private static String host = "127.0.0.1";
+	private static int porta = 22;
+	
+	public static void main(String[] args){		
+				
+		SSHUtils.criaDir(usuario,senha,host,porta,"/home/desenv/200/");
+			
+	}
+	
+	
+}
+```
 
 Wow, now that’s something. Now we can create some remote directories right? What more can we do? How about, check if a file exist?
 
-{% gist 3be5cd3b2f13f576670ebe8d53375d2e %}
+```java
+public static boolean existFile(String usuario,String senha, String host, int porta,String destino){
+
+		ShellConnectionStream ssh = new ShellConnectionStream(usuario, senha, host, porta);
+		try{
+			ssh.connect();
+			if(ssh.isReady()) {
+				String retorno = ssh.write("[ -f " + destino +" ]  && echo 1 || echo 0 ");
+				ssh.close();
+				if(retorno != null){
+					retorno = retorno.replace("\n", "");
+					return  Long.parseLong(retorno) > 0;
+				}
+				return false;
+			}
+		}catch(Exception e){ e.printStackTrace(); }		
+		return false;
+	}
+```
 
 Now we are talking Paulo, now I can see what you are talking about. Now, how about… move files?
 
-{% gist c343771e51f88b7521fc5335f341c605 %}
+```java
+public static void renameFile(String usuario,String senha, String host, int porta, String dirArquivoOriginal, String dirArquivoNovo) {
+		ShellConnectionStream ssh = new ShellConnectionStream(usuario, senha, host, porta);
+		try{
+			ssh.connect();
+			if(ssh.isReady()) {
+				dirArquivoOriginal =  dirArquivoOriginal.replace(" ", "\\ ");
+				ssh.write("mv " + dirArquivoOriginal + " " + dirArquivoNovo);
+				ssh.close();
+			}
+		}catch(Exception e){ e.printStackTrace(); }		
+		
+	}
+```
 
 So… how about upload? And if I want to send more than one file at time?
 
-{% gist 26e000fac86d99a0d54fbf0d977ffc41 %}
+```java
+public static boolean uploadTo(String usuario,String senha, String host, int porta,String destino,String dirDestino, String arquivo){
+  criaDir(usuario, senha, host, porta, dirDestino);
+	ShellConnectionStream ssh = new ShellConnectionStream(usuario, senha, host, porta);
+	try{
+		ssh.connect();
+		if(ssh.isReady()) {
+			if(ssh.upload(arquivo,destino, dirDestino)){
+				ssh.close();
+				return true;				
+			}
+		}
+	} catch(Exception e){ e.printStackTrace(); }		
+	return false;
+}
+
+public static boolean uploadTo(String usuario,String senha, String host, int porta,String dirDestino, List<String> arquivos){
+	criaDir(usuario, senha, host, porta, dirDestino);
+	ShellConnectionStream ssh = new ShellConnectionStream(usuario, senha, host, porta);
+	try{
+		ssh.connect();
+		if(ssh.isReady()) {
+			for(String arquivo : arquivos){
+				if(!ssh.upload(arquivo, dirDestino)){
+					ssh.close();
+					return false;
+				}
+			}
+			ssh.close();
+			return true;
+		}
+	} catch(Exception e){ e.printStackTrace(); }		
+	return false;
+}
+```
 
 The possibilities are endless, this is just the tip of the iceberg.You can make some task execute automatically, using code, like cleaning temporary files, manage servers on a centralized manner, or maybe, like myself, you need a Swiss Army knife, that will save you from trouble and from unecessary dependencies.
 
