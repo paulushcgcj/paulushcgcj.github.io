@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Dunno",
+            "label": "Bundler",
             "type": "shell",
             "command": "bundle",
             "dependsOn": "Install"
@@ -11,7 +11,7 @@
             "label": "Update",
             "type": "shell",
             "command": "bundle update",
-            "dependsOn": "Dunno"
+            "dependsOn": "Bundler"
         },
         {
             "label": "Serve",
