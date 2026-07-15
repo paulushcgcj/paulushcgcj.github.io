@@ -124,3 +124,5 @@ build-iPhoneSimulator/
 CLAUDE.md
 .opencode/
 _drafts/
+.playwright-mcp/
+stitch_screens/
