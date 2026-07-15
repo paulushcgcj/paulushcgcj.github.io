@@ -23,5 +23,3 @@ end
 
 gem "http_parser.rb", "~> 0.8.0", platforms: [:jruby]
 
-gem "minimal-mistakes-jekyll", ">= 4.25.1"
-gem "faraday-retry"

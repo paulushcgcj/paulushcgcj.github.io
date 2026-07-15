@@ -1,0 +1,50 @@
+<button class="theme-toggle"
+        id="theme-toggle"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode"
+        type="button">
+  <span class="material-symbols-outlined theme-toggle__icon--light" aria-hidden="true">light_mode</span>
+  <span class="material-symbols-outlined theme-toggle__icon--dark" aria-hidden="true">dark_mode</span>
+</button>
+
+<script>
+  (function() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+
+    function getPreferredTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      updateToggleLabel(theme);
+    }
+
+    function updateToggleLabel(theme) {
+      toggle.setAttribute('aria-label',
+        theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+      );
+    }
+
+    // Initialize
+    updateToggleLabel(getPreferredTheme());
+
+    // Toggle on click
+    toggle.addEventListener('click', function() {
+      const current = document.documentElement.getAttribute('data-theme') || getPreferredTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  })();
+</script>

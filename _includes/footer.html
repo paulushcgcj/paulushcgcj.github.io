@@ -1,0 +1,56 @@
+<footer class="footer" role="contentinfo">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <a href="{{ '/' | relative_url }}" class="footer__logo" aria-label="{{ site.title }} - Home">
+        {{ site.title | upcase }}
+      </a>
+      <p class="footer__tagline">
+        {{ site.subtitle | escape }}
+      </p>
+      <p class="footer__copyright">
+        &copy; {{ site.time | date: '%Y' }} {{ site.title | escape }}.
+        All posts licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+      </p>
+    </div>
+
+    <nav class="footer__nav" aria-label="Footer Navigation">
+      <ul class="footer__links" role="list">
+        {%- for link in site.data.navigation.main %}
+        <li>
+          <a href="{{ link.url | relative_url }}" class="footer__link">
+            {{ link.title }}
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <div class="footer__social">
+      {%- if site.github_username %}
+      <a href="https://github.com/{{ site.github_username }}"
+         class="footer__social-link"
+         aria-label="GitHub"
+         target="_blank"
+         rel="noopener noreferrer">
+        <span class="material-symbols-outlined" aria-hidden="true">code</span>
+      </a>
+      {%- endif %}
+      
+      {%- if site.linkedin_username %}
+      <a href="https://linkedin.com/in/{{ site.linkedin_username }}"
+         class="footer__social-link"
+         aria-label="LinkedIn"
+         target="_blank"
+         rel="noopener noreferrer">
+        <span class="material-symbols-outlined" aria-hidden="true">hub</span>
+      </a>
+      {%- endif %}
+      
+      <a href="{{ '/feed.xml' | relative_url }}"
+         class="footer__social-link"
+         aria-label="RSS Feed">
+        <span class="material-symbols-outlined" aria-hidden="true">rss_feed</span>
+      </a>
+    </div>
+  </div>
+</footer>

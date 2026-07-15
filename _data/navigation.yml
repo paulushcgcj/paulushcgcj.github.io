@@ -2,7 +2,7 @@ main:
   - title: Articles
     description: All articles
     url: /articles/
-  - title: Blog Posts
+  - title: Blog
     description: Blog posts, usually with personal stuff
     url: /blog/
   - title: Wolfpack

@@ -1,0 +1,56 @@
+{%- comment -%}
+  Post Card Component for the home feed
+  
+  Usage: {% include post-card.html post=post %}
+  
+  The post object should have:
+  - title
+  - url
+  - date
+  - excerpt
+  - categories (optional)
+  - image (optional)
+  - content (for reading time calculation)
+{%- endcomment -%}
+
+{%- assign post = include.post -%}
+{%- assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 -%}
+{%- assign primary_categories = post.categories | first -%}
+
+<article class="post-card card">
+  {%- if post.image %}
+  <div class="post-card__image">
+    <img src="{{ post.image | relative_url }}"
+         alt="{{ post.title | escape }}"
+         loading="lazy"
+         width="800"
+         height="450">
+  </div>
+  {%- endif %}
+  
+  <div class="post-card__body">
+    <div class="post-card__meta">
+      {%- if primary_categories %}
+      <span class="chip chip--secondary">{{ primary_categories }}</span>
+      {%- endif %}
+      <span class="post-card__read-time">{{ read_time }} MIN</span>
+    </div>
+    
+    <h3 class="post-card__title">
+      <a href="{{ post.url | relative_url }}" class="post-card__link">
+        {{ post.title | escape }}
+      </a>
+    </h3>
+    
+    {%- if post.excerpt %}
+    <p class="post-card__excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+    {%- endif %}
+    
+    <div class="post-card__footer">
+      <time class="post-card__date" datetime="{{ post.date | date_to_xmlschema }}">
+        {{ post.date | date: "%Y.%m.%d" }}
+      </time>
+      <span class="material-symbols-outlined post-card__arrow" aria-hidden="true">arrow_forward</span>
+    </div>
+  </div>
+</article>

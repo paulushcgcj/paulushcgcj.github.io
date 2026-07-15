@@ -1,0 +1,72 @@
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% if page.title %}{{ page.title | escape }} | {{ site.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
+<meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+
+<!-- Preconnect for Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Google Fonts: Fraunces, Inter, JetBrains Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Material Symbols for icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet">
+
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+<!-- Theme initialization script (before body to prevent FOUC) -->
+<script>
+  (function() {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (prefersDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+
+<!-- SEO -->
+{% seo %}
+{% feed_meta %}
+
+<!-- Canonical URL -->
+{% if page.url %}
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+{% endif %}
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="{{ site.title | escape }}">
+<meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+<meta property="og:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 200 | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+{% if page.date %}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+{% endif %}
+{% if page.image %}
+<meta property="og:image" content="{{ page.image | absolute_url }}">
+{% endif %}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
+<meta name="twitter:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 200 | escape }}">
+{% if page.image %}
+<meta name="twitter:image" content="{{ page.image | absolute_url }}">
+{% endif %}
+{% if site.twitter_username %}
+<meta name="twitter:site" content="@{{ site.twitter_username }}">
+{% endif %}
+
+<!-- Favicon -->
+{% if site.logo %}
+<link rel="icon" href="{{ site.logo | relative_url }}" type="image/png">
+{% endif %}
+
+<!-- RSS -->
+<link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">

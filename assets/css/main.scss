@@ -1,0 +1,64 @@
+---
+# Front matter — Jekyll processes this file
+# Output: /assets/css/main.css
+---
+
+/*
+ * @docs
+ * File: main.scss
+ * Responsibility: Master stylesheet entry point. Imports all partials in
+ *   the correct cascade order for the Modern-Technical Editorial system.
+ * Notes:
+ *   - Import order matters: tokens -> themes -> base -> components -> utilities.
+ *   - Jekyll compiles this to /assets/css/main.css at build time.
+ *   - Front matter (---) triggers Jekyll's Sass pipeline.
+ *   - @use / @forward not used here because this is the entry point; partials
+ *     are plain @import to stay compatible with Jekyll's built-in Sass processor.
+ */
+
+/* ==========================================================================
+   1. DESIGN TOKENS — Custom properties, font families, spacing scale
+   ========================================================================== */
+
+@import "tokens";
+
+/* ==========================================================================
+   2. THEMES — Light/dark mode color assignments
+   ==========================================================================
+   Must come after tokens so the custom property declarations in tokens
+   are available for the theme overrides.
+   ========================================================================== */
+
+@import "themes";
+
+/* ==========================================================================
+   3. BASE — Element resets, typographic defaults, form basics
+   ==========================================================================
+   Establishes the 8px grid, font loading, and semantic element styles.
+   ========================================================================== */
+
+@import "base";
+
+/* ==========================================================================
+   4. COMPONENTS — BEM component styles
+   ==========================================================================
+   Buttons, cards, chips, inputs, nav, article layout, etc.
+   ========================================================================== */
+
+@import "components";
+
+/* ==========================================================================
+   5. TEMPLATES — Layout and template-specific styles
+   ==========================================================================
+   Hero sections, post cards, sidebar widgets, CV layout, page layouts.
+   ========================================================================== */
+
+@import "templates";
+
+/* ==========================================================================
+   6. UTILITIES — Single-property helper classes
+   ==========================================================================
+   Loaded last so they can override component styles when needed.
+   ========================================================================== */
+
+@import "utilities";

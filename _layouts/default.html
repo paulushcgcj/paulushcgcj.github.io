@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  {% include head.html %}
+</head>
+
+<body class="site-body">
+  <!-- Skip to content link for accessibility -->
+  <a class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+     href="#main-content">
+    Skip to content
+  </a>
+
+  {% include header.html %}
+
+  <main id="main-content" class="site-main" role="main">
+    {{ content }}
+  </main>
+
+  {% include footer.html %}
+
+  <!-- Mobile navigation toggle script -->
+  <script>
+    (function() {
+      const toggle = document.querySelector('.nav__toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+      if (!toggle || !mobileNav) return;
+
+      toggle.addEventListener('click', function() {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', !isExpanded);
+        mobileNav.setAttribute('aria-hidden', isExpanded);
+        mobileNav.classList.toggle('nav__mobile--open');
+        
+        // Update icon
+        const icon = toggle.querySelector('.material-symbols-outlined');
+        if (icon) {
+          icon.textContent = isExpanded ? 'menu' : 'close';
+        }
+      });
+
+      // Close mobile nav when clicking a link
+      mobileNav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toggle.setAttribute('aria-expanded', 'false');
+          mobileNav.setAttribute('aria-hidden', 'true');
+          mobileNav.classList.remove('nav__mobile--open');
+          const icon = toggle.querySelector('.material-symbols-outlined');
+          if (icon) icon.textContent = 'menu';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

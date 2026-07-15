@@ -1,0 +1,222 @@
+/*
+ * @docs
+ * File: _tokens.scss
+ * Responsibility: Design token definitions — colors, typography, spacing, radii, and layout constants.
+ * Notes:
+ *   - All values derive from DESIGN.md (Modern-Technical Editorial).
+ *   - CSS custom properties enable runtime theming via _themes.scss.
+ *   - Sass variables hold static layout constants that don't change per theme.
+ *   - Typography scale uses clamp() where mobile/Desktop split is specified.
+ *   - Naming: --color-* for palette, --font-* / --text-* for type, --space-* for spacing, --radius-* for shapes.
+ */
+
+/* ==========================================================================
+   COLOR TOKENS — Material 3–style role system
+   ==========================================================================
+   These are shell declarations. Actual values are set in _themes.scss
+   under :root (light) and [data-theme="dark"] / prefers-color-scheme.
+   We declare the properties here so tooling and documentation can
+   enumerate the full token surface.
+   ========================================================================== */
+
+:root {
+  /* ---- Surface palette ---- */
+  --color-surface: #faf9f7;
+  --color-surface-dim: #dadad8;
+  --color-surface-bright: #faf9f7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container: #efeeec;
+  --color-surface-container-high: #e9e8e6;
+  --color-surface-container-highest: #e3e2e0;
+
+  /* ---- Foreground / text ---- */
+  --color-on-surface: #1a1c1b;
+  --color-on-surface-variant: #434750;
+
+  /* ---- Inverse ---- */
+  --color-inverse-surface: #2f3130;
+  --color-inverse-on-surface: #f1f1ef;
+
+  /* ---- Outline / border ---- */
+  --color-outline: #737781;
+  --color-outline-variant: #c3c6d2;
+  --color-border: #e9e8e5;
+
+  /* ---- Tint ---- */
+  --color-surface-tint: #325f9e;
+
+  /* ---- Primary (Deep Blue) ---- */
+  --color-primary: #1e4e8c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #9dc1ff;
+  --color-on-primary-container: #00376f;
+  --color-inverse-primary: #a8c8ff;
+
+  /* ---- Secondary (Terracotta) ---- */
+  --color-secondary: #b85c3e;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #ff9472;
+  --color-on-secondary-container: #772b11;
+
+  /* ---- Tertiary (Forest Green) ---- */
+  --color-tertiary: #2f7a34;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #84d280;
+  --color-on-tertiary-container: #00410e;
+
+  /* ---- Error ---- */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* ---- Fixed tones (shared across modes) ---- */
+  --color-primary-fixed: #d6e3ff;
+  --color-primary-fixed-dim: #a8c8ff;
+  --color-on-primary-fixed: #001b3d;
+  --color-on-primary-fixed-variant: #134684;
+
+  --color-secondary-fixed: #ffdbd0;
+  --color-secondary-fixed-dim: #ffb59e;
+  --color-on-secondary-fixed: #3a0b00;
+  --color-on-secondary-fixed-variant: #7b2e14;
+
+  --color-tertiary-fixed: #a6f6a0;
+  --color-tertiary-fixed-dim: #8bd987;
+  --color-on-tertiary-fixed: #002204;
+  --color-on-tertiary-fixed-variant: #005314;
+
+  /* ---- Background alias ---- */
+  --color-background: #faf9f7;
+  --color-on-background: #1a1c1b;
+  --color-surface-variant: #e3e2e0;
+
+  /* ---- Code block surfaces (always dark) ---- */
+  --color-code-bg: #1d2026;
+  --color-code-surface: #272a30;
+  --color-code-text: #e1e2eb;
+  --color-code-border: #434750;
+  --color-code-header-bg: #101319;
+
+  /* ---- Focus ring ---- */
+  --color-focus-ring: #325f9e;
+
+  /* ---- Reading progress bar ---- */
+  --color-progress-bar: #b85c3e;
+
+  /* ==========================================================================
+     TYPOGRAPHY TOKENS
+     ==========================================================================
+     Font families
+     ========================================================================== */
+
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+
+  /* ---- Type scale ---- */
+
+  --text-display-lg: 700 48px/1.1 var(--font-display);
+  --text-display-lg-letter-spacing: -0.01em;
+
+  --text-headline-md: 600 24px/1.3 var(--font-display);
+
+  --text-article-body: 400 17px/1.6 var(--font-body);
+  --text-article-body-letter-spacing: -0.01em;
+
+  --text-code-inline: 500 14px/1.4 var(--font-mono);
+
+  --text-label-caps: 700 12px/1 var(--font-mono);
+  --text-label-caps-letter-spacing: 0.08em;
+
+  /* ---- Individual font-size tokens (for targeted use) ---- */
+  --font-size-display-lg: 48px;
+  --font-size-display-lg-mobile: 32px;
+  --font-size-headline-md: 24px;
+  --font-size-article-body: 17px;
+  --font-size-code-inline: 14px;
+  --font-size-label-caps: 12px;
+
+  /* ---- Line-height tokens ---- */
+  --line-height-display-lg: 1.1;
+  --line-height-display-lg-mobile: 1.2;
+  --line-height-headline-md: 1.3;
+  --line-height-article-body: 1.6;
+  --line-height-code-inline: 1.4;
+  --line-height-label-caps: 1;
+
+  /* ---- Letter-spacing tokens ---- */
+  --letter-spacing-display-lg: -0.01em;
+  --letter-spacing-article-body: -0.01em;
+  --letter-spacing-label-caps: 0.08em;
+
+  /* ==========================================================================
+     SPACING TOKENS — 8px baseline grid
+     ========================================================================== */
+
+  --space-unit: 8px;
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ---- Layout-specific ---- */
+  --container-max: 1100px;
+  --article-max: 720px;
+  --gutter: 24px;
+  --margin-mobile: 16px;
+
+  /* ==========================================================================
+     BORDER RADIUS TOKENS
+     ========================================================================== */
+
+  --radius-sm: 0.125rem;
+  --radius-default: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* ==========================================================================
+     ELEVATION / DEPTH TOKENS
+     ==========================================================================
+     No drop shadows per DESIGN.md. Depth is tonal + outline only.
+     Backdrop blur for overlays and nav bars.
+     ========================================================================== */
+
+  --backdrop-blur: 8px;
+  --border-width-default: 1px;
+
+  /* ==========================================================================
+     TRANSITION TOKENS
+     ========================================================================== */
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* ==========================================================================
+     Z-INDEX SCALE
+     ========================================================================== */
+
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-progress: 700;
+
+  /* ==========================================================================
+     READING PROGRESS BAR
+     ========================================================================== */
+
+  --progress-bar-height: 2px;
+}

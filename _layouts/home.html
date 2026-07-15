@@ -1,0 +1,151 @@
+---
+layout: default
+---
+
+{%- comment -%} Hero Section {%- endcomment -%}
+<section class="hero">
+  <div class="hero__inner container">
+    <div class="hero__content">
+      {%- if site.posts.first %}
+      <div class="hero__badge">
+        <span class="chip chip--primary">Latest Article</span>
+        {%- assign read_time = site.posts.first.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
+        <span class="hero__meta">{{ read_time }} MIN READ</span>
+        <span class="hero__meta">{{ site.posts.first.date | date: "%b %d, %Y" | upcase }}</span>
+      </div>
+      
+      <h1 class="hero__title">
+        {{ site.posts.first.title }}
+        {%- if site.posts.first.subtitle %}
+        <span class="hero__title-accent">{{ site.posts.first.subtitle }}</span>
+        {%- endif %}
+      </h1>
+      
+      {%- if site.posts.first.excerpt %}
+      <p class="hero__excerpt">
+        {{ site.posts.first.excerpt | strip_html | truncatewords: 40 }}
+      </p>
+      {%- endif %}
+      
+      <div class="hero__actions">
+        <a href="{{ site.posts.first.url | relative_url }}" class="btn btn--primary">
+          READ ARTICLE
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </a>
+        {% if site.github_username %}
+        <a href="https://github.com/{{ site.github_username }}" class="btn btn--secondary" target="_blank" rel="noopener noreferrer">
+          VIEW SOURCE
+        </a>
+        {% endif %}
+      </div>
+      {%- endif %}
+    </div>
+    
+    {%- if site.posts.first.image %}
+    <div class="hero__visual">
+      <div class="hero__image-wrapper">
+        <img src="{{ site.posts.first.image | relative_url }}"
+             alt="{{ site.posts.first.title | escape }}"
+             class="hero__image"
+             loading="eager">
+      </div>
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+{%- comment -%} Main Content Area {%- endcomment -%}
+<div class="container">
+  <div class="home-layout">
+    {%- comment -%} Posts Feed {%- endcomment -%}
+    <div class="home-layout__feed">
+      <div class="home-layout__header">
+        <h2 class="home-layout__title">Recent Transmissions</h2>
+        <a href="{{ '/articles/' | relative_url }}" class="home-layout__view-all">VIEW ALL</a>
+      </div>
+      
+      <div class="home-layout__grid">
+        {%- assign posts = site.posts | where: "categories", "Articles" %}
+        {%- for post in posts limit:6 %}
+          {% include post-card.html post=post %}
+        {%- endfor %}
+      </div>
+    </div>
+
+    {%- comment -%} Sidebar {%- endcomment -%}
+    <aside class="home-layout__sidebar">
+      {%- comment -%} Author Card {%- endcomment -%}
+      <div class="sidebar-card">
+        <div class="sidebar-card__accent"></div>
+        <div class="sidebar-card__body">
+          <h3 class="sidebar-card__label">
+            <span class="sr-only">Status: </span>
+            <span class="sidebar-card__status-dot" aria-hidden="true"></span>
+            IDENT: MAINTAINER
+          </h3>
+          
+          <div class="sidebar-card__author">
+            {%- if site.logo %}
+            <div class="sidebar-card__avatar">
+              <img src="{{ site.logo | relative_url }}"
+                   alt="{{ site.title | escape }}"
+                   class="sidebar-card__avatar-img">
+            </div>
+            {%- endif %}
+            <div>
+              <p class="sidebar-card__name">{{ site.title }}</p>
+              <p class="sidebar-card__role">Systems Architect</p>
+            </div>
+          </div>
+          
+          <p class="sidebar-card__bio">
+            Artifact of a technical mind. Documenting high-performance computing, security, and digital arts.
+          </p>
+          
+          <div class="sidebar-card__social">
+            {% if site.github_username %}
+            <a href="https://github.com/{{ site.github_username }}" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+            </a>
+            {% endif %}
+            {% if site.linkedin_username %}
+            <a href="https://linkedin.com/in/{{ site.linkedin_username }}" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <span class="material-symbols-outlined" aria-hidden="true">hub</span>
+            </a>
+            {% endif %}
+            <a href="mailto:{{ site.email }}" aria-label="Email">
+              <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Tags Cloud {%- endcomment -%}
+      <div class="sidebar-tags">
+        <h3 class="sidebar-tags__title">Data_Tags</h3>
+        <div class="sidebar-tags__list">
+          {%- assign all_tags = site.tags | sort %}
+          {%- for tag in all_tags limit:10 %}
+            {%- assign tag_name = tag[0] %}
+            <a href="{{ '/tags/' | append: tag_name | relative_url | downcase }}" class="sidebar-tags__tag">
+              #{{ tag_name | upcase }}
+            </a>
+          {%- endfor %}
+        </div>
+      </div>
+
+      {%- comment -%} Featured Project {%- endcomment -%}
+      <div class="sidebar-project">
+        <div class="sidebar-project__inner">
+          <p class="sidebar-project__label">Active_Project</p>
+          <h4 class="sidebar-project__title">The Old Ladies</h4>
+          <p class="sidebar-project__desc">A classic Tic-Tac-Toe implementation using MonoGame framework.</p>
+          <div class="sidebar-project__link">
+            OPEN_MODULE
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

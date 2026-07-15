@@ -1,0 +1,85 @@
+<nav class="nav" id="main-nav" aria-label="Main Navigation">
+  <div class="nav__inner">
+    {%- comment -%} Brand / Logo {%- endcomment -%}
+    <a href="{{ '/' | relative_url }}" class="nav__brand" aria-label="{{ site.title }} - Home">
+      {{ site.title | upcase }}
+    </a>
+
+    {%- comment -%} Desktop Navigation Links {%- endcomment -%}
+    <ul class="nav__links u-hide-mobile" role="list">
+      {%- for link in site.data.navigation.main %}
+        <li>
+          <a href="{{ link.url | relative_url }}"
+             class="nav__link{% if page.url == link.url %} nav__link--active{% endif %}">
+            {{ link.title }}
+          </a>
+        </li>
+      {%- endfor %}
+    </ul>
+
+    {%- comment -%} Action buttons {%- endcomment -%}
+    <div class="nav__actions u-flex u-items-center u-gap-sm">
+      <!-- RSS Feed -->
+      <a href="{{ '/feed.xml' | relative_url }}"
+         class="nav__action-btn"
+         aria-label="RSS Feed"
+         title="RSS Feed">
+        <span class="material-symbols-outlined" aria-hidden="true">rss_feed</span>
+      </a>
+
+      <!-- Divider -->
+      <span class="nav__divider u-hide-mobile" aria-hidden="true"></span>
+
+      <!-- Terminal -->
+      {% if site.github_username %}
+      <a href="https://github.com/{{ site.github_username }}"
+         class="nav__action-btn"
+         aria-label="GitHub Profile"
+         title="GitHub Profile"
+         target="_blank"
+         rel="noopener noreferrer">
+        <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+      </a>
+      {% endif %}
+
+      <!-- Divider -->
+      <span class="nav__divider u-hide-mobile" aria-hidden="true"></span>
+
+      <!-- Search -->
+      <form class="nav__search u-hide-mobile" action="{{ '/search' | relative_url }}" method="get" role="search">
+        <span class="material-symbols-outlined nav__search-icon" aria-hidden="true">search</span>
+        <input type="text"
+               name="q"
+               class="nav__search-input"
+               placeholder="SEARCH_ARCHIVE..."
+               aria-label="Search blog posts"
+               autocomplete="off">
+      </form>
+
+      {%- comment -%} Theme Toggle {%- endcomment -%}
+      {% include theme-toggle.html %}
+
+      {%- comment -%} Mobile menu toggle {%- endcomment -%}
+      <button class="nav__toggle u-show-mobile"
+              aria-label="Toggle navigation menu"
+              aria-expanded="false"
+              aria-controls="mobile-nav">
+        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} Mobile Navigation Menu {%- endcomment -%}
+  <div class="nav__mobile" id="mobile-nav" aria-hidden="true">
+    <ul class="nav__mobile-links" role="list">
+      {%- for link in site.data.navigation.main %}
+        <li>
+          <a href="{{ link.url | relative_url }}"
+             class="nav__link{% if page.url == link.url %} nav__link--active{% endif %}">
+            {{ link.title }}
+          </a>
+        </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</nav>

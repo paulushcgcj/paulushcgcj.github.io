@@ -1,0 +1,341 @@
+/*
+ * @docs
+ * File: _utilities.scss
+ * Responsibility: Utility classes for rapid prototyping and one-off layout
+ *   needs. These are intentionally low-specificity single-property helpers.
+ * Notes:
+ *   - Loaded last so they can override component styles when needed.
+ *   - Naming: .u-{property}--{value} pattern for predictability.
+ *   - Keep this file lean — prefer component-level styles for repeated patterns.
+ *   - All values reference CSS custom property tokens from _tokens.scss.
+ */
+
+/* ==========================================================================
+   DISPLAY
+   ========================================================================== */
+
+.u-block {
+  display: block;
+}
+
+.u-flex {
+  display: flex;
+}
+
+.u-flex-inline {
+  display: inline-flex;
+}
+
+.u-grid {
+  display: grid;
+}
+
+.u-hidden {
+  display: none;
+}
+
+/* ==========================================================================
+   FLEX UTILITIES
+   ========================================================================== */
+
+.u-flex-row {
+  flex-direction: row;
+}
+
+.u-flex-col {
+  flex-direction: column;
+}
+
+.u-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.u-flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.u-items-center {
+  align-items: center;
+}
+
+.u-items-start {
+  align-items: flex-start;
+}
+
+.u-items-end {
+  align-items: flex-end;
+}
+
+.u-justify-center {
+  justify-content: center;
+}
+
+.u-justify-between {
+  justify-content: space-between;
+}
+
+.u-justify-end {
+  justify-content: flex-end;
+}
+
+.u-gap-xs {
+  gap: var(--space-xs);
+}
+
+.u-gap-sm {
+  gap: var(--space-sm);
+}
+
+.u-gap-md {
+  gap: var(--space-md);
+}
+
+.u-gap-lg {
+  gap: var(--space-lg);
+}
+
+.u-gap-xl {
+  gap: var(--space-xl);
+}
+
+.u-flex-1 {
+  flex: 1;
+}
+
+/* ==========================================================================
+   SPACING — Margin & Padding
+   ==========================================================================
+   Pattern: .u-{m|p}{side}--{size}
+   Sides: t=top, r=right, b=bottom, l=left, x=horizontal, y=vertical, a=all
+   Sizes: xs(4px), sm(8px), md(16px), lg(24px), xl(32px), 2xl(48px), 3xl(64px)
+   ========================================================================== */
+
+// Margin
+.u-mt--xs { margin-top: var(--space-xs); }
+.u-mt--sm { margin-top: var(--space-sm); }
+.u-mt--md { margin-top: var(--space-md); }
+.u-mt--lg { margin-top: var(--space-lg); }
+.u-mt--xl { margin-top: var(--space-xl); }
+.u-mt--2xl { margin-top: var(--space-2xl); }
+.u-mt--3xl { margin-top: var(--space-3xl); }
+
+.u-mb--xs { margin-bottom: var(--space-xs); }
+.u-mb--sm { margin-bottom: var(--space-sm); }
+.u-mb--md { margin-bottom: var(--space-md); }
+.u-mb--lg { margin-bottom: var(--space-lg); }
+.u-mb--xl { margin-bottom: var(--space-xl); }
+.u-mb--2xl { margin-bottom: var(--space-2xl); }
+.u-mb--3xl { margin-bottom: var(--space-3xl); }
+
+.u-mx--auto { margin-inline: auto; }
+.u-my--auto { margin-block: auto; }
+
+// Padding
+.u-pt--xs { padding-top: var(--space-xs); }
+.u-pt--sm { padding-top: var(--space-sm); }
+.u-pt--md { padding-top: var(--space-md); }
+.u-pt--lg { padding-top: var(--space-lg); }
+.u-pt--xl { padding-top: var(--space-xl); }
+
+.u-pb--xs { padding-bottom: var(--space-xs); }
+.u-pb--sm { padding-bottom: var(--space-sm); }
+.u-pb--md { padding-bottom: var(--space-md); }
+.u-pb--lg { padding-bottom: var(--space-lg); }
+.u-pb--xl { padding-bottom: var(--space-xl); }
+
+.u-px--md { padding-inline: var(--space-md); }
+.u-px--lg { padding-inline: var(--space-lg); }
+.u-py--md { padding-block: var(--space-md); }
+.u-py--lg { padding-block: var(--space-lg); }
+
+/* ==========================================================================
+   TYPOGRAPHY UTILITIES
+   ========================================================================== */
+
+.u-text-display-lg {
+  font: var(--text-display-lg);
+  letter-spacing: var(--letter-spacing-display-lg);
+}
+
+.u-text-headline-md {
+  font: var(--text-headline-md);
+}
+
+.u-text-body {
+  font: var(--text-article-body);
+  letter-spacing: var(--letter-spacing-article-body);
+}
+
+.u-text-code {
+  font: var(--text-code-inline);
+}
+
+.u-text-label {
+  font: var(--text-label-caps);
+  letter-spacing: var(--letter-spacing-label-caps);
+  text-transform: uppercase;
+}
+
+.u-text-center { text-align: center; }
+.u-text-left { text-align: left; }
+.u-text-right { text-align: right; }
+
+.u-text-primary { color: var(--color-primary); }
+.u-text-secondary { color: var(--color-secondary); }
+.u-text-tertiary { color: var(--color-tertiary); }
+.u-text-on-surface { color: var(--color-on-surface); }
+.u-text-on-surface-variant { color: var(--color-on-surface-variant); }
+.u-text-outline { color: var(--color-outline); }
+.u-text-error { color: var(--color-error); }
+
+.u-font-normal { font-weight: 400; }
+.u-font-medium { font-weight: 500; }
+.u-font-semibold { font-weight: 600; }
+.u-font-bold { font-weight: 700; }
+
+.u-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.u-text-balance {
+  text-wrap: balance;
+}
+
+/* ==========================================================================
+   BACKGROUND COLORS
+   ========================================================================== */
+
+.u-bg-surface { background-color: var(--color-surface); }
+.u-bg-surface-container { background-color: var(--color-surface-container); }
+.u-bg-surface-container-low { background-color: var(--color-surface-container-low); }
+.u-bg-surface-container-high { background-color: var(--color-surface-container-high); }
+.u-bg-primary { background-color: var(--color-primary); }
+.u-bg-primary-container { background-color: var(--color-primary-container); }
+.u-bg-secondary { background-color: var(--color-secondary); }
+.u-bg-secondary-container { background-color: var(--color-secondary-container); }
+.u-bg-tertiary { background-color: var(--color-tertiary); }
+.u-bg-tertiary-container { background-color: var(--color-tertiary-container); }
+
+/* ==========================================================================
+   BORDER UTILITIES
+   ========================================================================== */
+
+.u-border { border: var(--border-width-default) solid var(--color-border); }
+.u-border-primary { border-color: var(--color-primary); }
+.u-border-secondary { border-color: var(--color-secondary); }
+.u-border-tertiary { border-color: var(--color-tertiary); }
+.u-border-error { border-color: var(--color-error); }
+.u-border-none { border: none; }
+
+.u-border-t { border-top: var(--border-width-default) solid var(--color-border); }
+.u-border-b { border-bottom: var(--border-width-default) solid var(--color-border); }
+
+.u-rounded { border-radius: var(--radius-default); }
+.u-rounded-md { border-radius: var(--radius-md); }
+.u-rounded-lg { border-radius: var(--radius-lg); }
+.u-rounded-xl { border-radius: var(--radius-xl); }
+.u-rounded-full { border-radius: var(--radius-full); }
+.u-rounded-none { border-radius: 0; }
+
+/* ==========================================================================
+   WIDTH / HEIGHT
+   ========================================================================== */
+
+.u-w-full { width: 100%; }
+.u-w-auto { width: auto; }
+.u-h-full { height: 100%; }
+.u-h-screen { height: 100dvh; }
+
+.u-max-w-article { max-width: var(--article-max); }
+.u-max-w-container { max-width: var(--container-max); }
+
+/* ==========================================================================
+   POSITION
+   ========================================================================== */
+
+.u-relative { position: relative; }
+.u-absolute { position: absolute; }
+.u-sticky { position: sticky; }
+.u-fixed { position: fixed; }
+
+/* ==========================================================================
+   OVERFLOW
+   ========================================================================== */
+
+.u-overflow-hidden { overflow: hidden; }
+.u-overflow-auto { overflow: auto; }
+.u-overflow-x-auto { overflow-x: auto; }
+
+/* ==========================================================================
+   LIST RESET
+   ========================================================================== */
+
+.u-list-reset {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ==========================================================================
+   TRANSITIONS
+   ========================================================================== */
+
+.u-transition-fast { transition: all var(--transition-fast); }
+.u-transition-normal { transition: all var(--transition-normal); }
+.u-transition-slow { transition: all var(--transition-slow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .u-transition-fast,
+  .u-transition-normal,
+  .u-transition-slow {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE VISIBILITY
+   ==========================================================================
+   Show/hide elements at specific breakpoints.
+   ========================================================================== */
+
+.u-hide-mobile {
+  @media (max-width: 640px) {
+    display: none !important;
+  }
+}
+
+.u-hide-desktop {
+  @media (min-width: 641px) {
+    display: none !important;
+  }
+}
+
+.u-show-mobile {
+  display: none !important;
+
+  @media (max-width: 640px) {
+    display: block !important;
+  }
+}
+
+/* ==========================================================================
+   FOCUS VISIBLE UTILITY
+   ==========================================================================
+   Ensure all focusable elements get a visible focus ring.
+   ========================================================================== */
+
+.u-focus-ring:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   SCROLL MARGIN (for anchor links)
+   ========================================================================== */
+
+.u-scroll-mt {
+  scroll-margin-top: calc(var(--space-3xl) + var(--space-md));
+}

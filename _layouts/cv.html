@@ -1,0 +1,179 @@
+---
+layout: default
+---
+
+{%- comment -%} CV Hero Section {%- endcomment -%}
+<header class="cv-hero">
+  <div class="cv-hero__inner container">
+    <div class="cv-hero__content">
+      <div class="cv-hero__status">
+        <span class="cv-hero__status-dot" aria-hidden="true"></span>
+        <span class="cv-hero__status-text">AVAILABLE FOR CONSULTING</span>
+      </div>
+      
+      <h1 class="cv-hero__title">
+        Software Architect <br>
+        <span class="cv-hero__title-accent">& Tech Lead</span>
+      </h1>
+      
+      <p class="cv-hero__bio">
+        {{ page.bio | default: "Born in the bustling tech hub of São Paulo and now shaping the digital landscape from Victoria, BC. I orchestrate complex distributed systems, bridging the gap between deep technical rigor and human-centric engineering leadership." }}
+      </p>
+      
+      <div class="cv-hero__meta">
+        {%- if page.location %}
+        <div class="cv-hero__meta-item">
+          <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+          <span>{{ page.location }}</span>
+        </div>
+        {%- endif %}
+        
+        {%- if page.scope %}
+        <div class="cv-hero__meta-item">
+          <span class="material-symbols-outlined" aria-hidden="true">public</span>
+          <span>{{ page.scope }}</span>
+        </div>
+        {%- endif %}
+      </div>
+    </div>
+    
+    {%- if page.portrait %}
+    <div class="cv-hero__portrait">
+      <div class="cv-hero__portrait-frame">
+        <img src="{{ page.portrait | relative_url }}"
+             alt="{{ site.title | escape }} Portrait"
+             class="cv-hero__portrait-image"
+             loading="eager">
+      </div>
+    </div>
+    {%- endif %}
+  </div>
+</header>
+
+{%- comment -%} Technical Skills Section {%- endcomment -%}
+{%- if page.skills %}
+<section class="cv-section cv-section--skills">
+  <div class="container">
+    <div class="cv-section__header">
+      <div>
+        <span class="cv-section__label">CAPABILITIES</span>
+        <h2 class="cv-section__title">Technical <em>Arsenal</em></h2>
+      </div>
+    </div>
+    
+    <div class="cv-skills-grid">
+      {%- for skill in page.skills %}
+      <div class="cv-skill-card">
+        <span class="material-symbols-outlined cv-skill-card__icon" aria-hidden="true">{{ skill.icon }}</span>
+        <h3 class="cv-skill-card__title">{{ skill.title }}</h3>
+        <p class="cv-skill-card__desc">{{ skill.description }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+    
+    {%- if page.technologies %}
+    <div class="cv-tech-stack">
+      {%- if page.cloud_platforms %}
+      <div class="cv-tech-stack__platforms">
+        <h4 class="cv-tech-stack__subtitle">CLOUD PLATFORMS</h4>
+        <ul class="cv-tech-stack__list">
+          {%- for platform in page.cloud_platforms %}
+          <li>
+            <span class="cv-tech-stack__dot" aria-hidden="true"></span>
+            {{ platform }}
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      {%- endif %}
+      
+      <div class="cv-tech-stack__grid">
+        <span class="cv-tech-stack__grid-label">TECH_GRID:</span>
+        {%- for tech in page.technologies %}
+        <span class="cv-tech-chip">{{ tech }}</span>
+        {%- endfor %}
+      </div>
+    </div>
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+
+{%- comment -%} Work Experience Timeline {%- endcomment -%}
+{%- if page.experience %}
+<section class="cv-section cv-section--experience">
+  <div class="container">
+    <h2 class="cv-section__title-center">
+      Work <span class="cv-section__title-accent">Protocol</span>
+    </h2>
+    
+    <div class="cv-timeline">
+      <div class="cv-timeline__line" aria-hidden="true"></div>
+      
+      {%- for job in page.experience %}
+      <div class="cv-timeline__item{% cycle '', ' cv-timeline__item--reverse' %}">
+        <div class="cv-timeline__card">
+          <span class="cv-timeline__period">{{ job.period }}</span>
+          <h3 class="cv-timeline__company">{{ job.company }}</h3>
+          <h4 class="cv-timeline__role">{{ job.role }}</h4>
+          <p class="cv-timeline__description">{{ job.description }}</p>
+        </div>
+        <div class="cv-timeline__dot" aria-hidden="true"></div>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{%- comment -%} Education Section {%- endcomment -%}
+{%- if page.education %}
+<section class="cv-section cv-section--education">
+  <div class="container">
+    <div class="cv-education">
+      {%- if page.education.image %}
+      <div class="cv-education__image-wrapper">
+        <img src="{{ page.education.image | relative_url }}"
+             alt="{{ page.education.institution }}"
+             class="cv-education__image"
+             loading="lazy">
+      </div>
+      {%- endif %}
+      
+      <div class="cv-education__content">
+        <span class="cv-section__label">QUALIFICATIONS</span>
+        <h2 class="cv-section__title">
+          Academic <br>
+          <span class="cv-section__title-accent">Credential</span>
+        </h2>
+        
+        <div class="cv-education__details">
+          <h3 class="cv-education__institution">{{ page.education.institution }}</h3>
+          <p class="cv-education__degree">{{ page.education.degree }}</p>
+          
+          <div class="cv-education__badges">
+            {%- if page.education.gpa %}
+            <span class="cv-badge cv-badge--primary">{{ page.education.gpa }}</span>
+            {%- endif %}
+            {%- if page.education.location %}
+            <span class="cv-badge">{{ page.education.location }}</span>
+            {%- endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{%- comment -%} Download CV Button {%- endcomment -%}
+<div class="container">
+  <div class="cv-download">
+    {%- if page.cv_file %}
+    <a href="{{ page.cv_file | relative_url }}" class="btn btn--primary btn--lg" download>
+      DOWNLOAD CV
+      <span class="material-symbols-outlined" aria-hidden="true">download</span>
+    </a>
+    {%- endif %}
+  </div>
+</div>

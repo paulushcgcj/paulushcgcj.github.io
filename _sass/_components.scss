@@ -1,0 +1,864 @@
+/*
+ * @docs
+ * File: _components.scss
+ * Responsibility: Component-specific styles for the Modern-Technical Editorial
+ *   design system. Each component block follows BEM naming (block__element--modifier).
+ * Notes:
+ *   - Depends on _tokens.scss, _themes.scss, and _base.scss.
+ *   - Depth is achieved via tonal stacking and outlines, never drop shadows.
+ *   - Code blocks are always dark-surfaced regardless of page theme.
+ *   - Interactive states use color shifts (primary <-> secondary), not z-axis.
+ *   - All components use CSS custom property tokens.
+ */
+
+/* ==========================================================================
+   BUTTONS
+   ==========================================================================
+   Primary: solid Deep Blue bg, white text, label-caps monospace.
+   Secondary: ghost-style, 1px secondary-terracotta border.
+   Compact, technical 4px radius per DESIGN.md shapes.
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font: var(--text-label-caps);
+  letter-spacing: var(--letter-spacing-label-caps);
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-default);
+  padding: var(--space-sm) var(--space-lg);
+  cursor: pointer;
+  border: var(--border-width-default) solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  line-height: 1;
+  white-space: nowrap;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  /* Primary button — Deep Blue solid */
+  &--primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+
+    &:hover {
+      background-color: var(--color-primary-container);
+      color: var(--color-on-primary-container);
+      border-color: var(--color-primary-container);
+    }
+
+    &:active {
+      background-color: var(--color-on-primary-fixed);
+      border-color: var(--color-on-primary-fixed);
+    }
+  }
+
+  /* Secondary button — Terracotta ghost */
+  &--secondary {
+    background-color: transparent;
+    color: var(--color-secondary);
+    border-color: var(--color-secondary);
+
+    &:hover {
+      background-color: var(--color-secondary-container);
+      color: var(--color-on-secondary-container);
+      border-color: var(--color-secondary-container);
+    }
+
+    &:active {
+      background-color: var(--color-on-secondary-fixed);
+      color: var(--color-on-secondary-fixed);
+      border-color: var(--color-on-secondary-fixed);
+    }
+  }
+
+  /* Tertiary button — Forest Green ghost */
+  &--tertiary {
+    background-color: transparent;
+    color: var(--color-tertiary);
+    border-color: var(--color-tertiary);
+
+    &:hover {
+      background-color: var(--color-tertiary-container);
+      color: var(--color-on-tertiary-container);
+      border-color: var(--color-tertiary-container);
+    }
+  }
+
+  /* Disabled state */
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Focus ring */
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Size variants */
+  &--sm {
+    padding: var(--space-xs) var(--space-md);
+    font-size: 11px;
+  }
+
+  &--lg {
+    padding: var(--space-md) var(--space-xl);
+    font-size: 13px;
+  }
+}
+
+/* ==========================================================================
+   CARDS
+   ==========================================================================
+   Dark mode: Surface 2 fill + primary-blue 1px border on hover.
+   Light mode: 1px border outline by default, darker header strip.
+   Standard 0.25rem radius (rounded.DEFAULT).
+   ========================================================================== */
+
+.card {
+  background-color: var(--color-surface-container-low);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-default);
+  overflow: hidden;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  /* Dark mode hover — primary-blue border */
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  /* Card header strip (light mode: slightly darker header) */
+  &__header {
+    background-color: var(--color-surface-container);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: var(--border-width-default) solid var(--color-border);
+
+    /* Label-caps for metadata */
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-on-surface-variant);
+  }
+
+  &__body {
+    padding: var(--space-lg);
+  }
+
+  &__footer {
+    padding: var(--space-md) var(--space-lg);
+    border-top: var(--border-width-default) solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  /* Full-width variant (no padding on body) */
+  &--flush {
+    .card__body {
+      padding: 0;
+    }
+  }
+}
+
+/* ==========================================================================
+   CHIPS / TAGS / BADGES
+   ==========================================================================
+   Label-caps monospace, secondary- or tertiary-color tint background.
+   ========================================================================== */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font: var(--text-label-caps);
+  letter-spacing: var(--letter-spacing-label-caps);
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  line-height: 1;
+  white-space: nowrap;
+
+  /* Default: secondary tint */
+  &--secondary {
+    background-color: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+  }
+
+  &--tertiary {
+    background-color: var(--color-tertiary-container);
+    color: var(--color-on-tertiary-container);
+  }
+
+  &--primary {
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+  }
+
+  /* Outline variant */
+  &--outline {
+    background-color: transparent;
+    border: var(--border-width-default) solid var(--color-outline-variant);
+    color: var(--color-on-surface-variant);
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  font: var(--text-label-caps);
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-full);
+  background-color: var(--color-error);
+  color: var(--color-on-error);
+}
+
+/* ==========================================================================
+   INPUTS
+   ==========================================================================
+   Dark mode: darker-than-surface fill, primary-color bottom border on focus.
+   Light mode: base-surface fill, 1px border, secondary terracotta on focus.
+   Standard 4px radius.
+   ========================================================================== */
+
+.input {
+  width: 100%;
+  font: var(--text-article-body);
+  color: var(--color-on-surface);
+  background-color: var(--color-surface-container-high);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-default);
+  padding: var(--space-sm) var(--space-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &:hover {
+    border-color: var(--color-outline);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 2px var(--color-secondary-container);
+  }
+
+  &::placeholder {
+    color: var(--color-outline);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Error state */
+  &--error {
+    border-color: var(--color-error);
+
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 2px var(--color-error-container);
+    }
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.input-label {
+  font: var(--text-label-caps);
+  letter-spacing: var(--letter-spacing-label-caps);
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+}
+
+.input-hint {
+  font-size: 13px;
+  color: var(--color-outline);
+}
+
+.input-error {
+  font-size: 13px;
+  color: var(--color-error);
+}
+
+/* ==========================================================================
+   TECHNICAL READOUTS
+   ==========================================================================
+   Bordered box with label-caps label in top-left and code-inline data points.
+   Identical pattern in both modes.
+   ========================================================================== */
+
+.readout {
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  background-color: var(--color-surface-container-low);
+  position: relative;
+
+  &__label {
+    position: absolute;
+    top: 0;
+    left: var(--space-md);
+    transform: translateY(-50%);
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-on-surface-variant);
+    background-color: var(--color-surface-container-low);
+    padding: var(--space-2xs) var(--space-sm);
+  }
+
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    padding-top: var(--space-sm);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  &__key {
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-outline);
+    font-size: 10px;
+  }
+
+  &__value {
+    font: var(--text-code-inline);
+    color: var(--color-on-surface);
+  }
+}
+
+/* ==========================================================================
+   READING PROGRESS BAR
+   ==========================================================================
+   Thin 2px terracotta line at viewport top. Fills as user scrolls.
+   Shared by both modes.
+   ========================================================================== */
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: var(--progress-bar-height);
+  background-color: var(--color-progress-bar);
+  z-index: var(--z-progress);
+  transition: width 100ms linear;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   NAVIGATION / HEADER
+   ==========================================================================
+   Backdrop blur overlay per DESIGN.md elevation section.
+   ========================================================================== */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-surface-container-low);
+  border-bottom: var(--border-width-default) solid var(--color-border);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+
+  &__inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--space-3xl);
+  }
+
+  &__brand {
+    font: var(--text-headline-md);
+    color: var(--color-on-surface);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__link {
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-on-surface-variant);
+    text-decoration: none;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-default);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    &:hover {
+      color: var(--color-primary);
+      background-color: var(--color-primary-container);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+  }
+
+  /* Mobile hamburger (placeholder — wire with JS) */
+  &__toggle {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    &__toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--space-xl);
+      height: var(--space-xl);
+      background: none;
+      border: none;
+      color: var(--color-on-surface);
+      cursor: pointer;
+    }
+
+    &__links {
+      display: none;
+
+      &--open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: var(--space-3xl);
+        left: 0;
+        right: 0;
+        background-color: var(--color-surface-container-low);
+        border-bottom: var(--border-width-default) solid var(--color-border);
+        padding: var(--space-md) var(--space-lg);
+        gap: var(--space-sm);
+        backdrop-filter: blur(var(--backdrop-blur));
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   ARTICLE LAYOUT
+   ==========================================================================
+   Centered, narrow column (720px max) for reading.
+   ========================================================================== */
+
+.article {
+  max-width: var(--article-max);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+
+  @media (max-width: 640px) {
+    padding-inline: var(--space-md);
+  }
+
+  &__header {
+    margin-bottom: var(--space-2xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: var(--border-width-default) solid var(--color-border);
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-outline);
+  }
+
+  &__meta-separator {
+    color: var(--color-outline-variant);
+  }
+
+  &__content {
+    /* Article body inherits base typographic defaults */
+  }
+
+  &__footer {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-xl);
+    border-top: var(--border-width-default) solid var(--color-border);
+  }
+}
+
+/* ==========================================================================
+   CONTAINER / LAYOUT WRAPPER
+   ==========================================================================
+   For dashboards/lists: 12-column grid, 1100px max.
+   ========================================================================== */
+
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+
+  @media (max-width: 640px) {
+    padding-inline: var(--space-md);
+  }
+}
+
+.grid {
+  display: grid;
+  gap: var(--gutter);
+
+  &--2 {
+    grid-template-columns: repeat(2, 1fr);
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--4 {
+    grid-template-columns: repeat(4, 1fr);
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* ==========================================================================
+   OVERLAY / MODAL
+   ==========================================================================
+   Backdrop blur, tonal stacking, modal uses modal z-index.
+   ========================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(var(--backdrop-blur));
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: var(--color-surface-container);
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  max-width: var(--article-max);
+  width: calc(100% - var(--space-xl) * 2);
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: var(--z-modal);
+}
+
+/* ==========================================================================
+   TOAST / NOTIFICATION
+   ========================================================================== */
+
+.toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  background-color: var(--color-inverse-surface);
+  color: var(--color-inverse-on-surface);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-default);
+  font: var(--text-label-caps);
+  letter-spacing: var(--letter-spacing-label-caps);
+  z-index: var(--z-toast);
+  max-width: 400px;
+
+  &--success {
+    border-left: 3px solid var(--color-tertiary);
+  }
+
+  &--error {
+    border-left: 3px solid var(--color-error);
+  }
+
+  &--info {
+    border-left: 3px solid var(--color-primary);
+  }
+}
+
+/* ==========================================================================
+   BLOCKQUOTE — Editorial pull-quote style
+   ========================================================================== */
+
+blockquote {
+  border-left: 3px solid var(--color-secondary);
+  padding-inline: var(--space-lg);
+  margin-block: var(--space-lg);
+  font-style: italic;
+  color: var(--color-on-surface-variant);
+
+  cite {
+    display: block;
+    margin-top: var(--space-sm);
+    font-style: normal;
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-outline);
+  }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-surface-container);
+  border-top: var(--border-width-default) solid var(--color-border);
+  padding-block: var(--space-2xl);
+  margin-top: var(--space-4xl);
+
+  &__inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  &__text {
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-outline);
+  }
+
+  &__links {
+    display: flex;
+    gap: var(--space-md);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__link {
+    color: var(--color-on-surface-variant);
+    text-decoration: none;
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+  }
+}
+
+/* ==========================================================================
+   POST LIST — Blog index / archive
+   ========================================================================== */
+
+.post-list {
+  list-style: none;
+  padding: 0;
+
+  &__item {
+    padding-block: var(--space-lg);
+    border-bottom: var(--border-width-default) solid var(--color-border);
+
+    &:hover {
+      background-color: var(--color-surface-container-low);
+    }
+
+    &:first-child {
+      border-top: var(--border-width-default) solid var(--color-border);
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: var(--space-md);
+    border-radius: var(--radius-default);
+
+    &:focus-visible {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  &__title {
+    font: var(--text-headline-md);
+    color: var(--color-on-surface);
+    margin-bottom: var(--space-xs);
+  }
+
+  &__date {
+    font: var(--text-label-caps);
+    letter-spacing: var(--letter-spacing-label-caps);
+    text-transform: uppercase;
+    color: var(--color-outline);
+    margin-bottom: var(--space-sm);
+  }
+
+  &__excerpt {
+    color: var(--color-on-surface-variant);
+    max-width: 65ch;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+  }
+}
+
+/* ==========================================================================
+   THEME TOGGLE BUTTON
+   ==========================================================================
+   Small icon button for switching light/dark mode.
+   ========================================================================== */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-xl);
+  height: var(--space-xl);
+  background: none;
+  border: var(--border-width-default) solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Hide icons based on current theme */
+  &__icon--light {
+    display: none;
+  }
+
+  &__icon--dark {
+    display: block;
+  }
+}
+
+[data-theme="dark"] .theme-toggle {
+  &__icon--light {
+    display: block;
+  }
+
+  &__icon--dark {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle {
+    &__icon--light {
+      display: block;
+    }
+
+    &__icon--dark {
+      display: none;
+    }
+  }
+}

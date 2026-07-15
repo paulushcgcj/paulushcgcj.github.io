@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<div class="container">
+  <div class="page-layout">
+    {%- comment -%} Page Header {%- endcomment -%}
+    <header class="page-header">
+      {%- if page.subtitle %}
+      <span class="page-header__label">{{ page.subtitle }}</span>
+      {%- endif %}
+      
+      <h1 class="page-header__title">
+        {{ page.title }}
+      </h1>
+      
+      {%- if page.description %}
+      <p class="page-header__description">
+        {{ page.description }}
+      </p>
+      {%- endif %}
+    </header>
+
+    {%- comment -%} Page Content {%- endcomment -%}
+    <article class="page-content article" itemscope itemtype="https://schema.org/WebPage">
+      <meta itemprop="headline" content="{{ page.title | escape }}">
+      {% if page.description %}<meta itemprop="description" content="{{ page.description | strip_html | escape }}">{% endif %}
+      
+      <div class="article__content" itemprop="text">
+        {{ content }}
+      </div>
+
+      {%- comment -%} License Footer {%- endcomment -%}
+      {% include cc-by-4.0-footer.html %}
+    </article>
+  </div>
+</div>
