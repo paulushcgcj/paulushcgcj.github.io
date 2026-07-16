@@ -22,10 +22,10 @@ colors:
     primary-container: '#9dc1ff'
     on-primary-container: '#00376f'
     inverse-primary: '#a8c8ff'
-    secondary: '#b85c3e'
+    secondary: '#0058be'
     on-secondary: '#ffffff'
-    secondary-container: '#ff9472'
-    on-secondary-container: '#772b11'
+    secondary-container: '#d8e2ff'
+    on-secondary-container: '#001a42'
     tertiary: '#2f7a34'
     on-tertiary: '#ffffff'
     tertiary-container: '#84d280'
@@ -38,16 +38,16 @@ colors:
     primary-fixed-dim: '#a8c8ff'
     on-primary-fixed: '#001b3d'
     on-primary-fixed-variant: '#134684'
-    secondary-fixed: '#ffdbd0'
-    secondary-fixed-dim: '#ffb59e'
-    on-secondary-fixed: '#3a0b00'
-    on-secondary-fixed-variant: '#7b2e14'
+    secondary-fixed: '#d8e2ff'
+    secondary-fixed-dim: '#adc6ff'
+    on-secondary-fixed: '#001a42'
+    on-secondary-fixed-variant: '#004395'
     tertiary-fixed: '#a6f6a0'
     tertiary-fixed-dim: '#8bd987'
     on-tertiary-fixed: '#002204'
     on-tertiary-fixed-variant: '#005314'
-    background: '#faf9f7'
-    on-background: '#1a1c1b'
+    background: '#f7f9fb'
+    on-background: '#191c1e'
     surface-variant: '#e3e2e0'
     border: '#e9e8e5'
   dark:
@@ -71,10 +71,10 @@ colors:
     primary-container: '#1e4e8c'
     on-primary-container: '#9dc1ff'
     inverse-primary: '#325f9e'
-    secondary: '#ffb59e'
-    on-secondary: '#5d1801'
-    secondary-container: '#7b2e14'
-    on-secondary-container: '#ff9b7b'
+    secondary: '#adc6ff'
+    on-secondary: '#001a42'
+    secondary-container: '#004395'
+    on-secondary-container: '#d8e2ff'
     tertiary: '#8bd987'
     on-tertiary: '#00390b'
     tertiary-container: '#065b19'
@@ -87,10 +87,10 @@ colors:
     primary-fixed-dim: '#a8c8ff'
     on-primary-fixed: '#001b3d'
     on-primary-fixed-variant: '#134684'
-    secondary-fixed: '#ffdbd0'
-    secondary-fixed-dim: '#ffb59e'
-    on-secondary-fixed: '#3a0b00'
-    on-secondary-fixed-variant: '#7b2e14'
+    secondary-fixed: '#d8e2ff'
+    secondary-fixed-dim: '#adc6ff'
+    on-secondary-fixed: '#001a42'
+    on-secondary-fixed-variant: '#004395'
     tertiary-fixed: '#a6f6a0'
     tertiary-fixed-dim: '#8bd987'
     on-tertiary-fixed: '#002204'
@@ -150,7 +150,7 @@ spacing:
 
 ## Brand & Style
 
-The brand personality is a fusion of academic rigor and modern engineering. It targets software architects and technical leads who value clarity, precision, and a sophisticated reading experience. The design style is **Modern-Editorial with Technical Accents** — a rigorous, grid-based editorial layout punctuated by a sophisticated palette of deep blues and warm terracotta, meant to feel authoritative and timeless while keeping the precision of a developer-centric tool.
+The brand personality is a fusion of academic rigor and modern engineering. It targets software architects and technical leads who value clarity, precision, and a sophisticated reading experience. The design style is **Modern-Editorial with Technical Accents** — a rigorous, grid-based editorial layout punctuated by a deep blue and vibrant blue palette, meant to feel authoritative and technical while keeping the precision of a developer-centric tool.
 
 The two modes are the same brand under different lighting, not two separate designs:
 
@@ -167,9 +167,9 @@ Both palettes share the same token names and roles (Material 3–style: `primary
 Role meaning is identical across modes:
 
 - **Primary (Deep Blue family):** primary actions, navigation states, core branding, heading color. Conveys stability and technical reliability.
-- **Secondary (Terracotta family):** highlights, callouts, links, and interactive/focus states. Warm, editorial contrast to the cool primary.
+- **Secondary (Vibrant Blue family):** highlights, callouts, links, and interactive/focus states. Provides a crisp, technical contrast to the deep blue primary.
 - **Tertiary (Forest Green family):** success states, code diffs, and technical readouts.
-- **Neutral/Background:** dark mode uses a deep, warm charcoal slate (`#101319`) with progressively lighter surface containers to build depth; light mode uses a warm off-white (`#faf9f7`) with progressively darker/greyer surface containers, plus an explicit `border` token (`#e9e8e5` light / `#434750` dark) for the "blueprint" grid-line feel.
+- **Neutral/Background:** dark mode uses a deep, warm charcoal slate (`#101319`) with progressively lighter surface containers to build depth; light mode uses a cool off-white (`#f7f9fb`) with progressively darker/greyer surface containers, plus an explicit `border` token (`#e9e8e5` light / `#434750` dark) for the "blueprint" grid-line feel.
 - **Text:** `on-surface` is high-contrast (near-white on dark, near-black on light) for body copy; `on-surface-variant` is a muted blue-grey used for metadata and secondary info in both modes.
 
 ## Typography
@@ -193,8 +193,8 @@ Both modes share one **Fixed-Fluid Hybrid** layout model on an 8px baseline grid
 
 Neither mode uses traditional drop shadows — depth comes from tone and outline instead:
 
-- **Dark mode — Tonal Stacking:** each surface container steps a notch lighter than the one below it, creating a "lifted" appearance. Interactive elements use color shifts or 1px borders (primary blue / secondary terracotta) instead of shadows. A subtle 8px backdrop-blur is used on overlays and nav bars.
-- **Light mode — Low-Contrast Outlines + Tonal Layering:** each surface container steps a notch darker/greyer than the background, and 1px solid `border` tokens define separation explicitly. Raised/active elements use a subtle offset border or a tint shift toward secondary terracotta rather than elevation.
+- **Dark mode — Tonal Stacking:** each surface container steps a notch lighter than the one below it, creating a "lifted" appearance. Interactive elements use color shifts or 1px borders (primary deep blue / secondary vibrant blue) instead of shadows. A subtle 8px backdrop-blur is used on overlays and nav bars.
+- **Light mode — Low-Contrast Outlines + Tonal Layering:** each surface container steps a notch darker/greyer than the background, and 1px solid `border` tokens define separation explicitly. Raised/active elements use a subtle offset border or a tint shift toward secondary blue rather than elevation.
 - **Interactivity (both modes):** focus and active states are communicated with high-contrast color shifts (e.g. a button moving from Deep Blue to Terracotta), not z-axis movement.
 
 ## Shapes
@@ -207,11 +207,11 @@ The shape language is **Technical and Precise** in both modes — soft, not bubb
 
 ## Components
 
-- **Buttons:** solid Deep Blue background with white/`on-primary` text for primary actions; ghost-style secondary buttons use a 1px secondary-terracotta border. Button labels use `label-caps` (monospaced) in both modes.
+- **Buttons:** solid Deep Blue background with white/`on-primary` text for primary actions; ghost-style secondary buttons use a 1px secondary-blue border. Button labels use `label-caps` (monospaced) in both modes.
 - **Code Blocks:** dark, professional palette regardless of page theme (code blocks stay dark-surfaced even on the light theme, for contrast and familiarity); headers show the language name in `label-caps`.
 - **Chips/Tags/Badges:** `label-caps`, all-caps, monospaced text inside a subtle secondary- or tertiary-color tint (`*-container` tone).
 - **Cards:** dark mode uses a `Surface 2` fill with a primary-blue 1px border on hover; light mode uses a 1px `border` outline by default, with a slightly darker header strip to separate metadata from content.
-- **Inputs:** darker-than-surface fill in dark mode with a primary-color bottom border that expands on focus; base-surface fill with a 1px `border` in light mode, transitioning to secondary terracotta on focus.
+- **Inputs:** darker-than-surface fill in dark mode with a primary-color bottom border that expands on focus; base-surface fill with a 1px `border` in light mode, transitioning to secondary blue on focus.
 - **Lists:** horizontal separators between items; hover uses a subtle background-tint shift rather than shadows or chevrons.
 - **Technical Readouts:** a bordered box with a `label-caps` label in the top-left and `code-inline` data points inside — identical pattern in both modes.
 - **Reading Progress Bar:** a thin, 2px terracotta line at the top of the viewport that fills as the user scrolls, shared by both modes.
