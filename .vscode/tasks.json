@@ -16,7 +16,7 @@
         {
             "label": "Serve",
             "type": "shell",
-            "command": "bundle exec jekyll serve",
+            "command": "bundle exec jekyll serve --livereload",
             "problemMatcher": [],
             "dependsOn": "Update"
         },
