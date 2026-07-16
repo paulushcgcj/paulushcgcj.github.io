@@ -53,11 +53,11 @@
   --color-on-primary-container: #00376f;
   --color-inverse-primary: #a8c8ff;
 
-  /* ---- Secondary (Terracotta) ---- */
-  --color-secondary: #b85c3e;
+  /* ---- Secondary (Vibrant Blue) ---- */
+  --color-secondary: #0058be;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #ff9472;
-  --color-on-secondary-container: #772b11;
+  --color-secondary-container: #d8e2ff;
+  --color-on-secondary-container: #001a42;
 
   /* ---- Tertiary (Forest Green) ---- */
   --color-tertiary: #2f7a34;
@@ -77,10 +77,10 @@
   --color-on-primary-fixed: #001b3d;
   --color-on-primary-fixed-variant: #134684;
 
-  --color-secondary-fixed: #ffdbd0;
-  --color-secondary-fixed-dim: #ffb59e;
-  --color-on-secondary-fixed: #3a0b00;
-  --color-on-secondary-fixed-variant: #7b2e14;
+  --color-secondary-fixed: #d8e2ff;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-on-secondary-fixed: #001a42;
+  --color-on-secondary-fixed-variant: #004395;
 
   --color-tertiary-fixed: #a6f6a0;
   --color-tertiary-fixed-dim: #8bd987;
@@ -88,8 +88,8 @@
   --color-on-tertiary-fixed-variant: #005314;
 
   /* ---- Background alias ---- */
-  --color-background: #faf9f7;
-  --color-on-background: #1a1c1b;
+  --color-background: #f7f9fb;
+  --color-on-background: #191c1e;
   --color-surface-variant: #e3e2e0;
 
   /* ---- Focus ring ---- */
@@ -103,7 +103,7 @@
    Activated by data-theme="dark" OR system preference.
    ========================================================================== */
 
-[data-theme="dark"] {
+  [data-theme="dark"] {
   /* ---- Surface palette ---- */
   --color-surface: #101319;
   --color-surface-dim: #101319;
@@ -137,11 +137,11 @@
   --color-on-primary-container: #9dc1ff;
   --color-inverse-primary: #325f9e;
 
-  /* ---- Secondary (Terracotta) ---- */
-  --color-secondary: #ffb59e;
-  --color-on-secondary: #5d1801;
-  --color-secondary-container: #7b2e14;
-  --color-on-secondary-container: #ff9b7b;
+  /* ---- Secondary (Vibrant Blue) ---- */
+  --color-secondary: #adc6ff;
+  --color-on-secondary: #001a42;
+  --color-secondary-container: #004395;
+  --color-on-secondary-container: #d8e2ff;
 
   /* ---- Tertiary (Forest Green) ---- */
   --color-tertiary: #8bd987;
@@ -161,10 +161,10 @@
   --color-on-primary-fixed: #001b3d;
   --color-on-primary-fixed-variant: #134684;
 
-  --color-secondary-fixed: #ffdbd0;
-  --color-secondary-fixed-dim: #ffb59e;
-  --color-on-secondary-fixed: #3a0b00;
-  --color-on-secondary-fixed-variant: #7b2e14;
+  --color-secondary-fixed: #d8e2ff;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-on-secondary-fixed: #001a42;
+  --color-on-secondary-fixed-variant: #004395;
 
   --color-tertiary-fixed: #a6f6a0;
   --color-tertiary-fixed-dim: #8bd987;
@@ -217,10 +217,10 @@
     --color-on-primary-container: #9dc1ff;
     --color-inverse-primary: #325f9e;
 
-    --color-secondary: #ffb59e;
-    --color-on-secondary: #5d1801;
-    --color-secondary-container: #7b2e14;
-    --color-on-secondary-container: #ff9b7b;
+    --color-secondary: #adc6ff;
+    --color-on-secondary: #001a42;
+    --color-secondary-container: #004395;
+    --color-on-secondary-container: #d8e2ff;
 
     --color-tertiary: #8bd987;
     --color-on-tertiary: #00390b;
@@ -237,10 +237,10 @@
     --color-on-primary-fixed: #001b3d;
     --color-on-primary-fixed-variant: #134684;
 
-    --color-secondary-fixed: #ffdbd0;
-    --color-secondary-fixed-dim: #ffb59e;
-    --color-on-secondary-fixed: #3a0b00;
-    --color-on-secondary-fixed-variant: #7b2e14;
+  --color-secondary-fixed: #d8e2ff;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-on-secondary-fixed: #001a42;
+  --color-on-secondary-fixed-variant: #004395;
 
     --color-tertiary-fixed: #a6f6a0;
     --color-tertiary-fixed-dim: #8bd987;

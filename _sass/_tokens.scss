@@ -53,11 +53,11 @@
   --color-on-primary-container: #00376f;
   --color-inverse-primary: #a8c8ff;
 
-  /* ---- Secondary (Terracotta) ---- */
-  --color-secondary: #b85c3e;
+  /* ---- Secondary (Vibrant Blue) ---- */
+  --color-secondary: #0058be;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #ff9472;
-  --color-on-secondary-container: #772b11;
+  --color-secondary-container: #d8e2ff;
+  --color-on-secondary-container: #001a42;
 
   /* ---- Tertiary (Forest Green) ---- */
   --color-tertiary: #2f7a34;
@@ -77,10 +77,10 @@
   --color-on-primary-fixed: #001b3d;
   --color-on-primary-fixed-variant: #134684;
 
-  --color-secondary-fixed: #ffdbd0;
-  --color-secondary-fixed-dim: #ffb59e;
-  --color-on-secondary-fixed: #3a0b00;
-  --color-on-secondary-fixed-variant: #7b2e14;
+  --color-secondary-fixed: #d8e2ff;
+  --color-secondary-fixed-dim: #adc6ff;
+  --color-on-secondary-fixed: #001a42;
+  --color-on-secondary-fixed-variant: #004395;
 
   --color-tertiary-fixed: #a6f6a0;
   --color-tertiary-fixed-dim: #8bd987;
@@ -88,8 +88,8 @@
   --color-on-tertiary-fixed-variant: #005314;
 
   /* ---- Background alias ---- */
-  --color-background: #faf9f7;
-  --color-on-background: #1a1c1b;
+  --color-background: #f7f9fb;
+  --color-on-background: #191c1e;
   --color-surface-variant: #e3e2e0;
 
   /* ---- Code block surfaces (always dark) ---- */
@@ -103,7 +103,7 @@
   --color-focus-ring: #325f9e;
 
   /* ---- Reading progress bar ---- */
-  --color-progress-bar: #b85c3e;
+  --color-progress-bar: #0058be;
 
   /* ==========================================================================
      TYPOGRAPHY TOKENS

@@ -10,30 +10,70 @@
  */
 
 /* ==========================================================================
-   HERO SECTION — Home page
+   HERO SECTION — Home page (Full Bleed)
    ========================================================================== */
 
 .hero {
   position: relative;
   width: 100%;
+  min-height: 600px;
   overflow: hidden;
   border-bottom: var(--border-width-default) solid var(--color-border);
   background-color: var(--color-surface-container-lowest);
+  display: flex;
+  align-items: center;
 
+  @media (min-width: 1024px) {
+    min-height: 700px;
+  }
+
+  /* ---- Background image layer (full bleed) ---- */
+  &__image-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    opacity: 0.4;
+    transition: filter var(--transition-slow), opacity var(--transition-slow);
+  }
+
+  &--has-image:hover &__image {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  /* ---- Gradient overlay for text legibility ---- */
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      var(--color-background) 0%,
+      color-mix(in srgb, var(--color-background) 90%, transparent) 60%,
+      transparent 100%
+    );
+  }
+
+  /* ---- Content container ---- */
   &__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-2xl);
-    align-items: center;
-    padding-block: var(--space-3xl);
-
-    @media (min-width: 1024px) {
-      grid-template-columns: 7fr 5fr;
-    }
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-inline: var(--gutter);
+    padding-block: var(--space-4xl);
   }
 
   &__content {
-    z-index: 1;
+    max-width: 640px;
   }
 
   &__badge {
@@ -48,6 +88,11 @@
     letter-spacing: var(--letter-spacing-label-caps);
     text-transform: uppercase;
     color: var(--color-on-surface);
+  }
+
+  &__meta-separator {
+    color: var(--color-outline-variant);
+    font-size: 12px;
   }
 
   &__title {
@@ -75,34 +120,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-md);
-  }
-
-  &__visual {
-    position: relative;
-
-    @media (min-width: 1024px) {
-      display: flex;
-      justify-content: flex-end;
-    }
-  }
-
-  &__image-wrapper {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 1;
-    border-radius: var(--radius-sm);
-    border: var(--border-width-default) solid var(--color-border);
-    background-color: var(--color-surface-container);
-
-    @media (min-width: 1024px) {
-      max-width: 400px;
-    }
-  }
-
-  &__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 }
 
@@ -194,7 +211,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: grayscale(0.8) opacity(0.9);
+      filter: grayscale(1) opacity(0.85);
       transition: filter var(--transition-slow), transform var(--transition-slow);
     }
 
@@ -836,14 +853,14 @@
     width: 8px;
     height: 8px;
     border-radius: var(--radius-full);
-    background-color: var(--color-secondary);
+    background-color: var(--color-primary);
     animation: pulse 2s infinite;
   }
 
   &__status-text {
     font: var(--text-label-caps);
     font-size: 10px;
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 
   &__title {
@@ -856,7 +873,7 @@
   }
 
   &__title-accent {
-    background: linear-gradient(135deg, var(--color-secondary), var(--color-outline));
+    background: linear-gradient(135deg, var(--color-primary), var(--color-outline));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -888,7 +905,7 @@
     color: var(--color-on-surface);
 
     .material-symbols-outlined {
-      color: var(--color-secondary);
+      color: var(--color-primary);
       font-size: 20px;
     }
   }
@@ -964,7 +981,7 @@
     display: block;
     font: var(--text-label-caps);
     font-size: 10px;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin-bottom: var(--space-sm);
@@ -993,7 +1010,7 @@
   }
 
   &__title-accent {
-    color: var(--color-secondary);
+    color: var(--color-primary);
     font-style: italic;
     font-weight: 400;
   }
@@ -1024,7 +1041,7 @@
 
   &__icon {
     font-size: 32px;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     margin-bottom: var(--space-lg);
     display: block;
   }
@@ -1086,7 +1103,8 @@
     width: 6px;
     height: 6px;
     border-radius: var(--radius-full);
-    background-color: rgba(184, 92, 62, 0.4);
+    background-color: var(--color-primary);
+    opacity: 0.4;
   }
 
   &__grid {
@@ -1214,7 +1232,7 @@
     transition: border-color var(--transition-fast);
 
     &:hover {
-      border-color: var(--color-secondary);
+      border-color: var(--color-primary);
     }
 
     @media (max-width: 767px) {
@@ -1233,7 +1251,7 @@
       width: 16px;
       height: 16px;
       border-radius: var(--radius-full);
-      background-color: var(--color-secondary);
+      background-color: var(--color-primary);
       box-shadow: 0 0 0 4px var(--color-surface);
     }
 
@@ -1263,7 +1281,7 @@
     display: block;
     font: var(--text-label-caps);
     font-size: 12px;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     margin-bottom: var(--space-sm);
 
     &--primary {
@@ -1351,7 +1369,7 @@
   transition: border-color var(--transition-fast);
 
   &:hover {
-    border-color: var(--color-secondary);
+    border-color: var(--color-primary);
   }
 
   &__company {
@@ -1365,7 +1383,7 @@
   &__role {
     font: var(--text-label-caps);
     font-size: 10px;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     display: block;
     margin-bottom: var(--space-md);
   }
@@ -1423,7 +1441,7 @@
   &__details {
     position: relative;
     padding-left: var(--space-xl);
-    border-left: 2px solid var(--color-secondary);
+    border-left: 2px solid var(--color-primary);
   }
 
   &__institution {
@@ -1456,9 +1474,9 @@
   border: var(--border-width-default) solid var(--color-border);
 
   &--primary {
-    background-color: rgba(184, 92, 62, 0.05);
-    border-color: rgba(184, 92, 62, 0.2);
-    color: var(--color-secondary);
+    background-color: var(--color-primary-fixed);
+    border-color: var(--color-primary-container);
+    color: var(--color-primary);
   }
 }
 

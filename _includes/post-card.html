@@ -18,9 +18,10 @@
 {%- assign primary_categories = post.categories | first -%}
 
 <article class="post-card card">
-  {%- if post.image %}
+  {%- assign card_image = post.header.teaser | default: false %}
+  {%- if card_image %}
   <div class="post-card__image">
-    <img src="{{ post.image | relative_url }}"
+    <img src="{{ card_image | relative_url }}"
          alt="{{ post.title | escape }}"
          loading="lazy"
          width="800"

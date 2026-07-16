@@ -2,33 +2,46 @@
 layout: default
 ---
 
-{%- comment -%} Hero Section {%- endcomment -%}
-<section class="hero">
+{%- comment -%} Hero Section — Full Bleed with Grayscale Transition {%- endcomment -%}
+{%- assign hero_post = site.posts.first %}
+{%- assign hero_teaser = hero_post.header.teaser | default: false %}
+<section class="hero{% if hero_teaser %} hero--has-image{% endif %}">
+  {%- if hero_teaser %}
+  <div class="hero__image-layer">
+    <img src="{{ hero_teaser | relative_url }}"
+         alt="{{ hero_post.title | escape }}"
+         class="hero__image"
+         loading="eager">
+    <div class="hero__overlay"></div>
+  </div>
+  {%- endif %}
+
   <div class="hero__inner container">
+    {%- if hero_post %}
     <div class="hero__content">
-      {%- if site.posts.first %}
       <div class="hero__badge">
         <span class="chip chip--primary">Latest Article</span>
-        {%- assign read_time = site.posts.first.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
+        {%- assign read_time = hero_post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
         <span class="hero__meta">{{ read_time }} MIN READ</span>
-        <span class="hero__meta">{{ site.posts.first.date | date: "%b %d, %Y" | upcase }}</span>
+        <span class="hero__meta-separator" aria-hidden="true">&#8226;</span>
+        <span class="hero__meta">{{ hero_post.date | date: "%b %d, %Y" | upcase }}</span>
       </div>
       
       <h1 class="hero__title">
-        {{ site.posts.first.title }}
-        {%- if site.posts.first.subtitle %}
-        <span class="hero__title-accent">{{ site.posts.first.subtitle }}</span>
+        {{ hero_post.title }}
+        {%- if hero_post.subtitle %}
+        <span class="hero__title-accent">{{ hero_post.subtitle }}</span>
         {%- endif %}
       </h1>
       
-      {%- if site.posts.first.excerpt %}
+      {%- if hero_post.excerpt %}
       <p class="hero__excerpt">
-        {{ site.posts.first.excerpt | strip_html | truncatewords: 40 }}
+        {{ hero_post.excerpt | strip_html | truncatewords: 60 }}
       </p>
       {%- endif %}
       
       <div class="hero__actions">
-        <a href="{{ site.posts.first.url | relative_url }}" class="btn btn--primary">
+        <a href="{{ hero_post.url | relative_url }}" class="btn btn--primary">
           READ ARTICLE
           <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
         </a>
@@ -37,17 +50,6 @@ layout: default
           VIEW SOURCE
         </a>
         {% endif %}
-      </div>
-      {%- endif %}
-    </div>
-    
-    {%- if site.posts.first.image %}
-    <div class="hero__visual">
-      <div class="hero__image-wrapper">
-        <img src="{{ site.posts.first.image | relative_url }}"
-             alt="{{ site.posts.first.title | escape }}"
-             class="hero__image"
-             loading="eager">
       </div>
     </div>
     {%- endif %}
@@ -65,8 +67,7 @@ layout: default
       </div>
       
       <div class="home-layout__grid">
-        {%- assign posts = site.posts | where: "categories", "Articles" %}
-        {%- for post in posts limit:6 %}
+        {%- for post in site.posts limit:6 %}
           {% include post-card.html post=post %}
         {%- endfor %}
       </div>
