@@ -1,0 +1,42 @@
+{%- comment -%}
+  Article List Item Component — Gradient Mask Variant
+  
+  Usage: {% include article-list-item.html post=post %}
+  
+  Matches the Stitch "Articles Archive - Gradient Mask Variant" screen.
+  Features:
+    - Translucent masked background image on hover
+    - Title translates right on hover
+    - Date + read time with separator line
+    - Excerpt text
+{%- endcomment -%}
+
+{%- assign post = include.post -%}
+{%- assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 -%}
+{%- assign banner_image = post.header.overlay_image | default: post.header.teaser -%}
+
+<article class="article-list-item">
+  {%- if banner_image %}
+  <div class="article-list-item__banner" aria-hidden="true">
+    <img alt="" class="article-list-item__banner-img" src="{{ banner_image | relative_url }}">
+  </div>
+  {%- endif %}
+  
+  <div class="article-list-item__content">
+    <div class="article-list-item__meta">
+      <time class="article-list-item__date" datetime="{{ post.date | date_to_xmlschema }}">
+        {{ post.date | date: "%B %-d, %Y" }}
+      </time>
+      <span class="article-list-item__separator" aria-hidden="true"></span>
+      <span class="article-list-item__read-time">{{ read_time }} MIN READ</span>
+    </div>
+    
+    <a class="article-list-item__title-link" href="{{ post.url | relative_url }}">
+      <h3 class="article-list-item__title">{{ post.title | escape }}</h3>
+    </a>
+    
+    {%- if post.excerpt %}
+    <p class="article-list-item__excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+    {%- endif %}
+  </div>
+</article>

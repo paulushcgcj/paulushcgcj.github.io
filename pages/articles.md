@@ -1,29 +1,46 @@
 ---
 title: Articles
 permalink: /articles/
+layout: article-list
+description: A curated collection of technical deep dives, architectural reflections, and software engineering insights gathered throughout my journey.
 ---
 
-<ul class="taxonomy__index">
-  {% assign postsInYear = site.posts | where_exp: "item", "item.hidden != true" | where_exp: "item", "item.categories contains 'article'" | group_by_exp: 'post', 'post.date | date: "%Y"' %}
-  {% for year in postsInYear %}
-    <li>
-      <a href="#{{ year.name }}">
-        <strong>{{ year.name }}</strong> <span class="taxonomy__count">{{ year.items | size }}</span>
-      </a>
-    </li>
-  {% endfor %}
-</ul>
+<div class="articles-page">
+  {%- comment -%} Breadcrumb {%- endcomment -%}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}" class="breadcrumb__item">Home</a>
+    <span class="breadcrumb__separator material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    <span class="breadcrumb__item breadcrumb__item--active">Articles</span>
+  </nav>
 
-{% assign entries_layout = page.entries_layout | default: 'list' %}
-{% assign postsByYear = site.posts | where_exp: "item", "item.hidden != true" | where_exp: "item", "item.categories contains 'article'" | group_by_exp: 'post', 'post.date | date: "%Y"' %}
-{% for year in postsByYear %}
-  <section id="{{ year.name }}" class="taxonomy__section">
-    <h2 class="archive__subtitle">{{ year.name }}</h2>
-    <div class="entries-{{ entries_layout }}">
-      {% for post in year.items %}
-        {% include archive-single.html type=entries_layout %}
-      {% endfor %}
+  {%- comment -%} Page Header {%- endcomment -%}
+  <header class="article-list-header">
+    <h1 class="article-list-header__title">Articles</h1>
+    {%- if page.description %}
+    <p class="article-list-header__description">{{ page.description }}</p>
+    {%- endif %}
+  </header>
+
+  {%- comment -%} Articles grouped by year {%- endcomment -%}
+  {%- assign articles = site.posts | where_exp: "item", "item.categories contains 'article'" %}
+  {%- assign postsByYear = articles | group_by_exp: 'post', 'post.date | date: "%Y"' %}
+  
+  <div class="article-list">
+    {%- for year in postsByYear %}
+    <div class="article-list__year-group">
+      <aside class="article-list__year-sidebar">
+        <div class="article-list__year-sticky">
+          <h2 class="article-list__year-label">{{ year.name }}</h2>
+          <span class="article-list__year-count">{{ year.items | size }} {% if year.items.size == 1 %}Entry{% else %}Entries{% endif %}</span>
+        </div>
+      </aside>
+      
+      <div class="article-list__items">
+        {%- for post in year.items %}
+          {%- include article-list-item.html post=post %}
+        {%- endfor %}
+      </div>
     </div>
-    <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
-  </section>
-{% endfor %}
+    {%- endfor %}
+  </div>
+</div>
