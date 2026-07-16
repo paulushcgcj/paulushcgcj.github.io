@@ -99,8 +99,8 @@ layout: default
 </section>
 {%- endif %}
 
-{%- comment -%} Work Experience Timeline {%- endcomment -%}
-{%- if page.experience %}
+{%- comment -%} Work Protocol — Timeline (all entries in one alternating timeline) {%- endcomment -%}
+{%- if page.primary_experience %}
 <section class="cv-section cv-section--experience">
   <div class="container">
     <h2 class="cv-section__title-center">
@@ -110,15 +110,50 @@ layout: default
     <div class="cv-timeline">
       <div class="cv-timeline__line" aria-hidden="true"></div>
       
-      {%- for job in page.experience %}
-      <div class="cv-timeline__item{% cycle '', ' cv-timeline__item--reverse' %}">
-        <div class="cv-timeline__card">
-          <span class="cv-timeline__period">{{ job.period }}</span>
-          <h3 class="cv-timeline__company">{{ job.company }}</h3>
-          <h4 class="cv-timeline__role">{{ job.role }}</h4>
-          <p class="cv-timeline__description">{{ job.description }}</p>
+      {%- for job in page.primary_experience %}
+      {%- assign accent = '' %}
+      {%- if job.period == 'GUEST LECTURER' %}
+        {%- assign accent = 'lecturer' %}
+      {%- elsif forloop.index == 1 %}
+        {%- assign accent = 'primary' %}
+      {%- else %}
+        {%- assign accent = 'tertiary' %}
+      {%- endif %}
+      {%- assign side = '' %}
+      {%- if forloop.index == 1 or forloop.index == 3 %}
+        {%- assign side = 'left' %}
+      {%- else %}
+        {%- assign side = 'right' %}
+      {%- endif %}
+      <div class="cv-timeline__item cv-timeline__item--{{ side }}">
+        <div class="cv-timeline__card-wrapper">
+          <div class="cv-timeline__card cv-timeline__card--{{ accent }}">
+            <span class="cv-timeline__period cv-timeline__period--{{ accent }}">{{ job.period }}</span>
+            <h3 class="cv-timeline__company">{{ job.company }}</h3>
+            <h4 class="cv-timeline__role">{{ job.role }}</h4>
+            <p class="cv-timeline__description">{{ job.description }}</p>
+          </div>
         </div>
-        <div class="cv-timeline__dot" aria-hidden="true"></div>
+        <div class="cv-timeline__dot cv-timeline__dot--{{ accent }}" aria-hidden="true"></div>
+        <div class="cv-timeline__spacer" aria-hidden="true"></div>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{%- comment -%} Legacy Foundation Index — separate section, 3-column grid {%- endcomment -%}
+{%- if page.legacy_foundation %}
+<section class="cv-section cv-section--legacy">
+  <div class="container">
+    <h2 class="cv-section__legacy-title">LEGACY_FOUNDATION_INDEX</h2>
+    <div class="cv-legacy-grid">
+      {%- for entry in page.legacy_foundation %}
+      <div class="cv-legacy-card">
+        <h3 class="cv-legacy-card__company">{{ entry.company }}</h3>
+        <span class="cv-legacy-card__role">{{ entry.role }}</span>
+        <p class="cv-legacy-card__description">{{ entry.description }}</p>
       </div>
       {%- endfor %}
     </div>
@@ -136,7 +171,9 @@ layout: default
         <img src="{{ page.education.image | relative_url }}"
              alt="{{ page.education.institution }}"
              class="cv-education__image"
-             loading="lazy">
+             loading="lazy"
+             width="474"
+             height="474">
       </div>
       {%- endif %}
       
@@ -152,8 +189,8 @@ layout: default
           <p class="cv-education__degree">{{ page.education.degree }}</p>
           
           <div class="cv-education__badges">
-            {%- if page.education.gpa %}
-            <span class="cv-badge cv-badge--primary">{{ page.education.gpa }}</span>
+            {%- if page.education.year %}
+            <span class="cv-badge cv-badge--primary">{{ page.education.year }}</span>
             {%- endif %}
             {%- if page.education.location %}
             <span class="cv-badge">{{ page.education.location }}</span>
