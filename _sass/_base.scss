@@ -247,6 +247,7 @@ pre {
   margin-block: var(--space-lg);
   font: var(--text-code-inline);
   line-height: 1.7;
+  box-shadow: 0 4px 20px var(--color-code-shadow);
 
   code {
     background: none;

@@ -608,6 +608,11 @@
       display: block;
       width: 240px;
       flex-shrink: 0;
+      position: sticky;
+      top: calc(64px + var(--space-lg)); /* nav height (64px) + spacing */
+      align-self: flex-start;
+      max-height: calc(100vh - 64px - var(--space-3xl));
+      overflow-y: auto;
     }
   }
 
@@ -631,8 +636,6 @@
 
 /* Table of Contents */
 .article-toc {
-  position: sticky;
-  top: calc(var(--space-3xl) + var(--space-md));
 
   &__title {
     font: var(--text-label-caps);
