@@ -5,6 +5,25 @@ categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
 permalink: /articles/mathematics-of-the-unknown
+resources:
+    - title: "Fechner, G. T. (1860). Elemente der Psychophysik"
+      url: "https://archive.org/details/elementederpsych001fech"
+    - title: "Cohn, M. (2005). Agile Estimating and Planning"
+      url: "https://www.mountaingoatsoftware.com/books/agile-estimating-and-planning"
+    - title: "Kahneman, D., & Tversky, A. (1979). Intuitive prediction: Biases and corrective procedures"
+      url: "https://doi.org/10.1017/CBO9780511809477.031"
+    - title: "Buehler, R., Griffin, D., & Ross, M. (2002). Inside the planning fallacy"
+      url: "https://doi.org/10.1017/CBO9780511808098.016"
+    - title: "Developex. (2023). Time & Material Estimation Guide for Software Projects"
+      url: "https://developex.com/blog/time-material-estimation-guide/"
+    - title: "Weiss, D. M., & Basili, V. R. (1978). Evaluating Software Development by Error Analysis"
+      url: "https://apps.dtic.mil/sti/tr/pdf/ADA062922.pdf"
+    - title: "McCabe, T. J. (1976). A Complexity Measure"
+      url: "https://doi.org/10.1109/TSE.1976.233837"
+    - title: "Flyvbjerg, B. (2006). From Nobel Prize to Project Management"
+      url: "https://doi.org/10.1177/875697280603700302"
+    - title: "Klein, G. (2007). Performing a Project Premortem"
+      url: "https://hbr.org/2007/09/performing-a-project-premortem"
 ---
 
 Every engineering team has sat in a synchronous Planning Poker session, staring at a Jira ticket for a feature that doesn't exist yet. The Product Owner reads the acceptance criteria. The Scrum Master asks for estimates. 
@@ -34,15 +53,11 @@ This law states that human perception of magnitude is *logarithmic*, not linear.
 **What this means for estimation:**
 *   The gap between 1 and 2 is 100%. A developer can confidently distinguish a "1" task from a "2" task.
 *   The gap between 5 and 8 is 60%. The distinction is harder, but still meaningful.
-*   The gap between 8 and 13 is 62.5%. At this point, the uncertainty band of the estimate overlaps with the next number. 
+*   The gap between 8 and 13 is 62.5%. On a logarithmic scale, this jump is nearly identical to the gap between 5 and 8 (60%). The human eye perceives these as similar steps in magnitude. At this point, the uncertainty band of the estimate overlaps with the next number. 
 
 This is why the golden rule of Agile, **"anything above 8 must be broken down,"** is statistically sound. Above 8, the variance in human estimation exceeds the gap between the numbers. A "13" could be an "8" or a "21". The signal-to-noise ratio collapses. A team voting 13 is signaling panic, not estimating.
 
-### References
-*   Fechner, G. T. (1860). [*Elemente der Psychophysik*](https://archive.org/details/elementederpsych001fech).
-*   Cohn, M. (2005). [*Agile Estimating and Planning*](https://www.mountaingoatsoftware.com/books/agile-estimating-and-planning). Prentice Hall.
 
----
 
 ## The Statistical Failure Modes: Why "Feelings" Fail
 
@@ -62,11 +77,7 @@ When estimating a new feature, developers think in terms of the *new abstraction
 *   Test infrastructure setup
 *   Cross-team API contracts
 
-Studies show that integration and error handling account for **40-60%** of actual development time, but typically only **15-20%** of estimated time.
-
-### References
-*   Kahneman, D., & Tversky, A. (1979). [*Intuitive prediction: Biases and corrective procedures*](https://doi.org/10.1017/CBO9780511809477.031).
-*   Buehler, R., Griffin, D., & Ross, M. (2002). [*Inside the planning fallacy*](https://doi.org/10.1017/CBO9780511808098.016).
+Industry consensus and empirical estimation studies consistently show that integration, error handling, and testing routinely consume **40–60%** of actual development time, despite initial estimates typically allocating only **15–20%** to these phases due to optimism bias.
 
 ---
 
@@ -147,9 +158,3 @@ How do we synthesize this into a meeting? We change the order of operations.
 Estimating greenfield software does not require guesswork. Respecting the logarithmic nature of human perception (Fibonacci), counting the structural abstractions (Complexity Drivers), mirroring existing topology (Codebase Analogies), and simulating failure (Pre-Mortems) replace "feelings" with defensible, structured analysis.
 
 Measure the dimensions of the unknown.
-
-### References
-*   McCabe, T. J. (1976). [*A Complexity Measure*](https://doi.org/10.1109/TSE.1976.233837). IEEE Transactions on Software Engineering.
-*   Kahneman, D., & Tversky, A. (1979). [*Intuitive prediction: Biases and corrective procedures*](https://doi.org/10.1017/CBO9780511809477.031).
-*   Flyvbjerg, B. (2006). [*From Nobel Prize to Project Management: Getting Risks Right*](https://doi.org/10.1177/875697280603700302).
-*   Klein, G. (2007). [*Performing a Project Premortem*](https://hbr.org/2007/09/performing-a-project-premortem). Harvard Business Review.
