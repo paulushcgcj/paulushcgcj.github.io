@@ -10,6 +10,16 @@ header:
     overlay_image: /assets/2024/04/articles/dbcrypt-02-cover.jpg
     overlay_filter: 0.5
     show_overlay_excerpt: false
+resources:
+    - title: "Source Code"
+      url: "https://github.com/paulushcgcj/article-database-encryption"
+      icon: "code"
+    - title: "Part 1: Column Encryption"
+      url: "/articles/database-encryption-pt1"
+      icon: "arrow_back"
+    - title: "Part 3: Data Masking"
+      url: "/articles/database-encryption-pt3"
+      icon: "arrow_forward"
 ---
 Welcome back to the second instalment of our journey into the realm of database encryption with PostgreSQL and Spring Boot. In this continuation of our multipart series, we delve deeper into the realm of data security, shifting our focus from column-level encryption to the crucial aspect of connection encryption. As we strive to fortify our applications against potential security threats, ensuring secure communication between our Spring Boot application and the PostgreSQL database becomes paramount.
 

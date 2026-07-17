@@ -8,8 +8,13 @@ layout: default
 {%- comment -%} Article Hero Section {%- endcomment -%}
 <section class="article-hero">
   <div class="article-hero__bg">
-    {%- if page.image %}
-    <img src="{{ page.image | relative_url }}"
+    {%- if page.header.overlay_image %}
+    <img src="{{ page.header.overlay_image | relative_url }}"
+         alt=""
+         class="article-hero__bg-image"
+         loading="eager">
+    {%- elsif page.header.teaser %}
+    <img src="{{ page.header.teaser | relative_url }}"
          alt=""
          class="article-hero__bg-image"
          loading="eager">
