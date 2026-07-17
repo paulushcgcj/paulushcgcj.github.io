@@ -1154,7 +1154,8 @@
     top: 0;
     bottom: 0;
     width: 1px;
-    background-color: rgba(var(--color-outline-variant), 0.4);
+    background-color: var(--color-outline-variant);
+    opacity: 0.4;
 
     @media (min-width: 768px) {
       left: 50%;
@@ -1272,15 +1273,6 @@
 
     &--lecturer {
       background-color: var(--color-on-primary-fixed-variant);
-    }
-  }
-
-  &__spacer {
-    display: none;
-
-    @media (min-width: 768px) {
-      display: block;
-      width: 50%;
     }
   }
 
@@ -1935,11 +1927,11 @@
     font: var(--text-label-caps);
     letter-spacing: var(--letter-spacing-label-caps);
     text-transform: uppercase;
-    color: var(--color-tertiary);
+    color: var(--color-on-tertiary-container);
     font-size: 10px;
     white-space: nowrap;
     padding: var(--space-2xs) var(--space-sm);
-    background-color: var(--color-tertiary-fixed);
+    background-color: var(--color-tertiary-container);
     border-radius: var(--radius-sm);
   }
 
@@ -1988,5 +1980,24 @@
     color: var(--color-on-surface-variant);
     max-width: 600px;
     line-height: 1.6;
+  }
+}
+
+/* ==========================================================================
+   404 PAGE
+   ==========================================================================
+   Centered error page using design tokens instead of inline styles.
+   ========================================================================== */
+
+.page-404 {
+  max-width: var(--article-max);
+  margin-inline: auto;
+  padding-block: var(--space-4xl);
+  text-align: center;
+
+  &__title {
+    font: var(--text-display-lg);
+    letter-spacing: var(--letter-spacing-display-lg);
+    margin-block: var(--space-2xl);
   }
 }
