@@ -14,6 +14,7 @@ group :jekyll_plugins do
   gem "jekyll-gist"
   gem "jekyll-seo-tag"
   gem "jekyll-sitemap"
+  gem "kramdown-math-katex"
 end
 
 platforms :mingw, :x64_mingw, :mswin, :jruby do
