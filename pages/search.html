@@ -1,0 +1,22 @@
+---
+layout: page
+title: Search Results
+permalink: /search/
+---
+
+<div id="search-results" class="search-results">
+  <div class="search-results__header">
+    <h1>Search Results</h1>
+    <p id="search-query" class="search-results__query"></p>
+  </div>
+  <div id="search-hits" class="search-results__hits"></div>
+  <div id="search-empty" class="search-results__empty" hidden>
+    <p class="search-results__empty-text">No results found. Try a different search term.</p>
+  </div>
+  <div id="search-loading" class="search-results__loading">
+    <p>Loading search index...</p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+<script src="{{ '/assets/js/search.js' | relative_url }}"></script>

@@ -125,4 +125,5 @@ CLAUDE.md
 .opencode/
 _drafts/
 .playwright-mcp/
-stitch_screens/graphify-out
+graphify-out
+stitch_screens
