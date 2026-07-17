@@ -500,14 +500,14 @@
 .article-hero {
   position: relative;
   width: 100%;
-  min-height: 500px;
+  min-height: 15rem;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 
   @media (min-width: 768px) {
-    min-height: 716px;
+    min-height: 25rem;
   }
 
   &__bg {
