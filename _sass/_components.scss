@@ -392,7 +392,6 @@
   top: 0;
   z-index: var(--z-sticky);
   background-color: var(--color-surface-container-low);
-  border-bottom: var(--border-width-default) solid var(--color-border);
   backdrop-filter: blur(var(--backdrop-blur));
   -webkit-backdrop-filter: blur(var(--backdrop-blur));
 
@@ -688,7 +687,6 @@ blockquote {
 
 .footer {
   background-color: var(--color-surface-container);
-  border-top: var(--border-width-default) solid var(--color-border);
   padding-block: var(--space-2xl);
   margin-top: var(--space-4xl);
 
@@ -716,6 +714,10 @@ blockquote {
     list-style: none;
     padding: 0;
     margin: 0;
+
+    li {
+      border-top: none;
+    }
   }
 
   &__link {

@@ -195,10 +195,6 @@ li {
   margin-block: var(--space-xs);
   padding-block: var(--space-xs);
 
-  /* Horizontal separator per DESIGN.md lists */
-  & + & {
-    border-top: var(--border-width-default) solid var(--color-border);
-  }
 }
 
 li::marker {
