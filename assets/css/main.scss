@@ -67,6 +67,16 @@
 @use "rouge-theme";
 
 /* ==========================================================================
+   5c. MATH DISPLAY — KaTeX formula block styling
+   ==========================================================================
+   Gives $$ formula blocks a featured, centered layout inside articles.
+   Loaded after rouge-theme and before utilities so it can contribute
+   component-level styles without accidentally overriding utility classes.
+   ========================================================================== */
+
+@use "math";
+
+/* ==========================================================================
    6. UTILITIES — Single-property helper classes
    ==========================================================================
    Loaded last so they can override component styles when needed.

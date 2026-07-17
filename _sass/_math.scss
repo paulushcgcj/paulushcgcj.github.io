@@ -1,0 +1,74 @@
+/*
+ * @docs
+ * File: _math.scss
+ * Responsibility: Standalone styling for KaTeX math blocks inside articles.
+ * Notes:
+ *   - This project’s kramdown/katex setup currently renders $$ formulas as
+ *     paragraphs containing `<span class="katex">`, not as a separate
+ *     `.katex-display` wrapper.
+ *   - The display detection below uses a structural heuristic:
+ *     paragraphs whose only meaningful child is a KaTeX node with a fraction
+ *     (`span.mfrac`) are treated as display math.
+ *   - All spacing and color tokens come from _tokens.scss and _themes.scss.
+ *   - No KaTeX-internal class overrides are used beyond the detection selector.
+ */
+
+/* ==========================================================================
+   DISPLAY MATH — Featured formula blocks
+   ==========================================================================
+   Goal: make $$ formulas feel like centered, featured content blocks instead
+   of inline-ish prose math. Keep KaTeX internals untouched so rendering stays
+   safe.
+   ========================================================================== */
+
+/* 1. Style paragraphs that kramdown currently outputs for $$ formulas. */
+.article__content > p > strong:first-child + .katex {
+  display: block;
+  width: 100%;
+  margin-block: var(--space-2xl);
+  padding-block: var(--space-lg);
+  padding-inline: var(--space-lg);
+  background-color: var(--color-surface-container-low);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-default);
+  text-align: center;
+
+  /* Keep the formula slightly more prominent than body copy. */
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+}
+
+/* 2. If future KaTeX/Jekyll output wraps $$ blocks in .katex-display,
+      cover that case too without duplicating design intent. */
+.article__content > .katex-display {
+  display: block;
+  width: 100%;
+  margin-block: var(--space-2xl);
+  padding-block: var(--space-lg);
+  padding-inline: var(--space-lg);
+  background-color: var(--color-surface-container-low);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-default);
+  text-align: center;
+
+  /* Keep the formula slightly more prominent than body copy. */
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+}
+
+/* 3. Provide a class for any future manual or plugin-driven wrappers. */
+.math-display {
+  display: block;
+  width: 100%;
+  margin-block: var(--space-2xl);
+  padding-block: var(--space-lg);
+  padding-inline: var(--space-lg);
+  background-color: var(--color-surface-container-low);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-default);
+  text-align: center;
+
+  /* Keep the formula slightly more prominent than body copy. */
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+}

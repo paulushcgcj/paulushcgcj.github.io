@@ -5,6 +5,11 @@ categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
 permalink: /articles/mathematics-of-the-unknown
+header:
+    teaser: /assets/2026/07/mathofunknow01-cover.png
+    overlay_image: /assets/2026/07/mathofunknow01-cover.png
+    overlay_filter: 0.5
+    show_overlay_excerpt: false
 resources:
     - title: "Fechner, G. T. (1860). Elemente der Psychophysik"
       url: "https://archive.org/details/elementederpsych001fech"
@@ -111,7 +116,7 @@ If the code doesn't exist yet, find the code that is *most similar* to what you 
 
 If you are asked to estimate a new "User Subscription" feature, do not estimate it in a vacuum. Look at your existing "User Profile Update" feature. Run your static analysis tools (like `lizard`) on the existing analog. 
 
-Calculate the baseline effort of the analog code (using NLOC and CCN). Then, apply a **Greenfield Uncertainty Multiplier** (e.g., 1.3x to 1.5x). Why? Because the analog code is already built; you know its shape. The new code will require the same base effort, *plus* the unknown integration glue that the analog code has already absorbed.
+Calculate the baseline effort of the analog code (using NLOC and CCN). Apply a **Greenfield Uncertainty Multiplier** (1.3x to 1.5x) as a starting point, then calibrate it against your team's actual integration overhead. Every codebase absorbs glue differently. The analog is already built; you know its shape. The new code carries that same base effort, plus the unknowns the analog has already absorbed.
 
 ### Pillar 3: PERT Estimation (Quantifying the Unknown)
 
