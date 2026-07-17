@@ -1,16 +1,18 @@
 /*
  * @docs
  * File: _math.scss
- * Responsibility: Standalone styling for KaTeX math blocks inside articles.
+ * Responsibility: Standalone styling for KaTeX math display blocks inside articles.
  * Notes:
- *   - This project’s kramdown/katex setup currently renders $$ formulas as
+ *   - This project's kramdown/katex setup currently renders $$ formulas as
  *     paragraphs containing `<span class="katex">`, not as a separate
  *     `.katex-display` wrapper.
- *   - The display detection below uses a structural heuristic:
- *     paragraphs whose only meaningful child is a KaTeX node with a fraction
- *     (`span.mfrac`) are treated as display math.
+ *   - Two selectors cover the current kramdown output variants:
+ *       1. Paragraphs starting with a bold label then .katex (e.g. "The PERT Formula:")
+ *       2. Paragraphs where .katex is the only child (bare formula)
+ *   - A third selector covers future .katex-display wrappers.
+ *   - A utility class (.math-display) is provided for manual/plugin use.
  *   - All spacing and color tokens come from _tokens.scss and _themes.scss.
- *   - No KaTeX-internal class overrides are used beyond the detection selector.
+ *   - No KaTeX-internal class overrides are used.
  */
 
 /* ==========================================================================
@@ -21,54 +23,45 @@
    safe.
    ========================================================================== */
 
-/* 1. Style paragraphs that kramdown currently outputs for $$ formulas. */
+/* Shared display-math styling extracted into a placeholder pattern.
+   Applied via @extend inside each selector below. */
+
+%math-display-base {
+  display: block;
+  width: 100%;
+  margin-block: var(--space-2xl);
+  padding-block: var(--space-lg);
+  padding-inline: var(--space-lg);
+  background-color: var(--color-surface-container-low);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-default);
+  text-align: center;
+
+  /* Slightly more prominent than body copy. */
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  font-weight: 500;
+}
+
+/* 1. Paragraphs starting with a bold label then a .katex span.
+      This is the current kramdown output for $$ blocks preceded by
+      a **bold title** line (e.g. "The PERT Formula:"). */
 .article__content > p > strong:first-child + .katex {
-  display: block;
-  width: 100%;
-  margin-block: var(--space-2xl);
-  padding-block: var(--space-lg);
-  padding-inline: var(--space-lg);
-  background-color: var(--color-surface-container-low);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-default);
-  text-align: center;
-
-  /* Keep the formula slightly more prominent than body copy. */
-  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
-  font-weight: 500;
+  @extend %math-display-base;
 }
 
-/* 2. If future KaTeX/Jekyll output wraps $$ blocks in .katex-display,
-      cover that case too without duplicating design intent. */
+/* 2. Paragraphs where .katex is the only child (bare formula, no label).
+      Covers $$ blocks that sit alone in their paragraph. */
+.article__content > p > .katex:only-child {
+  @extend %math-display-base;
+}
+
+/* 3. If future KaTeX/Jekyll output wraps $$ blocks in .katex-display,
+      cover that case too. */
 .article__content > .katex-display {
-  display: block;
-  width: 100%;
-  margin-block: var(--space-2xl);
-  padding-block: var(--space-lg);
-  padding-inline: var(--space-lg);
-  background-color: var(--color-surface-container-low);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-default);
-  text-align: center;
-
-  /* Keep the formula slightly more prominent than body copy. */
-  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
-  font-weight: 500;
+  @extend %math-display-base;
 }
 
-/* 3. Provide a class for any future manual or plugin-driven wrappers. */
+/* 4. Utility class for any future manual or plugin-driven wrappers. */
 .math-display {
-  display: block;
-  width: 100%;
-  margin-block: var(--space-2xl);
-  padding-block: var(--space-lg);
-  padding-inline: var(--space-lg);
-  background-color: var(--color-surface-container-low);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-default);
-  text-align: center;
-
-  /* Keep the formula slightly more prominent than body copy. */
-  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
-  font-weight: 500;
+  @extend %math-display-base;
 }
