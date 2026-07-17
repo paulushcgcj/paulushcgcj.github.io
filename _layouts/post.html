@@ -50,14 +50,8 @@ layout: default
       <div class="article-toc">
         <h4 class="article-toc__title">Navigation</h4>
         <nav class="article-toc__nav">
-          <ul class="article-toc__list" role="list">
-            {%- for heading in page.toc %}
-            <li class="article-toc__item">
-              <a href="#{{ heading.id }}" class="article-toc__link">
-                {{ heading.text }}
-              </a>
-            </li>
-            {%- endfor %}
+          <ul class="article-toc__list" id="article-toc-list" role="list">
+            {%- comment -%} TOC populated by JavaScript from article headings {%- endcomment -%}
           </ul>
         </nav>
       </div>
@@ -118,28 +112,54 @@ layout: default
   </div>
 </div>
 
-{%- comment -%} Auto-generate TOC from headings if not provided {%- endcomment -%}
+{%- comment -%} Auto-generate TOC from headings and track active state {%- endcomment -%}
 <script>
   (function() {
-    // Update TOC active state on scroll
-    const tocLinks = document.querySelectorAll('.article-toc__link');
-    const headings = document.querySelectorAll('.article__content h2[id], .article__content h3[id]');
+    var tocList = document.getElementById('article-toc-list');
+    var content = document.querySelector('.article__content');
     
-    if (!tocLinks.length || !headings.length) return;
+    if (!tocList || !content) return;
 
+    // Find all headings in the article content
+    var headings = content.querySelectorAll('h1[id], h2[id], h3[id]');
+    
+    if (!headings.length) return;
+
+    // Build TOC from headings
+    headings.forEach(function(heading) {
+      var li = document.createElement('li');
+      li.className = 'article-toc__item';
+      
+      var a = document.createElement('a');
+      a.className = 'article-toc__link';
+      a.href = '#' + heading.id;
+      a.textContent = heading.textContent;
+      
+      // Add indent class for h3
+      if (heading.tagName === 'H3') {
+        a.classList.add('article-toc__link--indent');
+      }
+      
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+
+    // Now set up active state tracking
+    var tocLinks = tocList.querySelectorAll('.article-toc__link');
+    
     function updateActiveToc() {
-      const scrollTop = window.pageYOffset;
-      let currentId = '';
+      var scrollTop = window.pageYOffset;
+      var currentId = '';
       
       headings.forEach(function(heading) {
-        const rect = heading.getBoundingClientRect();
+        var rect = heading.getBoundingClientRect();
         if (rect.top <= 150) {
           currentId = heading.getAttribute('id');
         }
       });
       
       tocLinks.forEach(function(link) {
-        const href = link.getAttribute('href');
+        var href = link.getAttribute('href');
         if (href === '#' + currentId) {
           link.classList.add('article-toc__link--active');
         } else {
@@ -148,7 +168,7 @@ layout: default
       });
     }
 
-    let ticking = false;
+    var ticking = false;
     window.addEventListener('scroll', function() {
       if (!ticking) {
         window.requestAnimationFrame(function() {
