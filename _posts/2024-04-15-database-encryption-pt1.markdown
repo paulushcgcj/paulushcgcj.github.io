@@ -10,6 +10,13 @@ header:
     overlay_image: /assets/2024/04/articles/dbcrypt-01-cover.png
     overlay_filter: 0.5
     show_overlay_excerpt: false
+resources:
+    - title: "Source Code"
+      url: "https://github.com/paulushcgcj/article-database-encryption/tree/v1.0.0"
+      icon: "code"
+    - title: "Part 2: Connection Encryption"
+      url: "/articles/database-encryption-pt2"
+      icon: "arrow_forward"
 ---
 In today's digital landscape, safeguarding sensitive data is paramount. As cyber threats continue to evolve, organizations must adopt robust measures to protect their information assets from unauthorized access and malicious attacks. One such measure is database encryption, a fundamental technique for securing data at rest. By encrypting data within the database itself, organizations can ensure that even if unauthorized access occurs, the data remains indecipherable and thus protected from prying eyes.
 

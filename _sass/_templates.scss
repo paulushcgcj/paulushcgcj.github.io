@@ -612,8 +612,12 @@
   }
 
   &__content {
-    flex: 1;
+    flex: 1 1 0%;
+    min-width: 0;
+    width: 100%; /* Constrain cross-axis width to parent in column flex */
     max-width: var(--article-max);
+    overflow-wrap: break-word;
+    word-wrap: break-word; /* Legacy fallback for older browsers */
     background-color: var(--color-surface-container-lowest);
     border: var(--border-width-default) solid var(--color-border);
     border-radius: var(--radius-xl);

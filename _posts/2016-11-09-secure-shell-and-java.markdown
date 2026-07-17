@@ -10,6 +10,10 @@ header:
     overlay_image: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg
     overlay_filter: 0.5
     show_overlay_excerpt: false
+resources:
+    - title: "Source Code"
+      url: "https://github.com/paulushcgcj/sshutil"
+      icon: "code"
 ---
 Some time ago, I was debating with some friends about writing an article for the community, but I never thought about what would be interesting, so I decided to write about a subject that we use a lot at my company, but using Java code, Secure Shell, or SSH.
 

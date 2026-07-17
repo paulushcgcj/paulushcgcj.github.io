@@ -10,6 +10,11 @@ header:
     overlay_image: /assets/2023/04/articles/productivity-cover.jpeg
     overlay_filter: 0.5
     show_overlay_excerpt: false
+resources:
+    - title: "Original article"
+      url: "https://www.encora.com/insights/how-to-improve-developers-productivity"
+      icon: "web"
+
 ---
 It's common for developers to spend most of their day between meetings, team syncing, or being interrupted by other team members without any intention to undermine their productivity. This is the reality for most developers these days and has nothing to do with the world of working from home, it happens in the office too. In this article, we’ll share some practices and techniques for keeping tasks on time while supporting the entire team and creating a healthy routine that can benefit developers individually and their teams.
 The idea behind this article is to share some tips and start some discussions on what improves and reduces productivity for developers. It’s a compilation of experiences from various developers that have helped them during their careers.

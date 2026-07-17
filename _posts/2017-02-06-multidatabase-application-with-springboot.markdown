@@ -10,6 +10,14 @@ header:
     overlay_image: /assets/2017/02/articles/multidatabase-application-with-springboot-cover.png
     overlay_filter: 0.5
     show_overlay_excerpt: false
+resources:
+    - title: "Source Code"
+      url: "https://github.com/paulushcgcj/multidbspring"
+      icon: "code"
+    - title: "Spring initializr"
+      url: "https://start.spring.io/"
+      icon: "web"
+
 ---
 In my time writing some APIs and micro services, I’ve faced some problems with multi database environments. On the company I’ve worked at that time, we had a lot of environments for a lot of different clients, but they always used the same database model, but on different servers. You can ask, but why? Well, some of our clients had some restrictions, based on region, and other requirements, and that’s not the point. At the beginning, this was not a problem, but came a time, where we needed to connect to every single database to get/put some data, but how?
 
