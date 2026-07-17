@@ -56,6 +56,17 @@
 @use "templates";
 
 /* ==========================================================================
+   5b. ROUGE SYNTAX — Code highlighting token mappings
+   ==========================================================================
+   Rouge-generated code blocks are always dark-surfaced. This partial
+   provides light/dark syntax color tokens and maps them to Rouge's
+   CSS class selectors. Loaded after templates so it can reference
+   any code block container styles.
+   ========================================================================== */
+
+@use "rouge-theme";
+
+/* ==========================================================================
    6. UTILITIES — Single-property helper classes
    ==========================================================================
    Loaded last so they can override component styles when needed.

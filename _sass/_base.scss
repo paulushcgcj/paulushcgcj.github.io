@@ -225,12 +225,17 @@ samp {
 
 /* ==========================================================================
    CODE BLOCKS — Always dark-surfaced per DESIGN.md
+   ==========================================================================
+   Left accent border provides visual separation from prose.
+   Rouge-generated blocks get a .highlighter-rouge wrapper; plain <pre>
+   blocks (manual code samples) inherit the same treatment.
    ========================================================================== */
 
 pre {
   background-color: var(--color-code-bg);
   color: var(--color-code-text);
   border: var(--border-width-default) solid var(--color-code-border);
+  border-left: 3px solid var(--color-primary);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   overflow-x: auto;
@@ -258,6 +263,19 @@ pre {
     padding: var(--space-sm) var(--space-lg);
     border-bottom: var(--border-width-default) solid var(--color-code-border);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}
+
+/* Rouge-generated code blocks — subtle container reset */
+.highlighter-rouge {
+  margin-block: var(--space-lg);
+
+  .highlight {
+    margin: 0;
+
+    pre {
+      margin: 0;
+    }
   }
 }
 
