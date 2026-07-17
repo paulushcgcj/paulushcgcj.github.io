@@ -150,68 +150,68 @@ spacing:
 
 ## Brand & Style
 
-The brand personality is a fusion of academic rigor and modern engineering. It targets software architects and technical leads who value clarity, precision, and a sophisticated reading experience. The design style is **Modern-Editorial with Technical Accents** — a rigorous, grid-based editorial layout punctuated by a deep blue and vibrant blue palette, meant to feel authoritative and technical while keeping the precision of a developer-centric tool.
+**Modern-Editorial with Technical Accents.** A grid-based editorial layout with deep blue and vibrant blue palette — authoritative, precise, developer-centric. Targets software architects and technical leads.
 
-The two modes are the same brand under different lighting, not two separate designs:
+Two modes, one brand:
 
-- **Dark mode** reads as an immersive, focused digital journal — a "Night Slate" environment for long, low-strain reading sessions.
-- **Light mode** reads as a "Clean Lab" — a high-end technical manual or architectural blueprint, high-contrast and information-dense.
+- **Dark mode** — "Night Slate." Immersive digital journal for long, low-strain reading.
+- **Light mode** — "Clean Lab." High-contrast technical manual with information density.
 
 ## Colors
 
-Both palettes share the same token names and roles (Material 3–style: `primary` / `secondary` / `tertiary`, each with an `on-*` and `*-container` pair, plus a shared neutral/surface ramp). Only the tone assignment flips between modes:
+Material 3–style token system: `primary` / `secondary` / `tertiary` with `on-*` and `*-container` pairs, plus a shared neutral/surface ramp. Tone assignment flips between modes:
 
-- **Dark mode** assigns *light, high-chroma tints* to the base roles (`primary`, `secondary`, `tertiary`) so they read clearly against dark surfaces, while the deeper, more saturated version of each hue lives in `*-container` for larger fills.
-- **Light mode** does the opposite: base roles carry the *deep, saturated* tone so they stay legible on a pale background, while `*-container` holds the lighter, softer tint for chips, tags, and large fills.
+- **Dark mode:** base roles get *light, high-chroma* tints for legibility on dark surfaces; `*-container` holds the deeper, more saturated version.
+- **Light mode:** base roles get *deep, saturated* tones for legibility on pale backgrounds; `*-container` holds the lighter, softer tint.
 
-Role meaning is identical across modes:
+Role meaning stays constant:
 
-- **Primary (Deep Blue family):** primary actions, navigation states, core branding, heading color. Conveys stability and technical reliability.
-- **Secondary (Vibrant Blue family):** highlights, callouts, links, and interactive/focus states. Provides a crisp, technical contrast to the deep blue primary.
-- **Tertiary (Forest Green family):** success states, code diffs, and technical readouts.
-- **Neutral/Background:** dark mode uses a deep, warm charcoal slate (`#101319`) with progressively lighter surface containers to build depth; light mode uses a cool off-white (`#f7f9fb`) with progressively darker/greyer surface containers, plus an explicit `border` token (`#e9e8e5` light / `#434750` dark) for the "blueprint" grid-line feel.
-- **Text:** `on-surface` is high-contrast (near-white on dark, near-black on light) for body copy; `on-surface-variant` is a muted blue-grey used for metadata and secondary info in both modes.
+- **Primary (Deep Blue):** primary actions, navigation, core branding, headings. Stability and reliability.
+- **Secondary (Vibrant Blue):** highlights, callouts, links, focus states. Technical contrast to primary.
+- **Tertiary (Forest Green):** success states, code diffs, technical readouts.
+- **Neutral/Background:** dark uses deep charcoal slate (`#101319`) with lighter surface containers for depth; light uses cool off-white (`#f7f9fb`) with darker surface containers plus a `border` token (`#e9e8e5` light / `#434750` dark) for blueprint grid lines.
+- **Text:** `on-surface` is high-contrast body copy (near-white on dark, near-black on light); `on-surface-variant` is muted blue-grey for metadata.
 
 ## Typography
 
-A single three-font type scale is shared, unchanged, across both modes — theming only touches color, never type:
+Three-font scale, shared across both modes — theming touches color only, never type.
 
-- **Fraunces (Headlines — `display-lg`, `display-lg-mobile`, `headline-md`):** an expressive, chiseled serif used for impact. Provides an "editorial," stamped-onto-the-page feel that distinguishes the brand from generic tech blogs.
-- **Inter (Body — `article-body`):** a highly legible, modern sans-serif at 17px/1.6 line-height, comfortable for long-form technical articles on any surface color.
-- **JetBrains Mono (Technical/UI — `code-inline`, `label-caps`):** code snippets, tags, timestamps, and small labels. Anchors the design in the developer world and gives metadata a precise rhythm.
+- **Fraunces (Headlines):** expressive, chiseled serif. Editorial feel that separates the brand from generic tech blogs.
+- **Inter (Body):** legible sans-serif at 17px/1.6. Comfortable for long-form technical articles.
+- **JetBrains Mono (Technical/UI):** code, tags, timestamps, small labels. Developer-world anchor with precise rhythm.
 
 ## Layout & Spacing
 
-Both modes share one **Fixed-Fluid Hybrid** layout model on an 8px baseline grid.
+**Fixed-Fluid Hybrid** on an 8px baseline grid.
 
-- **Article Pages:** centered, narrow column (`article-max`: 720px) to maximize line-length readability for the Inter body face.
-- **Dashboards/Lists:** 12-column grid with 24px gutters (`container-max`: 1100px).
-- **Rhythm:** strict 8px (`stack-unit`) vertical rhythm; generous spacing lets the editorial typography feel premium rather than cramped. In light mode, explicit 1px `border` dividers between major sections reinforce the blueprint structure.
-- **Mobile:** margins shrink to 16px (`margin-mobile`), multi-column grids collapse to a single stack.
+- **Article Pages:** centered column (`article-max`: 720px) for line-length readability.
+- **Dashboards/Lists:** 12-column grid, 24px gutters (`container-max`: 1100px).
+- **Rhythm:** strict 8px vertical rhythm. Light mode uses 1px `border` dividers between sections for blueprint structure.
+- **Mobile:** margins shrink to 16px (`margin-mobile`), grids collapse to single stack.
 
 ## Elevation & Depth
 
-Neither mode uses traditional drop shadows — depth comes from tone and outline instead:
+No drop shadows. Depth comes from tonal stacking and outlines.
 
-- **Dark mode — Tonal Stacking:** each surface container steps a notch lighter than the one below it, creating a "lifted" appearance. Interactive elements use color shifts or 1px borders (primary deep blue / secondary vibrant blue) instead of shadows. A subtle 8px backdrop-blur is used on overlays and nav bars.
-- **Light mode — Low-Contrast Outlines + Tonal Layering:** each surface container steps a notch darker/greyer than the background, and 1px solid `border` tokens define separation explicitly. Raised/active elements use a subtle offset border or a tint shift toward secondary blue rather than elevation.
-- **Interactivity (both modes):** focus and active states are communicated with high-contrast color shifts (e.g. a button moving from Deep Blue to Terracotta), not z-axis movement.
+- **Dark mode — Tonal Stacking:** surface containers step lighter as they rise. Interactive elements use color shifts or 1px borders instead of shadows. 8px backdrop-blur on overlays and nav bars.
+- **Light mode — Outlines + Tonal Layering:** surface containers step darker/greyer. 1px `border` tokens define separation. Raised elements use offset borders or secondary-blue tint shifts.
+- **Interactivity:** focus and active states use high-contrast color shifts (e.g. primary to secondary blue), not z-axis movement.
 
 ## Shapes
 
-The shape language is **Technical and Precise** in both modes — soft, not bubbly.
+**Technical and Precise** — soft, not bubbly.
 
-- **Standard elements:** 0.25rem (4px) corner radius (`rounded.DEFAULT`).
-- **Large containers** (cards, modals, code blocks): 0.5rem (8px), via `rounded.lg`.
-- **Interactive triggers** (buttons, inputs): stick to the standard 4px radius for a compact, technical look.
+- **Standard elements:** 4px radius (`rounded.DEFAULT`).
+- **Large containers** (cards, modals, code blocks): 8px (`rounded.lg`).
+- **Interactive triggers** (buttons, inputs): 4px for compact, technical look.
 
 ## Components
 
-- **Buttons:** solid Deep Blue background with white/`on-primary` text for primary actions; ghost-style secondary buttons use a 1px secondary-blue border. Button labels use `label-caps` (monospaced) in both modes.
-- **Code Blocks:** dark, professional palette regardless of page theme (code blocks stay dark-surfaced even on the light theme, for contrast and familiarity); headers show the language name in `label-caps`.
-- **Chips/Tags/Badges:** `label-caps`, all-caps, monospaced text inside a subtle secondary- or tertiary-color tint (`*-container` tone).
-- **Cards:** dark mode uses a `Surface 2` fill with a primary-blue 1px border on hover; light mode uses a 1px `border` outline by default, with a slightly darker header strip to separate metadata from content.
-- **Inputs:** darker-than-surface fill in dark mode with a primary-color bottom border that expands on focus; base-surface fill with a 1px `border` in light mode, transitioning to secondary blue on focus.
-- **Lists:** horizontal separators between items; hover uses a subtle background-tint shift rather than shadows or chevrons.
-- **Technical Readouts:** a bordered box with a `label-caps` label in the top-left and `code-inline` data points inside — identical pattern in both modes.
-- **Reading Progress Bar:** a thin, 2px terracotta line at the top of the viewport that fills as the user scrolls, shared by both modes.
+- **Buttons:** solid Deep Blue primary with white text; ghost-style secondary with 1px secondary-blue border. Labels use `label-caps` (monospaced).
+- **Code Blocks:** always dark-surfaced regardless of page theme. Headers show language in `label-caps`.
+- **Chips/Tags/Badges:** `label-caps`, all-caps, monospaced inside a subtle `*-container` tint.
+- **Cards:** dark mode uses `Surface 2` fill with primary-blue 1px border on hover; light mode uses 1px `border` outline with darker header strip.
+- **Inputs:** darker-than-surface fill in dark mode with primary-color bottom border expanding on focus; base-surface fill in light mode with `border` transitioning to secondary blue.
+- **Lists:** horizontal separators; hover uses subtle background-tint shift.
+- **Technical Readouts:** bordered box with `label-caps` label top-left, `code-inline` data points inside.
+- **Reading Progress Bar:** thin 2px secondary-blue line at viewport top, fills on scroll.
