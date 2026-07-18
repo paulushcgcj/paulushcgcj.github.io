@@ -130,6 +130,19 @@ layout: default
     
     if (!headings.length) return;
 
+    // Prepend a fixed "Introduction" entry that always scrolls to the top of page content
+    var introLi = document.createElement('li');
+    introLi.className = 'article-toc__item';
+
+    var introA = document.createElement('a');
+    introA.className = 'article-toc__link';
+    introA.href = '#main-content';
+    introA.textContent = 'Introduction';
+    introA.dataset.tocIntro = 'true';
+
+    introLi.appendChild(introA);
+    tocList.appendChild(introLi);
+
     // Build TOC from headings
     headings.forEach(function(heading) {
       var li = document.createElement('li');
@@ -162,13 +175,25 @@ layout: default
           currentId = heading.getAttribute('id');
         }
       });
-      
+
+      var inIntro = (currentId === '');
+
       tocLinks.forEach(function(link) {
-        var href = link.getAttribute('href');
-        if (href === '#' + currentId) {
-          link.classList.add('article-toc__link--active');
+        if (inIntro) {
+          // Still in the intro region (above the first heading): highlight the intro link only
+          if (link.dataset.tocIntro === 'true') {
+            link.classList.add('article-toc__link--active');
+          } else {
+            link.classList.remove('article-toc__link--active');
+          }
         } else {
-          link.classList.remove('article-toc__link--active');
+          // Within a heading region: highlight the matching heading link
+          var href = link.getAttribute('href');
+          if (href === '#' + currentId) {
+            link.classList.add('article-toc__link--active');
+          } else {
+            link.classList.remove('article-toc__link--active');
+          }
         }
       });
     }
