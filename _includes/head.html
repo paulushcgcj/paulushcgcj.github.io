@@ -18,6 +18,10 @@
 <!-- Main stylesheet -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
+<!-- KaTeX stylesheet: hides the MathML (.katex-mathml) fallback so build-time
+     kramdown-math-katex output renders as a single equation, not a duplicate. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+
 <!-- Theme initialization script (before body to prevent FOUC) -->
 <script>
   (function() {

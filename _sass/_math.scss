@@ -35,33 +35,36 @@
   background-color: var(--color-surface-container-low);
   border-left: 3px solid var(--color-primary);
   border-radius: var(--radius-default);
-  text-align: center;
+  
+  /* Use flexbox for robust centering instead of text-align */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  /* Slightly more prominent than body copy. */
-  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
-  font-weight: 500;
+  /* Prevent long equations from breaking mobile layouts */
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  /* Ensure smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 1. Paragraphs starting with a bold label then a .katex span.
-      This is the current kramdown output for $$ blocks preceded by
-      a **bold title** line (e.g. "The PERT Formula:"). */
+/* 1. Paragraphs starting with a bold label then a .katex span. */
 .article__content > p > strong:first-child + .katex {
   @extend %math-display-base;
 }
 
-/* 2. Paragraphs where .katex is the only child (bare formula, no label).
-      Covers $$ blocks that sit alone in their paragraph. */
+/* 2. Paragraphs where .katex is the only child (bare formula). */
 .article__content > p > .katex:only-child {
   @extend %math-display-base;
 }
 
-/* 3. If future KaTeX/Jekyll output wraps $$ blocks in .katex-display,
-      cover that case too. */
+/* 3. Future .katex-display wrappers. */
 .article__content > .katex-display {
   @extend %math-display-base;
 }
 
-/* 4. Utility class for any future manual or plugin-driven wrappers. */
+/* 4. Utility class. */
 .math-display {
   @extend %math-display-base;
 }
