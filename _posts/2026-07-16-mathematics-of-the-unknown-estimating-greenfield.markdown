@@ -11,6 +11,9 @@ header:
     overlay_filter: 0.5
     show_overlay_excerpt: false
 resources:
+    - title: "The Mathematics of Technical Debt"
+      url: "/articles/mathematics-of-technical-debt"
+      icon: "arrow_forward"
     - title: "Fechner, G. T. (1860). Elemente der Psychophysik"
       url: "https://archive.org/details/elementederpsych001fech"
     - title: "Cohn, M. (2005). Agile Estimating and Planning"
