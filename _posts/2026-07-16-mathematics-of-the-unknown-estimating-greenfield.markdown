@@ -5,6 +5,9 @@ categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
 permalink: /articles/mathematics-of-the-unknown
+has_bibliography: true
+scholar:
+  bibliography: mathematics-of-the-unknown
 header:
     teaser: /assets/2026/07/mathofunknow01-cover.png
     overlay_image: /assets/2026/07/mathofunknow01-cover.png
@@ -56,7 +59,7 @@ The Fibonacci sequence (1, 2, 3, 5, 8, 13, 21...) is not an arbitrary Agile trad
 
 ### The Weber-Fechner Law
 
-This law states that human perception of magnitude is *logarithmic*, not linear. We can distinguish between 1kg and 2kg, but we struggle to distinguish between 51kg and 52kg. The just-noticeable difference is proportional to the baseline magnitude.
+This law {% cite fechner1860elemente %} states that human perception of magnitude is *logarithmic*, not linear. We can distinguish between 1kg and 2kg, but we struggle to distinguish between 51kg and 52kg. The just-noticeable difference is proportional to the baseline magnitude.
 
 **What this means for estimation:**
 *   The gap between 1 and 2 is 100%. A developer can confidently distinguish a "1" task from a "2" task.
@@ -71,11 +74,11 @@ This is why the golden rule of Agile, **"anything above 8 must be broken down,"*
 
 When teams estimate new features, they fall prey to well-documented cognitive biases. Understanding these biases is the first step to building a framework that counteracts them.
 
-### 1. The Planning Fallacy (Kahneman & Tversky, 1979)
+### 1. The Planning Fallacy {% cite kahneman1979intuitive %}
 
 Humans systematically underestimate the time required to complete tasks, even when they have prior experience with similar tasks. The brain constructs a "best-case scenario" simulation (the happy path) and mistakes it for a prediction.
 
-A meta-analysis by Buehler et al. (2002) found that only **25-30% of projects** are completed within their estimated time.
+A meta-analysis by {% cite buehler2002inside %} found that only **25-30% of projects** are completed within their estimated time.
 
 ### 2. The Optimism Bias in Integration
 
