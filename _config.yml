@@ -36,6 +36,7 @@ plugins:
   - kramdown-math-katex
 
 kramdown:
+  smart_quotes: ["lsquo", "rsquo", "ldquo", "rdquo"]
   math_engine: katex
 
 exclude:

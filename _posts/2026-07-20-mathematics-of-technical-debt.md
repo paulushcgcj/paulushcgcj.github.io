@@ -38,15 +38,20 @@ resources:
     - title: "Coding on Copilot: 2023 Data Shows Downward Pressure on Code Quality — GitClear"
       url: "https://www.gitclear.com/coding_on_copilot_data_shows_ais_downward_pressure_on_code_quality/"
       icon: "link"
+    - title: "Pareto Principle — Investopedia"
+      url: "https://www.investopedia.com/terms/1/80-20-rule.asp"
+      icon: "book"
 ---
 
 Most engineering teams have faced this scenario: Product Management asks for an estimate to refactor a legacy module or add test coverage to a critical service. The senior developer stares at the screen, squints at the nested `if` statements, and says, *"I don't know, maybe a week?"*
 
 <!--more-->
 
-Gut-feeling estimation undermines reliable reporting. Intuition-based effort reports fall victim to cognitive biases. We underestimate the "blast radius" of tightly coupled code, and we overestimate the time required to write tests for simple, isolated logic.
+Gut-feeling estimation undermines reliable reporting. We underestimate the "blast radius" of tightly coupled code, and we overestimate the time required to write tests for simple, isolated logic.
 
-We can measure the *topology* of the code and derive the effort required to change it mathematically.
+The first article in this series, *The Mathematics of the Unknown*, tackled the inverse problem: estimating work on code that doesn't exist yet. It introduced the Complexity Driver Taxonomy, Codebase Analogies, and PERT estimation as structured alternatives to Planning Poker guesswork. Those tools work because they measure the *dimensions of the requirement* before a single line of code is written.
+
+This article picks up the other side of the coin. When the code already exists and needs to be refactored or tested, the requirement dimensions are no longer the bottleneck. The bottleneck is the code's internal structure: its size, its branching complexity, and how those properties translate into hours of work. We can measure the *topology* of the code and derive the effort required to change it mathematically.
 
 This article explores how to use static analysis, specifically Net Lines of Code (NLOC) and Cyclomatic Complexity (CCN), to build a calibrated model for estimating refactoring and testing time. It covers the mathematics, analyzes real-world code examples in Java and TypeScript, is honest about where the model's numbers come from and where they break down, and establishes a framework you can automate today.
 
@@ -330,7 +335,7 @@ Notice the React example has fewer NLOC than the Java one but a comparable CCN �
 
 What happens when you are asked to estimate the refactoring of an entire microservice containing 40 files? Running this math on 40 files is tedious and often inaccurate, as developers rarely refactor every file equally.
 
-We apply the **Pareto Principle (80/20 Rule)** to code complexity. In any large codebase, 80% of the technical debt and refactoring effort is concentrated in 20% of the files. This heuristic doesn't have the same empirical backing as the CCN-effort relationship above — treat it as a practical rule of thumb for triage, not a load-bearing part of the estimate.
+We apply the **Pareto Principle (80/20 Rule)** to code complexity. Originally observed by Vilfredo Pareto in 1906 and adapted to quality management by Joseph Juran in 1941, the principle states that roughly 80% of effects come from 20% of causes. In software, this pattern appears across defect distribution, feature usage, and code complexity. In any large codebase, 80% of the technical debt and refactoring effort is concentrated in 20% of the files. This heuristic doesn't have the same empirical backing as the CCN-effort relationship above — treat it as a practical rule of thumb for triage, not a load-bearing part of the estimate.
 
 **The Protocol for Large Directories:**
 1. Run `lizard` on the entire directory to get the Total Scope NLOC.
