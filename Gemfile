@@ -11,10 +11,15 @@ gem "sass-embedded", ">= 1.77.0"
 
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.17"
-  gem "jekyll-gist"
+  gem "jekyll-target-blank"
   gem "jekyll-seo-tag"
   gem "jekyll-sitemap"
+  gem "liquid_pluralize"
   gem "kramdown-math-katex"
+  gem "jekyll-compose"
+  gem "jekyll-archives"
+  gem "jekyll-paginate-v2"
+  gem "jekyll-scholar"
 end
 
 platforms :mingw, :x64_mingw, :mswin, :jruby do
@@ -23,4 +28,3 @@ platforms :mingw, :x64_mingw, :mswin, :jruby do
 end
 
 gem "http_parser.rb", "~> 0.8.0", platforms: [:jruby]
-
