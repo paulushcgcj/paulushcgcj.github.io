@@ -16,10 +16,11 @@ bundle update               # Update dependencies
 
 - `_posts/` — Blog articles and Wolfpack game posts (Markdown with front matter)
 - `_layouts/` — HTML layout templates (default, page, post, home, cv)
-- `_includes/` — Reusable HTML partials (header, footer, nav, head)
+- `_includes/` — Reusable HTML partials (header, footer, nav, head, bibliography)
 - `_sass/` — SCSS partials (tokens → themes → base → components → templates → utilities)
 - `pages/` — Static pages (about, CV, articles index, blog index, wolfpack)
 - `_data/` — YAML data files (navigation.yml, authors.yml)
+- `_bibliography/` — Per-post BibTeX files (`<slug>.bib`) for jekyll-scholar
 - `assets/` — Static assets organized by year and type
 - `DESIGN.md` — Design system tokens (colors, typography, spacing, shapes) used by Stitch
 
@@ -54,6 +55,25 @@ header:
 ---
 ```
 
+### Scholar-aware front matter (academic references)
+
+When a post cites academic works (papers, books, proceedings), use jekyll-scholar:
+```yaml
+---
+has_bibliography: true
+scholar:
+  bibliography: <slug>
+resources:
+  - title: "Non-academic resource (repo, tool, blog)"
+    url: "https://example.com"
+    icon: "link"
+---
+```
+
+- `_bibliography/<slug>.bib` holds the BibTeX entries (one file per post).
+- Inline citations use `{% cite <key> %}` (renders as `(Author, Year)`).
+- Academic references go to the bibliography; non-academic ones go to the sidebar `resources:` block.
+
 ## Content Categories
 
 - **articles/** — Technical articles (Java, PostgreSQL, Spring Boot, security)
@@ -72,9 +92,12 @@ All original content uses `CC-BY-4.0`. The `_includes/cc-by-4.0-footer.html` par
 
 - Dev container uses `mcr.microsoft.com/devcontainers/jekyll:2-bullseye` (Ruby, not Node)
 - `_drafts/` is gitignored — drafts live here until published
+- `future: true` is set in `_config.yml` — scheduled/future-dated posts build normally
 - `stitch_screens/` is gitignored — Stitch design tool output
 - `.playwright-mcp/` is gitignored
 - `vendor/` and `.bundle/` are gitignored — run `bundle install` after clone
 - Posts use `<!--more-->` for excerpt separators
 - The about page has custom inline CSS overriding page layout constraints
 - CSS custom properties enable runtime theme switching (no build-time dark/light split)
+- jekyll-scholar requires a `_bibliography/references.bib` stub even when all posts use
+  per-post `.bib` overrides (the gem initializes from the default path)

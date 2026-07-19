@@ -496,7 +496,7 @@ permalink: /about/
 
       <div class="about-hero__image" role="img" aria-label="Paulo Cruz brand icon">
         <img alt="Paulo Cruz brand icon"
-             src="https://lh3.googleusercontent.com/aida/AP1WRLu_omminc49HqBiVwezR6wE5h6stssN7xpWtu4bejGVS7MznUDZPOlIeb2jyAHzG-IFQ9sa9627AkrOxSoTiA-WsvRHfsDS5rFGKqVMEqMzmj5I4sMjTbQ5aG_h3I0NbnLECRSLJ1z73w-g5JeNQKo_527MiuK867Kwi15P3J5vzoIik9kWKK91a6xjNQzGSr0M2EsywiaQrJMRB0VMVjdn4gYYmJHBs_TKWtPhsXvJu5xX09TWcMY2-zQ">
+             src="/assets/icon88x88.png">
         <div class="about-hero__image-frame" aria-hidden="true"></div>
         <div class="about-hero__image-badge">
           <span class="sr-only">Status: </span>ACTIVE
