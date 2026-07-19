@@ -11,6 +11,9 @@ header:
     overlay_filter: 0.5
     show_overlay_excerpt: false
 resources:
+    - title: "The Mathematics of the Unknown"
+      url: "/articles/mathematics-of-the-unknown"
+      icon: "arrow_back"
     - title: "A Complexity Measure (McCabe, 1976)"
       url: "https://ieeexplore.ieee.org/document/1702388"
       icon: "book"
@@ -47,6 +50,21 @@ We can measure the *topology* of the code and derive the effort required to chan
 
 This article explores how to use static analysis, specifically Net Lines of Code (NLOC) and Cyclomatic Complexity (CCN), to build a calibrated model for estimating refactoring and testing time. It covers the mathematics, analyzes real-world code examples in Java and TypeScript, is honest about where the model's numbers come from and where they break down, and establishes a framework you can automate today.
 
+## Scope of This Model: In-Place Refactoring Only
+
+Before you apply these formulas in a planning meeting, it is worth being explicit about what this model does **not** cover.
+
+The formulas in this article assume the code being estimated already lives in its native environment — same language, same framework, same architecture. You are modifying, cleaning, or adding tests to code that is already where it belongs. The NLOC and CCN you measure with `lizard` are the actual NLOC and CCN of the work you will perform.
+
+This assumption breaks down the moment the work involves moving code **across paradigms**. If the task is to migrate a Struts 1 service into Spring Boot 4, or to port an AngularJS module to React, or to extract a monolith module into a standalone microservice, you are no longer doing in-place refactoring. You are doing one of two fundamentally different things:
+
+- **Modernization** — preserving the existing business rules and workflows while rewriting the code in a new paradigm.
+- **Transformation** — rethinking the workflows, retiring obsolete rules, and introducing new behavior alongside the migration.
+
+Both scenarios require a different mathematical model. The source code's NLOC becomes a poor proxy for the target code's NLOC (because modern frameworks often compress or expand boilerplate differently), and the Global Context Tax we defined here no longer captures the full cost of reverse-engineering legacy patterns or negotiating new business rules.
+
+A planned companion article, *The Mathematics of Migration*, will cover these two scenarios in depth — including how to derive a Translation Factor by comparing the same operation across frameworks, how to price the reverse-engineering overhead using empirically measured code-comprehension rates, and how to account for the one-time Foundation Setup Cost of bootstrapping a new service. If your ticket says "rewrite in Spring Boot 4," that article is the one to read next.
+
 ## The Metrics That Matter: NLOC and CCN
 
 To estimate effort, we must abandon raw Lines of Code (LOC). LOC measures volume, not complexity. A 500-line file with 500 simple getter methods takes minutes to refactor. A 500-line file with nested state machines takes days.
@@ -82,7 +100,7 @@ To translate these metrics into hours, we use a heuristic model with a starting 
 
 *   **Java (Spring Boot) Refactoring Baseline:** 333 NLOC per hour.
 *   **React (TypeScript) Refactoring Baseline:** 200 NLOC per hour. (React requires more mental context switching for state and hooks).
-*   **Testing Baseline:** 0.15 hours (9 minutes) per CCN path to write a *meaningful* assertion, plus 0.05 hours (3 minutes) per external dependency for fast mocking.
+*   **Testing Baseline:** 9 minutes (0.15 hrs) per CCN path to write a *meaningful* assertion, plus 3 minutes (0.05 hrs) per external dependency for fast mocking.
 
 **Calibrating this to your team:** run `lizard` against a handful of pull requests you already tracked actual hours for, plot NLOC/CCN against real time spent, and solve for your own rate. Teams with heavy onboarding debt, unfamiliar domains, or junior-heavy rosters will see meaningfully lower NLOC/hour numbers than the defaults above — that's expected, not a flaw in the method.
 
@@ -124,7 +142,6 @@ import com.example.billing.BillingClient;
 import com.example.inventory.InventoryClient;
 import com.example.notifications.EmailService;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class OrderProcessingService {
@@ -178,7 +195,7 @@ public class OrderProcessingService {
 ### Analyzing the Java Code
 
 If we run `lizard OrderProcessingService.java --csv`, we get:
-*   **NLOC:** ~65 lines
+*   **NLOC:** ~49 lines
 *   **CCN:** 10 (the null-and-empty-list check contributes 2 decision points via the `if` and the `||`; the `for` loop, the two nested `if`s inside it plus the `&&`, and the three nested `if`s in the billing/inventory block account for the rest).
 *   **External Dependencies:** 3 (`BillingClient`, `InventoryClient`, `EmailService` injected via constructor).
 
@@ -188,9 +205,9 @@ If we run `lizard OrderProcessingService.java --csv`, we get:
 
 $$
 \begin{aligned}
-\mathrm{Base\ Time}           &= \frac{65\ \mathrm{NLOC}}{333\ \mathrm{LOC/hr}} = 0.195\ \mathrm{hrs} \\[4pt]
+\mathrm{Base\ Time}           &= \frac{49\ \mathrm{NLOC}}{333\ \mathrm{LOC/hr}} \approx 0.15\ \mathrm{hrs} \\[4pt]
 \mathrm{Complexity\ Mult.}    &= 1 + (10\ \mathrm{CCN} \times 0.01) = 1.10 \\[4pt]
-\mathrm{Total\ Refactor\ Time} &= 0.195 \times 1.10 = \approx 0.21\ \mathrm{hrs\ (13\ min)}
+\mathrm{Total\ Refactor\ Time} &= 0.15 \times 1.10 \approx 0.16\ \mathrm{hrs\ (10\ min)}
 \end{aligned}
 $$
 
@@ -205,11 +222,11 @@ $$
 $$
 
 **Global Context Tax:**
-*   Since the scope is one file, the formula `(65/333) * 0.15` yields ~0.03 hours.
+*   Since the scope is one file, the formula `(49/333) * 0.15` yields ~1 minute.
 *   However, we apply the **Minimum Discovery Threshold** of 1.0 hour to map the surrounding architecture.
 
 **Reporting Output:**
-*"To refactor this service, write tests, and map the surrounding architecture, the estimated effort is **2.86 hours** (1.0h Discovery + 0.21h Refactor + 1.65h Testing)."*
+*"To refactor this service, write tests, and map the surrounding architecture, the estimated effort is **2 hours 49 minutes** (1 hr Discovery + 10 min Refactor + 1 hr 39 min Testing)."*
 
 ---
 
@@ -234,13 +251,16 @@ async function fetchOrderStatus(orderId: string): Promise<OrderStatus> {
     }
     throw new Error('STATUS_FETCH_FAILED');
   }
-  return response.json();
+  return response.json() as Promise<OrderStatus>;
 }
 
 export function useOrderStatus(orderId: string | undefined) {
   const query = useQuery({
     queryKey: ['orderStatus', orderId],
-    queryFn: () => fetchOrderStatus(orderId as string),
+    queryFn: () => {
+      if (!orderId) throw new Error('orderId is required');
+      return fetchOrderStatus(orderId);
+    },
     enabled: Boolean(orderId),
     retry: (failureCount, error) => {
       if (error instanceof Error && error.message === 'ORDER_NOT_FOUND') {
@@ -250,7 +270,7 @@ export function useOrderStatus(orderId: string | undefined) {
     },
   });
 
-  if (query.isLoading) {
+  if (query.isPending) {
     return { label: 'Loading...', tone: 'neutral' as const };
   }
 
@@ -278,17 +298,17 @@ export function useOrderStatus(orderId: string | undefined) {
 
 ### Analyzing the TypeScript Code
 
-*   **NLOC:** ~47 lines
-*   **CCN:** 10 (the `response.ok`/`404` pair inside the fetch helper, the `isLoading` and `isError` guards, the `instanceof`+`&&` check inside `retry`, and the three status-branching `if`s at the end).
-*   **External Dependencies:** 1 (the network call inside `fetchOrderStatus`, mocked at the `fetch` boundary).
+*   **NLOC:** ~45 lines
+*   **CCN:** 11 (the `response.ok`/`404` pair inside the fetch helper, the `isPending` and `isError` guards, the `instanceof`+`&&` check and the `< 3` comparison inside `retry`, and the three status-branching `if`s at the end — every relational operator in a boolean context counts as a decision point in McCabe's model).
+*   **External Dependencies:** 1 primary boundary (the network call inside `fetchOrderStatus`, mocked at the `fetch` boundary). Testing also requires wrapping the hook in a `QueryClientProvider` or mocking `useQuery` directly, but that is framework test-infrastructure overhead rather than a per-dependency mock cost.
 
 **Refactoring Estimate:**
 
 $$
 \begin{aligned}
-\mathrm{Base\ Time}           &= \frac{47\ \mathrm{NLOC}}{200\ \mathrm{LOC/hr}} = 0.235\ \mathrm{hrs} \\[4pt]
-\mathrm{Complexity\ Mult.}    &= 1 + (10\ \mathrm{CCN} \times 0.015) = 1.15 \\[4pt]
-\mathrm{Total\ Refactor\ Time} &= 0.235 \times 1.15 \approx 0.27\ \mathrm{hrs\ (16\ min)}
+\mathrm{Base\ Time}           &= \frac{45\ \mathrm{NLOC}}{200\ \mathrm{LOC/hr}} = 0.225\ \mathrm{hrs} \\[4pt]
+\mathrm{Complexity\ Mult.}    &= 1 + (11\ \mathrm{CCN} \times 0.015) = 1.165 \\[4pt]
+\mathrm{Total\ Refactor\ Time} &= 0.225 \times 1.165 \approx 0.26\ \mathrm{hrs\ (16\ min)}
 \end{aligned}
 $$
 
@@ -296,13 +316,13 @@ $$
 
 $$
 \begin{aligned}
-\mathrm{Meaningful\ Test\ Time} &= 10\ \text{CCN} \times 0.15\ \text{hrs} = \mathbf{1.50\ hrs} \\[4pt]
+\mathrm{Meaningful\ Test\ Time} &= 11\ \text{CCN} \times 0.15\ \text{hrs} = \mathbf{1.65\ hrs} \\[4pt]
 \mathrm{Fast\ Mocking\ Time} &= 1\ \text{Dep} \times 0.05\ \text{hrs} = \mathbf{0.05\ hrs} \\[4pt]
-\mathrm{Total\ Testing\ Time} &= 1.50 + 0.05 = \mathbf{1.55\ hrs\ (1\ hr\ 33\ min)}
+\mathrm{Total\ Testing\ Time} &= 1.65 + 0.05 = \mathbf{1.70\ hrs\ (1\ hr\ 42\ min)}
 \end{aligned}
 $$
 
-Notice the React example has fewer NLOC than the Java one but a comparable CCN — the "more mental context switching" penalty and the lower base rate are doing real work here, not just padding the estimate. Total for this file, applying the same 1.0-hour discovery floor as a standalone scope: **2.82 hours**.
+Notice the React example has fewer NLOC than the Java one but a comparable CCN — the "more mental context switching" penalty and the lower base rate are doing real work here, not just padding the estimate. Total for this file, applying the same 1.0-hour discovery floor as a standalone scope: **2 hours 58 minutes** (1 hr Discovery + 16 min Refactor + 1 hr 42 min Testing).
 
 ---
 
@@ -316,10 +336,10 @@ We apply the **Pareto Principle (80/20 Rule)** to code complexity. In any large 
 1. Run `lizard` on the entire directory to get the Total Scope NLOC.
 2. Sort the output by CCN (Cyclomatic Complexity).
 3. Isolate the **Top 3 most complex files** and calculate their specific Refactoring and Testing times.
-4. For the remaining files, apply a flat "Low Complexity Tail" estimate (0.05 hours per file).
+4. For the remaining files, apply a flat "Low Complexity Tail" estimate (3 minutes per file).
 5. **Calculate the Global Context Tax ONCE** using the Total Scope NLOC of all files.
 
-**Worked example:** say `lizard` reports 40 files totaling 6,400 NLOC (average ~160 NLOC/file, blended Java/TypeScript base rate of ~300 NLOC/hr). The Global Context Tax is `max(1.0, (6400/300) * 0.15)` ≈ **3.2 hours**. The top 3 files by CCN average 220 NLOC and CCN 18 each — running each through the refactor and testing formulas above gives roughly 1.0–1.3 hours refactoring and 2.9 hours testing per file, or about **11.7 hours** for all three combined. The remaining 37 files at the flat 0.05-hour tail add **1.85 hours**. Total: **≈16.75 hours** for the directory — a defensible number you can hand to a planning meeting, built from three worked examples and a flat tail instead of 40 individual guesses.
+**Worked example:** say `lizard` reports 40 files totaling 6,400 NLOC (average ~160 NLOC/file, blended Java/TypeScript base rate of ~300 NLOC/hr). The Global Context Tax is `max(1.0, (6400/300) * 0.15)` ≈ **3 hours 12 min**. The top 3 files by CCN average 220 NLOC and CCN 18 each — running each through the refactor and testing formulas above gives roughly 1–1¼ hours refactoring and about 3 hours testing per file, or about **11 hours 42 min** for all three combined. The remaining 37 files at the flat 3-minute tail add **1 hour 51 min**. Total: **about 16 hours 45 min** for the directory — a defensible number you can hand to a planning meeting, built from three worked examples and a flat tail instead of 40 individual guesses.
 
 This gives management an accurate, defensible number that respects the reality of context loading, without getting bogged down in analyzing trivial DTOs.
 
