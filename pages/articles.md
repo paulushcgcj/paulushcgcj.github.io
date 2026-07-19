@@ -22,9 +22,9 @@ description: A curated collection of technical deep dives, architectural reflect
   </header>
 
   {%- comment -%} Articles grouped by year {%- endcomment -%}
-  {%- assign articles = site.posts | where_exp: "item", "item.categories contains 'article'" %}
-  {%- assign postsByYear = articles | group_by_exp: 'post', 'post.date | date: "%Y"' %}
-  
+  {%- assign article_posts = site.posts | where_exp: "item", "item.categories contains 'article'" %}
+  {%- assign postsByYear = article_posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}
+
   <div class="article-list">
     {%- for year in postsByYear %}
     <div class="article-list__year-group">
@@ -34,7 +34,7 @@ description: A curated collection of technical deep dives, architectural reflect
           <span class="article-list__year-count">{{ year.items | size }} {% if year.items.size == 1 %}Entry{% else %}Entries{% endif %}</span>
         </div>
       </aside>
-      
+
       <div class="article-list__items">
         {%- for post in year.items %}
           {%- include article-list-item.html post=post %}

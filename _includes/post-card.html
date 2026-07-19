@@ -14,7 +14,6 @@
 {%- endcomment -%}
 
 {%- assign post = include.post -%}
-{%- assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 -%}
 {%- assign primary_categories = post.categories | first -%}
 
 <article class="post-card card">
@@ -34,7 +33,7 @@
       {%- if primary_categories %}
       <span class="chip chip--secondary">{{ primary_categories }}</span>
       {%- endif %}
-      <span class="post-card__read-time">{{ read_time }} MIN</span>
+      <span class="post-card__read-time">{% include read-time.html content=post.content %}</span>
     </div>
     
     <h3 class="post-card__title">

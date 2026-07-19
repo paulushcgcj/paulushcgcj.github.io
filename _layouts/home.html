@@ -21,8 +21,7 @@ layout: default
     <div class="hero__content">
       <div class="hero__badge">
         <span class="chip chip--primary">Latest Article</span>
-        {%- assign read_time = hero_post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
-        <span class="hero__meta">{{ read_time }} MIN READ</span>
+        <span class="hero__meta">{% include read-time.html content=hero_post.content %} read</span>
         <span class="hero__meta-separator" aria-hidden="true">&#8226;</span>
         <span class="hero__meta">{{ hero_post.date | date: "%b %d, %Y" | upcase }}</span>
       </div>

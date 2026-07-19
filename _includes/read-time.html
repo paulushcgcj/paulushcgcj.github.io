@@ -1,0 +1,1 @@
+{%- assign read_time = include.content | strip_html | number_of_words | divided_by: 180 | plus: 1 -%}{{ read_time | pluralize: "min" }}

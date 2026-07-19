@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<div class="articles-page">
+  {%- comment -%} Breadcrumb {%- endcomment -%}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}" class="breadcrumb__item">Home</a>
+    <span class="breadcrumb__separator material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    {%- if page.type == 'category' %}
+    <a href="{{ '/categories/' | relative_url }}" class="breadcrumb__item">Categories</a>
+    {%- else %}
+    <a href="{{ '/tags/' | relative_url }}" class="breadcrumb__item">Tags</a>
+    {%- endif %}
+    <span class="breadcrumb__separator material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    <span class="breadcrumb__item breadcrumb__item--active">{{ page.title }}</span>
+  </nav>
+
+  {%- comment -%} Page Header {%- endcomment -%}
+  <header class="article-list-header">
+    <h1 class="article-list-header__title">{{ page.title }}</h1>
+    <p class="article-list-header__description">
+      {%- if page.type == 'category' %}
+      Articles in the "{{ page.title }}" category
+      {%- else %}
+      Articles tagged with "{{ page.title }}"
+      {%- endif %}
+    </p>
+  </header>
+
+  {%- comment -%} Archived posts {%- endcomment -%}
+  <div class="article-list">
+    {%- for post in page.posts %}
+      {%- include article-list-item.html post=post %}
+    {%- endfor %}
+  </div>
+</div>

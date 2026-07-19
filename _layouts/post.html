@@ -41,8 +41,7 @@ layout: default
         {{ page.date | date: "%B %d, %Y" }}
       </time>
       <span class="article-hero__meta-dot" aria-hidden="true"></span>
-      {%- assign read_time = page.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
-      <span>{{ read_time }} Min Read</span>
+      <span>{% include read-time.html content=page.content %} read</span>
     </div>
   </div>
 </section>
@@ -93,6 +92,9 @@ layout: default
       <div class="article__content" itemprop="text">
         {{ content }}
       </div>
+
+      {%- comment -%} Bibliography (jekyll-scholar) {%- endcomment -%}
+      {% include bibliography.html %}
 
       {%- comment -%} Author Block {%- endcomment -%}
       <footer class="article__footer">

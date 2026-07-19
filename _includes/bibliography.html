@@ -1,0 +1,14 @@
+{%- comment -%}
+  bibliography.html — Renders jekyll-scholar bibliography section.
+  Requires `has_bibliography: true` in post frontmatter. The per-post
+  .bib file is set via `scholar: { bibliography: <filename> }`.
+{%- endcomment -%}
+
+{%- if page.has_bibliography -%}
+<section class="bibliography" aria-label="References">
+  <h2 class="bibliography__title">References</h2>
+  <div class="bibliography__content">
+    {% bibliography --query @* %}
+  </div>
+</section>
+{%- endif -%}

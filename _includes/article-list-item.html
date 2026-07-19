@@ -12,7 +12,6 @@
 {%- endcomment -%}
 
 {%- assign post = include.post -%}
-{%- assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 -%}
 {%- assign banner_image = post.header.overlay_image | default: post.header.teaser -%}
 
 <article class="article-list-item">
@@ -28,7 +27,7 @@
         {{ post.date | date: "%B %-d, %Y" }}
       </time>
       <span class="article-list-item__separator" aria-hidden="true"></span>
-      <span class="article-list-item__read-time">{{ read_time }} MIN READ</span>
+      <span class="article-list-item__read-time">{% include read-time.html content=post.content %} read</span>
     </div>
     
     <a class="article-list-item__title-link" href="{{ post.url | relative_url }}">
