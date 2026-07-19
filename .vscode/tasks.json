@@ -9,9 +9,9 @@
       "problemMatcher": []
     },
     {
-      "label": "Jekyll: Serve with Drafts & Live Reload",
+      "label": "Jekyll: Serve Live Reload",
       "type": "shell",
-      "command": "bundle exec jekyll serve --drafts --livereload",
+      "command": "bundle exec jekyll serve --drafts --future --livereload",
       "dependsOn": [
         "Jekyll: Install Dependencies"
       ],
