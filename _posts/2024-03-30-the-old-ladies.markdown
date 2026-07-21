@@ -1,7 +1,7 @@
 ---
 title:  "The Old Ladies - Tic-Tac-Toe Game"
 date:   2024-03-30 07:09:00 -0800
-last_modified_at: 2026-07-21 12:32:00 -0700
+last_modified_at: 2026-07-21 15:19:21 -0700
 categories: [game, wolfpack,puzzle,multiplatform]
 author: paulushc
 license: CC-BY-4.0

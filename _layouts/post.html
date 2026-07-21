@@ -52,7 +52,7 @@ layout: default
     {%- comment -%} Table of Contents Sidebar {%- endcomment -%}
     <aside class="article-layout__sidebar" aria-label="Table of contents">
       <div class="article-toc">
-        <h4 class="article-toc__title">Navigation</h4>
+        <p class="article-toc__title">Navigation</p>
         <nav class="article-toc__nav">
           <ul class="article-toc__list" id="article-toc-list" role="list">
             {%- comment -%} TOC populated by JavaScript from article headings {%- endcomment -%}
@@ -62,7 +62,7 @@ layout: default
       
       {%- if page.resources %}
       <div class="article-resources">
-        <h4 class="article-resources__title">Resources</h4>
+        <p class="article-resources__title">Resources</p>
         <ul class="article-resources__list" role="list">
           {%- for resource in page.resources %}
           <li>

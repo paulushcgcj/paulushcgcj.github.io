@@ -11,7 +11,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Coding for life. I love writing code, and as a developer, the world is an infinite source of inspiration. Every time I see some problem, I stop to think of a way to solve this problem with some kind of software, code or script. As a person, It's my responsibility to share all my knowledge with the world. This way, even if I die, my ideas will pass on.
   If you like to code, build plastic brick's towers and play some video and board games, just come with me on my magical journey through this big project called life.
 baseurl: ""
-url: "https://paulushcgcj.github.io/" 
+url: "https://paulushcgcj.github.io"
 github_username:  paulushcgcj
 linkedin_username: paulushc
 youtube_username: omundocruz

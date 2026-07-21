@@ -538,6 +538,10 @@
 
   &__content {
     /* Article body inherits base typographic defaults */
+
+    img {
+      margin: 1rem auto;
+    }
   }
 
   &__footer {
