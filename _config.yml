@@ -19,10 +19,11 @@ youtube_username: omundocruz
 # Build settings
 excerpt_separator: <!--more-->
 show_excerpts: true
-future: true
+future: false
 
 include:
   - "BingSiteAuth.xml"
+  - "8c3c5c9c-4c2c-4c0c-9c3c-2f6b7c4f9b21.txt"
 
 plugins:
   - jekyll-feed
