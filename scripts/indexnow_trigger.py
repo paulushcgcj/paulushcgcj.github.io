@@ -82,11 +82,7 @@ def main():
     modified_set = (
         set(MODIFIED_FILES)
         if MODIFIED_FILES
-        else set(
-            os.path.join("_posts", f)
-            for f in os.listdir("_posts")
-            if f.endswith(".markdown")
-        )
+        else set()
     )
 
     # Loop through the whole _posts folder
