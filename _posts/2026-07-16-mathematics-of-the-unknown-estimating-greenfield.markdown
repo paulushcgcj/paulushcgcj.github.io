@@ -1,7 +1,7 @@
 ---
 title: "The Mathematics of the Unknown - How to Estimate Greenfield Software Without Guessing"
 date: 2026-07-16 12:00:00 -0700
-lastupdated: 2026-07-21 12:32:00 -0700
+last_modified_at: 2026-07-21 12:32:00 -0700
 categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0

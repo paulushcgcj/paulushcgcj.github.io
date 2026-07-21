@@ -1,7 +1,7 @@
 ---
 title:  "A new start!"
 date:   2019-02-01 09:08:09 -0200
-lastupdated: 2026-07-21 12:32:00 -0700
+last_modified_at: 2026-07-21 12:32:00 -0700
 categories: [blog, personal]
 author: paulushc
 license: CC-BY-4.0
