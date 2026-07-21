@@ -21,6 +21,9 @@ excerpt_separator: <!--more-->
 show_excerpts: true
 future: true
 
+include:
+  - "BingSiteAuth.xml"
+
 plugins:
   - jekyll-feed
   - jekyll-target-blank
