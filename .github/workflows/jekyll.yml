@@ -62,3 +62,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  notify-indexnow:
+    needs: [deploy]
+    uses: ./.github/workflows/indexnow.yml
+    with:
+      trigger_mode: 'push'
+    secrets:
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}

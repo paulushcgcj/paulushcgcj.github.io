@@ -1,0 +1,45 @@
+name: Reusable IndexNow Trigger
+
+on:
+  workflow_call:
+    inputs:
+      trigger_mode:
+        description: 'Either "push" or "cron"'
+        required: true
+        type: string
+    secrets:
+      INDEXNOW_KEY:
+        description: 'The IndexNow API key'
+        required: true
+
+jobs:
+  trigger-indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Required for push mode to compute git diff
+
+      - name: Get modified files (Push mode only)
+        if: inputs.trigger_mode == 'push'
+        id: changed-files
+        run: |
+          MODIFIED=$(git diff --name-only HEAD~1 HEAD | grep '^_posts/.*\.md$' | tr '\n' ' ')
+          echo "files=$MODIFIED" >> $GITHUB_OUTPUT
+
+      - name: Set up Python and UV
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv pip install python-frontmatter
+
+      - name: Run IndexNow Script
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+          SITE_URL: "https://paulushcgcj.github.io"
+          TRIGGER_MODE: ${{ inputs.trigger_mode }}
+          MODIFIED_FILES: ${{ steps.changed-files.outputs.files }}
+        run: uv run python scripts/indexnow_trigger.py
