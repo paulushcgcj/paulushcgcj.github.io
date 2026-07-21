@@ -1,6 +1,7 @@
 ---
 title:  "Techleads"
 date:   2019-02-10 12:11:32 -0200
+lastupdated: 2026-07-21 11:48:00 -0700
 categories: [article, personal,tech,softskill]
 author: paulushc
 license: CC-BY-4.0

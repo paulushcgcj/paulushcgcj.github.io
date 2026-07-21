@@ -1,6 +1,7 @@
 ---
 title:  "How to Improve Developer's Productivity"
 date:   2023-04-13 12:00:00 -0700
+lastupdated: 2026-07-21 11:48:00 -0700
 categories: [article, softskill, repost, encora]
 author: paulushc
 license: proprietary

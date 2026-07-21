@@ -1,6 +1,7 @@
 ---
 title:  "Database Encryption Pt2 - Connection Encryption"
 date:   2024-04-26 09:30:00 -0700
+lastupdated: 2026-07-21 11:48:00 -0700
 categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
 license: CC-BY-4.0
