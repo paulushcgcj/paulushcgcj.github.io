@@ -1,7 +1,7 @@
 ---
 title:  "Multi Database Application with Spring Boot"
 date:   2017-02-06 15:00:00 -0200
-lastupdated: 2026-07-21 11:48:00 -0700
+lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, tech, java, spring]
 author: paulushc
 license: CC-BY-4.0

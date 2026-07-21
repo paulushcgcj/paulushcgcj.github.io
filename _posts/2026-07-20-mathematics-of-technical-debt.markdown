@@ -1,7 +1,7 @@
 ---
 title:  "The Mathematics of Technical Debt - How to Empirically Estimate Refactoring and Testing Effort"
 date:   2026-07-20 08:50:00 -0700
-lastupdated: 2026-07-21 11:48:00 -0700
+lastupdated: 2026-07-21 13:18:00 -0700
 categories: ["article", "tech", "engineering", "estimation", "refactoring"]
 author: paulushc
 license: CC-BY-4.0

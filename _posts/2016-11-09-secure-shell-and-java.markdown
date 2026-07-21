@@ -1,7 +1,7 @@
 ---
 title:  "Secure Shell (SSH) and Java"
 date:   2016-11-09 15:00:00 -0300
-lastupdated: 2026-07-21 11:48:00 -0700
+lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, tech, java, ssh]
 author: paulushc
 license: CC-BY-4.0
