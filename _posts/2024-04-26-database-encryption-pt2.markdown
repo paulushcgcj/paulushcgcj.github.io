@@ -30,7 +30,7 @@ As we journey through this chapter, readers will gain invaluable insights into t
 Let's embark on this adventure into connection encryption, as we continue our quest to fortify our applications against security vulnerabilities and uphold the highest standards of data protection. All code can be found on [GitHub](https://github.com/paulushcgcj/article-database-encryption) so don't worry about copying it from here if you don't want to. The main branch contains the starting point, so you can checkout and start fresh along with this article, and in case you get stuck, check the referenced tags on each step.
 Let's dive in and unlock the secrets of database encryption with PostgreSQL and Spring Boot!
 
-# Securing the database connection with certificate
+## Securing the database connection with certificate
 >  By the end of this section, you should have something like [the content of tag v1.2.0](https://github.com/paulushcgcj/article-database-encryption/releases/tag/v1.2.0)
 
 Now let's focus on securing the data in transit with SSL certificate. This tutorial (and this repository) will not provide a certificate file for you, and we expect you to already have a certificate to be used. I'll show an example on how to generate a self-signed certificate just for the sake of local test and validation only.
@@ -107,7 +107,7 @@ CMD [ "postgres","-c","ssl=on", "-c","ssl_cert_file=/certs/server.crt","-c","ssl
 
 ```
 
-# Securing the application connection
+## Securing the application connection
 
 Securing the application connection is pretty simple. We just need to enable the SSL through the connection string, so this part is pretty simple. Let's begin with the JDBC version first:
 
@@ -136,7 +136,7 @@ spring:
 
 If we run the application now, nothing will change. As a matter of fact, even without enabling the SSL connection, we will be able to connect to the database. This is due to the fact that by default, Postgres will still enable insecure connection to the database, so we will need to make sure that we will only allow secure connections to the database.
 
-# Restricting database access
+## Restricting database access
 
 To restrict database access, we need to update the `pg_hba.conf` file, where the database sets the access configuration. This file needs to be updated in order to allow or restrict access to the database. In our case we need to set the connections to allow only ssl connections and block insecure connections. This is how we are going to setup the file:
 
@@ -216,7 +216,7 @@ CMD [ "postgres","-c","ssl=on", "-c","ssl_cert_file=/certs/server.crt","-c","ssl
 
 ```
 
-# Securing the certificate
+## Securing the certificate
 
 The way we pass the certificate files to the image is pretty straightforward, but it's also extremely insecure, as anyone with access to our image will be able to copy our certificate files and use it for malicious activities using our key. To prevent that instead of baking it into the image, we will expect it to be received as a volume mapping, but not straight to the final folder. First, let's remove the copy commands and the other related ones from the file. We should end up with a Dockerfile like this.
 
@@ -380,7 +380,7 @@ USER postgres
 
 I've named all scripts into an order, to make the execution more predictable, as the init scripts run in order based on name, so nothing easier than setting a numeric order for our files. The second script is the one we use to enable SSL and reload the configuration. Is the reload required? No, it's not, as the database will shut down and restart after that, but it's a good sanity check nonetheless. This solves our problem of not being able to change the files manually or having to manually change it after the database is started.
 
-# Passing the certificates
+## Passing the certificates
 
 Now, for the final piece of this puzzle, we can pass the certificate files in both cases. It's simple and straightforward. Let's begin with the JDBC one.
 
@@ -409,7 +409,7 @@ io:
 
 As you can see, I moved the cert file into a specific configuration so I can pass it as an environment variable as well. It's pretty hard to see, but we've added a new parameter to our R2DBC configuration called `sslrootcert` and we're passing a file with the certificate using our new variable like `file:${io.github.paulushcgcj.database.ssl-path}` and this is all we need to set the certificates into the R2DBC connection.
 
-# Recap
+## Recap
 
 Well, folks, we've reached the end of another chapter in our quest for data security. In this instalment, we've rolled up our sleeves and tackled the vital task of securing our database connections with PostgreSQL. By configuring PostgreSQL to utilize a secure connection and updating our connection strings to leverage SSL, we've added another layer of defence to our data fortress. With each keystroke and configuration tweak, we're locking down our applications tighter than a vault.
 

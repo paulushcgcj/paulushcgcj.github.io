@@ -59,17 +59,6 @@
 <meta property="og:image" content="{{ page.image | absolute_url }}">
 {% endif %}
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
-<meta name="twitter:description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 200 | escape }}">
-{% if page.image %}
-<meta name="twitter:image" content="{{ page.image | absolute_url }}">
-{% endif %}
-{% if site.twitter_username %}
-<meta name="twitter:site" content="@{{ site.twitter_username }}">
-{% endif %}
-
 <!-- Favicon -->
 {% if site.logo %}
 <link rel="icon" href="{{ site.logo | relative_url }}" type="image/png">

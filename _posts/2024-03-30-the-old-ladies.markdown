@@ -58,7 +58,7 @@ Here are some screenshots of The Old Ladies in action:
 *Original screenshots by the author.*
 
 
-# Changelog
+## Changelog
 
 ## v0.0.1
 * ci: adding security workflow by @paulushcgcj in https://github.com/wolfpackgames/theoldladies/pull/1

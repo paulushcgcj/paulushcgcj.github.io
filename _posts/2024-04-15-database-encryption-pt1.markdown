@@ -33,7 +33,7 @@ Let's dive in and unlock the secrets of database encryption with PostgreSQL and 
 
 ---
 
-# Getting started
+## Getting started
 >  By the end of this section, you should have something like [the content of tag v1.0.0](https://github.com/paulushcgcj/article-database-encryption/releases/tag/v1.0.0)
 
 To get started, we will need a Postgres database instance, some data and some code. We're going to start by defining a Postgres instance. Notice that we are not doing anything special here with this image, just defining a healthcheck.
@@ -82,14 +82,14 @@ insert into secure.person (first_name, last_name, email, gender) values ('Tyrone
 insert into secure.person (first_name, last_name, email, gender) values ('Imogene', 'Simmill', 'isimmill4@e-recht24.de', 'Female') on conflict (email) do nothing;
 ```
 
-# The code
+## The code
 >  By the end of this section, you should have something like [the content of tag v1.0.0](https://github.com/paulushcgcj/article-database-encryption/releases/tag/v1.0.0)
 
 The initial code is super simple. There's nothing fancy here that requires any mention, so checkout the repository and start playing with it.
 
 As this article is meant to help reactive and non-reactive users, you will find two folders inside the repository, one for the reactive and one for the non-reactive. Use the one you're more comfortable with, and if you want, compare with the other approach.
 
-# Securing data with pgcrypto
+## Securing data with pgcrypto
 >  By the end of this section, you should have something like [the content of tag v1.1.0](https://github.com/paulushcgcj/article-database-encryption/releases/tag/v1.1.0)
 
 
@@ -154,7 +154,7 @@ insert into secure.person_tmp (first_name, last_name, email, gender) values (pgp
 
 This will insert the same entries we had insert before into our non-encrypted table. This will allow us to have a fair comparison between both tables. Notice that we are using the `pgp_sym_encrypt` function from `pgcrypto` in order to encrypt the data being passed with the provided key. The `AES_KEY` is the key we will use to encrypt the data. According to the documentation, it can be a text or an encryption key. Keep in mind that for the purpose of this example, I will use as a value and refer to it as the `AES_KEY`, but make sure to use a proper and secure key and handle it with care.
 
-# Consuming the secured data
+## Consuming the secured data
 
 If you check the encrypted data using the database UI or through SQL, you will notice that it will return some gibberish binary data that makes zero-sense. To properly read the data, we will need to use the `AES_KEY` we used to encrypt the data when inserted and use the corresponding reverse function to decrypt the data like:
 
@@ -171,7 +171,7 @@ FROM
 
 This should return the same result as the original table with the original data on it. Play around with it for now to get used to it.
 
-# Migrating existing table
+## Migrating existing table
 
 My approach is more reasonable and safer. I would start by creating a temporary table with the correct structure as mentioned on the securing data topic, with a random name.
 Then I would do an insert from a select that encrypts the data into the new temp table
@@ -253,7 +253,7 @@ LANGUAGE plpgsql;
 
 Again, bear in mind that the `AES_KEY` value should be replaced, along with the table names and fields.
 
-# Migrating existing code
+## Migrating existing code
 
 Now it's time to change the existing code to allow us to read and write using the encrypted data. I will guide you through the steps required to make your application read and write using the encryption/decryption key in the most simple and efficient way possible. Keep in mind that the non-reactive approach, using JDBC is simpler than the reactive counterpart, but both have its own merits and caveats.
 
@@ -463,7 +463,7 @@ io:
 
 The key difference here is the way we pass the options to the connection. When dealing with JDBC, we use the `-c key=value` param while with R2DBC, we can simply pass the `key=value` pair straight to the options parameter.
 
-# Considerations
+## Considerations
 
 With this we are done securing some fields with a little bit of encryption. In this article we used `pgp_sym_encrypt` and `pgp_sym_decrypt` functions that uses the PGP symmetric key to encrypt the data, but Postgres provides some other methods to encrypt data as well.
 
