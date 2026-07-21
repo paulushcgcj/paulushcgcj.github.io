@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [game, wolfpack,puzzle,multiplatform]
 author: paulushc
 license: CC-BY-4.0
+description: "The Old Ladies is a tic-tac-toe game built with MonoGame. Play against friends or AI with cross-platform support for Windows, Linux, Mac, and Android."
+image: /assets/2024/03/wolfpack/theoldladies-teaser.jpeg
 permalink: /wolfpack/theoldladies
 header:
     teaser: /assets/2024/03/wolfpack/theoldladies-teaser.jpeg

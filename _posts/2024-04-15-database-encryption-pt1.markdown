@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
 license: CC-BY-4.0
+description: "Implement column-level encryption in PostgreSQL with Spring Boot using pgcrypto. Covers JDBC and R2DBC approaches with practical code examples."
+image: /assets/2024/04/articles/dbcrypt-01-cover.png
 permalink: /articles/database-encryption-pt1
 header:
     teaser: /assets/2024/04/articles/dbcrypt-01-cover.png

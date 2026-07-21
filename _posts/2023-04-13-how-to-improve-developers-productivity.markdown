@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, softskill, repost, encora]
 author: paulushc
 license: proprietary
+description: "Practical tips and techniques for developers to boost productivity — from time management and breaks to delegation and planning poker."
+image: /assets/2023/04/articles/productivity-cover.jpeg
 permalink: /articles/how-to-improve-developers-productivity
 header:
     teaser: /assets/2023/04/articles/productivity-cover.jpeg
@@ -22,7 +24,7 @@ The idea behind this article is to share some tips and start some discussions on
 
 <!--more-->
 
->  This is a repost from an article that I wrote for [Encora](https://www.encora.com/). You can check the original post [here](https://www.encora.com/insights/how-to-improve-developers-productivity).
+>  This is a repost from an article that I wrote for [Encora](https://www.encora.com/). You can check the [original post on Encora's website](https://www.encora.com/insights/how-to-improve-developers-productivity).
 
 ## What Does Productivity Mean?
 

@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
+description: "Replace Planning Poker guesswork with grounded estimation. Four pillars using PERT, complexity counting, codebase analogies, and pre-mortems."
+image: /assets/2026/07/mathofunknow01-cover.png
 permalink: /articles/mathematics-of-the-unknown
 has_bibliography: true
 scholar:

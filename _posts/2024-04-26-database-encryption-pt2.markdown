@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
 license: CC-BY-4.0
+description: "Secure PostgreSQL connections with SSL certificates in Spring Boot. Step-by-step guide to connection encryption using JDBC and R2DBC."
+image: /assets/2024/04/articles/dbcrypt-02-teaser.jpg
 permalink: /articles/database-encryption-pt2
 header:
     teaser: /assets/2024/04/articles/dbcrypt-02-teaser.jpg

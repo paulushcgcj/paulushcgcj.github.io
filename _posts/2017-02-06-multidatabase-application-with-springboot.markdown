@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, tech, java, spring]
 author: paulushc
 license: CC-BY-4.0
+description: "Connect to multiple databases from a single Spring Boot application. Step-by-step guide to centralizing multi-database environments with dynamic routing."
+image: /assets/2017/02/articles/multidatabase-application-with-springboot-cover.png
 permalink: /articles/multidb-with-spring1
 header:
     teaser: /assets/2017/02/articles/multidatabase-application-with-springboot-cover.png

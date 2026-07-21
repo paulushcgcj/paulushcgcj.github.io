@@ -5,6 +5,8 @@ lastupdated: 2026-07-21 12:32:00 -0700
 categories: [article, personal,tech,softskill]
 author: paulushc
 license: CC-BY-4.0
+description: "Reflections on what it means to be a tech lead — responsibilities, people management, and the road to becoming a great technical leader."
+image: /assets/2019/02/articles/techleads-cover.jpg
 permalink: /articles/techleads
 header:
     teaser: /assets/2019/02/articles/techleads-cover.jpg
