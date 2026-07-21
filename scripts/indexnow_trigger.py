@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.14"
+# requires-python = ">=3.12"
 # dependencies = [
 #     "python-frontmatter>=1.0.0",
 # ]
@@ -12,7 +12,6 @@ import urllib.error
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 import frontmatter
-import yaml as pyyaml
 
 # Configuration
 INDEXNOW_KEY = os.getenv("INDEXNOW_KEY")
@@ -80,8 +79,14 @@ def main():
     now_vancouver = datetime.now(VANCOUVER_TZ)
     now_utc = datetime.now(timezone.utc)
 
-    modified_set = set(MODIFIED_FILES) if MODIFIED_FILES else set(
-        os.path.join("_posts", f) for f in os.listdir("_posts") if f.endswith(".markdown")
+    modified_set = (
+        set(MODIFIED_FILES)
+        if MODIFIED_FILES
+        else set(
+            os.path.join("_posts", f)
+            for f in os.listdir("_posts")
+            if f.endswith(".markdown")
+        )
     )
 
     # Loop through the whole _posts folder
@@ -89,7 +94,7 @@ def main():
         if not filename.endswith(".markdown"):
             print(f"⚠️ Skipping non-markdown file: {filename}")
             continue
-        
+
         file_path = os.path.join(posts_dir, filename)
         print(f"🔍 Processing {file_path}...")
 
@@ -103,7 +108,7 @@ def main():
 
         post = metadata
         post["_content"] = markdown
-        
+
         # 1. Validate: Is the post published? (date <= now)
         post_date = post.get("date")
         update_date = post.get("lastupdated") or post.get("last_modified_at")
@@ -116,7 +121,9 @@ def main():
 
         # Convert to UTC for a safe "is it published yet?" check
         if dt_post > now_utc:
-            print(f"⚠️ Post {file_path} is scheduled for the future ({dt_post}). Skipping.")
+            print(
+                f"⚠️ Post {file_path} is scheduled for the future ({dt_post}). Skipping."
+            )
             continue  # Skip future-dated posts
 
         # 2. Decide whether to submit based on trigger mode
@@ -126,7 +133,9 @@ def main():
             print(f"ℹ️ Push mode: Checking if {file_path} is in modified files.")
             # Push mode: Rely on git diff. If it's modified and published, submit it.
             if file_path in modified_set:
-                print(f"✅ {file_path} is modified and published. Queuing for submission.")
+                print(
+                    f"✅ {file_path} is modified and published. Queuing for submission."
+                )
                 should_submit = True
 
         elif TRIGGER_MODE == "cron":

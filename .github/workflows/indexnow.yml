@@ -25,16 +25,13 @@ jobs:
         if: inputs.trigger_mode == 'push'
         id: changed-files
         run: |
-          MODIFIED=$(git diff --name-only HEAD~1 HEAD | grep '^_posts/.*\.md$' | tr '\n' ' ')
+          MODIFIED=$(git diff --name-only HEAD~1 HEAD | grep '^_posts/.*\.markdown$' | tr '\n' ' ')
           echo "files=$MODIFIED" >> $GITHUB_OUTPUT
 
       - name: Set up Python and UV
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
-
-      - name: Install dependencies
-        run: uv pip install python-frontmatter
 
       - name: Run IndexNow Script
         env:
