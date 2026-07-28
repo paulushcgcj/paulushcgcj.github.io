@@ -1,7 +1,7 @@
 ---
 title:  "The Mathematics of Technical Debt - How to Empirically Estimate Refactoring and Testing Effort"
 date:   2026-07-20 08:50:00 -0700
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-07-28 08:00:00 -0700
 categories: ["article", "tech", "engineering", "estimation", "refactoring"]
 author: paulushc
 license: CC-BY-4.0
@@ -17,15 +17,9 @@ resources:
     - title: "The Mathematics of the Unknown"
       url: "/articles/mathematics-of-the-unknown"
       icon: "arrow_back"
-    - title: "A Complexity Measure (McCabe, 1976)"
-      url: "https://ieeexplore.ieee.org/document/1702388"
-      icon: "book"
     - title: "lizard — Code Complexity Analyzer"
       url: "https://github.com/terryyin/lizard"
       icon: "code"
-    - title: "Cyclomatic Complexity Density and Software Maintenance Productivity (Gill & Kemerer, 1991)"
-      url: "https://dl.acm.org/doi/10.1109/32.106988"
-      icon: "book"
     - title: "Cognitive Complexity — SonarSource"
       url: "https://www.sonarsource.com/resources/cognitive-complexity/"
       icon: "link"
@@ -43,7 +37,10 @@ resources:
       icon: "link"
     - title: "Pareto Principle — Investopedia"
       url: "https://www.investopedia.com/terms/1/80-20-rule.asp"
-      icon: "book"
+      icon: "link"
+has_bibliography: true
+scholar:
+  bibliography: mathematics-of-technical-debt
 ---
 
 Most engineering teams have faced this scenario: Product Management asks for an estimate to refactor a legacy module or add test coverage to a critical service. The senior developer stares at the screen, squints at the nested `if` statements, and says, *"I don't know, maybe a week?"*
@@ -203,7 +200,7 @@ public class OrderProcessingService {
 ### Analyzing the Java Code
 
 If we run `lizard OrderProcessingService.java --csv`, we get:
-*   **NLOC:** ~49 lines
+*   **NLOC:** ~47 lines
 *   **CCN:** 10 (the null-and-empty-list check contributes 2 decision points via the `if` and the `||`; the `for` loop, the two nested `if`s inside it plus the `&&`, and the three nested `if`s in the billing/inventory block account for the rest).
 *   **External Dependencies:** 3 (`BillingClient`, `InventoryClient`, `EmailService` injected via constructor).
 
@@ -213,7 +210,7 @@ If we run `lizard OrderProcessingService.java --csv`, we get:
 
 $$
 \begin{aligned}
-\mathrm{Base\ Time}           &= \frac{49\ \mathrm{NLOC}}{333\ \mathrm{LOC/hr}} \approx 0.15\ \mathrm{hrs} \\[4pt]
+\mathrm{Base\ Time}           &= \frac{47\ \mathrm{NLOC}}{333\ \mathrm{LOC/hr}} \approx 0.14\ \mathrm{hrs} \\[4pt]
 \mathrm{Complexity\ Mult.}    &= 1 + (10\ \mathrm{CCN} \times 0.01) = 1.10 \\[4pt]
 \mathrm{Total\ Refactor\ Time} &= 0.15 \times 1.10 \approx 0.16\ \mathrm{hrs\ (10\ min)}
 \end{aligned}

@@ -1,7 +1,7 @@
 ---
 title: "The Mathematics of the Unknown - How to Estimate Greenfield Software Without Guessing"
 date: 2026-07-16 12:00:00 -0700
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-07-28 08:00:00 -0700
 categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
@@ -20,24 +20,8 @@ resources:
     - title: "The Mathematics of Technical Debt"
       url: "/articles/mathematics-of-technical-debt"
       icon: "arrow_forward"
-    - title: "Fechner, G. T. (1860). Elemente der Psychophysik"
-      url: "https://archive.org/details/elementederpsych001fech"
-    - title: "Cohn, M. (2005). Agile Estimating and Planning"
-      url: "https://www.mountaingoatsoftware.com/books/agile-estimating-and-planning"
-    - title: "Kahneman, D., & Tversky, A. (1979). Intuitive prediction: Biases and corrective procedures"
-      url: "https://doi.org/10.1017/CBO9780511809477.031"
-    - title: "Buehler, R., Griffin, D., & Ross, M. (2002). Inside the planning fallacy"
-      url: "https://doi.org/10.1017/CBO9780511808098.016"
     - title: "Developex. (2023). Time & Material Estimation Guide for Software Projects"
       url: "https://developex.com/blog/time-material-estimation-guide/"
-    - title: "Weiss, D. M., & Basili, V. R. (1978). Evaluating Software Development by Error Analysis"
-      url: "https://apps.dtic.mil/sti/tr/pdf/ADA062922.pdf"
-    - title: "McCabe, T. J. (1976). A Complexity Measure"
-      url: "https://doi.org/10.1109/TSE.1976.233837"
-    - title: "Flyvbjerg, B. (2006). From Nobel Prize to Project Management"
-      url: "https://doi.org/10.1177/875697280603700302"
-    - title: "Klein, G. (2007). Performing a Project Premortem"
-      url: "https://hbr.org/2007/09/performing-a-project-premortem"
 ---
 
 Every engineering team has sat in a synchronous Planning Poker session, staring at a Jira ticket for a feature that doesn't exist yet. The Product Owner reads the acceptance criteria. The Scrum Master asks for estimates. 
