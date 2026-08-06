@@ -1,7 +1,7 @@
 ---
 title:   "The Mathematics of Migration - How to Empirically Estimate Modernization and Transformation Effort"
-date:   2026-08-01 08:30:00 -0700
-last_modified_at: 2026-08-01 08:30:00 -0700
+date:   2026-08-06 10:16:00 -0700
+last_modified_at: 2026-08-06 10:16:00 -0700
 categories: [ "article", "tech", "engineering", "estimation", "migration", "modernization" ]
 author: paulushc
 license: CC-BY-4.0
