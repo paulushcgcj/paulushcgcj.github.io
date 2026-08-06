@@ -19,7 +19,7 @@ youtube_username: omundocruz
 # Build settings
 excerpt_separator: <!--more-->
 show_excerpts: true
-future: false
+future: true
 
 include:
   - "BingSiteAuth.xml"
