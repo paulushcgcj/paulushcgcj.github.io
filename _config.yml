@@ -51,6 +51,7 @@ exclude:
   - Gemfile.lock
   - README.md
   - LICENSE
+  - .playwright-mcp/
 
 # Layout defaults
 defaults:

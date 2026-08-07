@@ -11,7 +11,7 @@
     {
       "label": "Jekyll: Serve Live Reload",
       "type": "shell",
-      "command": "bundle exec jekyll serve --drafts --future --livereload",
+      "command": "bundle exec jekyll serve --drafts --future --livereload --incremental",
       "dependsOn": [
         "Jekyll: Install Dependencies"
       ],
