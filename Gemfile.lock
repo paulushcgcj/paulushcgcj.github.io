@@ -89,7 +89,7 @@ GEM
       nokogiri (~> 1.10)
     jekyll-watch (2.2.1)
       listen (~> 3.0)
-    json (2.21.1)
+    json (2.21.2)
     katex (0.11.0)
       execjs (~> 2.8)
     kramdown (2.4.0)
