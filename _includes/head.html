@@ -39,6 +39,13 @@
 {% seo %}
 {% feed_meta %}
 
+<!-- Supplemental JSON-LD: jekyll-seo-tag does not emit `keywords`; categories serve as tags -->
+{% if page.layout == "post" and page.categories.size > 0 %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","@id":"{{ site.url }}{{ page.url }}","keywords":{{ page.categories | jsonify }}}
+</script>
+{% endif %}
+
 <!-- Favicon -->
 {% if site.logo %}
 <link rel="icon" href="{{ site.logo | relative_url }}" type="image/png">

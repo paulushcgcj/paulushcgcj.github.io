@@ -1,0 +1,41 @@
+---
+---
+# Paulo Cruz — Software Engineering & Game Development Blog
+
+> {{ site.description | normalize_whitespace | truncate: 300 }}
+
+Personal blog of Paulo Cruz: long-form technical articles (Java, Spring Boot, PostgreSQL, security), engineering essays, MonoGame/C# game development notes, and occasional personal writing. All original content is licensed CC BY 4.0 unless stated otherwise.
+
+## Ingestion guide
+
+- This file (`llms.txt`) is the curated map of the site.
+- Full corpus in one file: {{ site.url }}/llms-full.txt — complete Markdown text of every article.
+- Incremental updates: Atom feed at {{ site.url }}/feed.xml (full-content entries).
+- Raw Markdown per article: append `.md` to any article URL below (e.g. `{{ site.url }}/articles/example.md`).
+- Machine index of every page: {{ site.url }}/sitemap.xml
+
+## Technical Articles
+
+{% assign article_posts = site.posts | where_exp: 'p', 'p.categories contains "article"' | sort: 'date' | reverse -%}
+{% for p in article_posts -%}
+- [{{ p.title }}]({{ site.url }}{{ p.url }}): {{ p.description | normalize_whitespace }}
+{% endfor %}
+## Blog
+
+{% assign blog_posts = site.posts | where_exp: 'p', 'p.categories contains "blog"' | sort: 'date' | reverse -%}
+{% for p in blog_posts -%}
+- [{{ p.title }}]({{ site.url }}{{ p.url }}): {{ p.description | normalize_whitespace }}
+{% endfor %}
+## Wolfpack (Game Development)
+
+{% assign game_posts = site.posts | where_exp: 'p', 'p.categories contains "game"' | sort: 'date' | reverse -%}
+{% for p in game_posts -%}
+- [{{ p.title }}]({{ site.url }}{{ p.url }}): {{ p.description | normalize_whitespace }}
+{% endfor %}
+## Pages
+
+- [About Paulo Cruz]({{ site.url }}/about/): background, projects, and contact information.
+- [Articles index]({{ site.url }}/articles/)
+- [Blog index]({{ site.url }}/blog/)
+- [Wolfpack index]({{ site.url }}/wolfpack/)
+- [CV]({{ site.url }}/cv/)

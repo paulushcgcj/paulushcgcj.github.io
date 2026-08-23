@@ -1,0 +1,26 @@
+---
+---
+{%- assign author_name = site.data.authors[page.post.author].name | default: page.post.author %}
+---
+title: {{ page.post.title | jsonify }}
+description: {{ page.post.description | jsonify }}
+author: {{ page.post.author | jsonify }}
+author_name: {{ author_name | jsonify }}
+published_at: {{ page.post.date | date_to_xmlschema }}
+{% if page.post.last_modified_at %}modified_at: {{ page.post.last_modified_at | date_to_xmlschema }}
+{% endif -%}
+categories: {{ page.post.categories | jsonify }}
+license: {{ page.post.license | default: 'CC-BY-4.0' | jsonify }}
+canonical_url: {{ site.url }}{{ page.post.url }}
+format: machine-readable-markdown/1
+---
+
+<!--
+Machine-readable Markdown representation of this article.
+Generated at build time from the canonical source.
+Canonical HTML version: {{ site.url }}{{ page.post.url }}
+-->
+
+# {{ page.post.title }}
+
+{{ page.post.raw_content }}

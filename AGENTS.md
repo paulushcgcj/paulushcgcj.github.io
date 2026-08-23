@@ -97,6 +97,21 @@ All original content uses `CC-BY-4.0`. The `_includes/cc-by-4.0-footer.html` par
 - `.playwright-mcp/` is gitignored
 - `vendor/` and `.bundle/` are gitignored — run `bundle install` after clone
 - Posts use `<!--more-->` for excerpt separators
+
+## AI-agent discovery
+
+The Jekyll build generates machine-readable discovery resources without source files:
+
+- `/llms.txt` is a curated content index and ingestion guide.
+- `/llms-full.txt` contains the full Markdown corpus of published posts.
+- Each published post has a generated Markdown twin at the same path with `.html`
+  replaced by `.md` (for example, `/articles/example.md`).
+- `/feed.xml` is the incremental full-content Atom feed; `/sitemap.xml` remains the
+  page index and `/robots.txt` points to it.
+
+The generator lives in `_plugins/llms_discovery.rb`; the text resources and article
+twins are build artifacts and must not be hand-maintained or committed. Drafts are
+excluded because generation iterates only over `site.posts`.
 - The about page has custom inline CSS overriding page layout constraints
 - CSS custom properties enable runtime theme switching (no build-time dark/light split)
 - jekyll-scholar requires a `_bibliography/references.bib` stub even when all posts use

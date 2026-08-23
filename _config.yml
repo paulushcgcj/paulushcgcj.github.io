@@ -21,6 +21,11 @@ excerpt_separator: <!--more-->
 show_excerpts: true
 future: true
 
+# AI-agent discoverability: jekyll-feed caps entries at 10 by default,
+# which silently drops the oldest posts from feed.xml.
+feed:
+  posts_limit: 20
+
 include:
   - "BingSiteAuth.xml"
   - "8c3c5c9c-4c2c-4c0c-9c3c-2f6b7c4f9b21.txt"
@@ -52,6 +57,13 @@ exclude:
   - README.md
   - LICENSE
   - .playwright-mcp/
+  - .opencode/
+  # Internal docs / tooling artifacts that must not ship to _site
+  # (they were leaking into the published output AND the sitemap)
+  - AGENTS.md
+  - DESIGN.md
+  - graphify-out/
+  - scripts/
 
 # Layout defaults
 defaults:
