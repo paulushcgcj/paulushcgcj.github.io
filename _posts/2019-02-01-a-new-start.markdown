@@ -1,13 +1,15 @@
 ---
 title:  "A new start!"
 date:   2019-02-01 09:08:09 -0200
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [blog, personal]
 author: paulushc
 license: CC-BY-4.0
 description: "A personal update on a fresh beginning — new direction, new blog, and the story behind the Cruz family wolf symbol."
 image: /assets/2019/02/blog/a-new-start-cruzlogo.png
 permalink: /blog/a-fresh-start
+pagination:
+    enabled: true
 header:
     teaser: /assets/2019/02/blog/a-new-start-cruzlogo.png
     overlay_image: /assets/2019/02/blog/a-new-start-cruzlogo.png

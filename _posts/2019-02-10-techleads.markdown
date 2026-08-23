@@ -1,13 +1,15 @@
 ---
 title:  "Techleads"
 date:   2019-02-10 12:11:32 -0200
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [article, personal,tech,softskill]
 author: paulushc
 license: CC-BY-4.0
 description: "Reflections on what it means to be a tech lead — responsibilities, people management, and the road to becoming a great technical leader."
 image: /assets/2019/02/articles/techleads-cover.jpg
 permalink: /articles/techleads
+pagination:
+    enabled: true
 header:
     teaser: /assets/2019/02/articles/techleads-cover.jpg
     overlay_image: /assets/2019/02/articles/techleads-cover.jpg

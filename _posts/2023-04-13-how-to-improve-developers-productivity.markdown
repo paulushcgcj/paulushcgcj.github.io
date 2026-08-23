@@ -1,13 +1,15 @@
 ---
 title:  "How to Improve Developer's Productivity"
 date:   2023-04-13 12:00:00 -0700
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [article, softskill, repost, encora]
 author: paulushc
 license: proprietary
 description: "Practical tips and techniques for developers to boost productivity — from time management and breaks to delegation and planning poker."
 image: /assets/2023/04/articles/productivity-cover.jpeg
 permalink: /articles/how-to-improve-developers-productivity
+pagination:
+    enabled: true
 header:
     teaser: /assets/2023/04/articles/productivity-cover.jpeg
     overlay_image: /assets/2023/04/articles/productivity-cover.jpeg

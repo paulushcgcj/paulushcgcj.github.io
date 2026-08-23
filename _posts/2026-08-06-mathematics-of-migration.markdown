@@ -1,7 +1,7 @@
 ---
 title:   "The Mathematics of Migration - How to Empirically Estimate Modernization and Transformation Effort"
 date:   2026-08-06 10:16:00 -0700
-last_modified_at: 2026-08-06 10:16:00 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [ "article", "tech", "engineering", "estimation", "migration", "modernization" ]
 author: paulushc
 license: CC-BY-4.0
@@ -9,6 +9,8 @@ layout: post
 description: "A mathematically grounded model for estimating migration work — modernization vs transformation — from Swanson's maintenance taxonomy, Lehman's laws, and empirical code-comprehension rates."
 image: /assets/2026/08/mathematics-of-migration-cover.png
 permalink: /articles/mathematics-of-migration
+pagination:
+    enabled: true
 header:
     teaser: /assets/2026/08/mathematics-of-migration-cover.png
     overlay_image: /assets/2026/08/mathematics-of-migration-cover.png

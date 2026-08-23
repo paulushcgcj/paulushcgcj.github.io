@@ -1,13 +1,15 @@
 ---
 title:  "Secure Shell (SSH) and Java"
 date:   2016-11-09 15:00:00 -0300
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [article, tech, java, ssh]
 author: paulushc
 license: CC-BY-4.0
 description: "Learn how to implement Secure Shell (SSH) file transfers in Java using JCraft JSch. A practical guide to secure file operations between distributed servers."
 image: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg
 permalink: /articles/secure-shell-and-java
+pagination:
+    enabled: true
 header:
     teaser: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg
     overlay_image: /assets/2016/11/articles/secure-shell-and-java-cover.jpeg

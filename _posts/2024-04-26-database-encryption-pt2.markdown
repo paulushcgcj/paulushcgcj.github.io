@@ -1,13 +1,15 @@
 ---
 title:  "Database Encryption Pt2 - Connection Encryption"
 date:   2024-04-26 09:30:00 -0700
-last_modified_at: 2026-07-21 15:19:21 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: [article, tech, database, security, spring, jdbc, r2dbc]
 author: paulushc
 license: CC-BY-4.0
 description: "Secure PostgreSQL connections with SSL certificates in Spring Boot. Step-by-step guide to connection encryption using JDBC and R2DBC."
 image: /assets/2024/04/articles/dbcrypt-02-teaser.jpg
 permalink: /articles/database-encryption-pt2
+pagination:
+    enabled: true
 header:
     teaser: /assets/2024/04/articles/dbcrypt-02-teaser.jpg
     overlay_image: /assets/2024/04/articles/dbcrypt-02-cover.jpg

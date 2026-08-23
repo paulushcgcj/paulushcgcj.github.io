@@ -1,13 +1,15 @@
 ---
 title: "The Mathematics of the Unknown - How to Estimate Greenfield Software Without Guessing"
 date: 2026-07-16 12:00:00 -0700
-last_modified_at: 2026-07-28 08:00:00 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: ["article", "tech", "engineering", "estimation", "agile"]
 author: paulushc
 license: CC-BY-4.0
 description: "Replace Planning Poker guesswork with grounded estimation. Four pillars using PERT, complexity counting, codebase analogies, and pre-mortems."
 image: /assets/2026/07/mathofunknow01-cover.png
 permalink: /articles/mathematics-of-the-unknown
+pagination:
+    enabled: true
 has_bibliography: true
 scholar:
   bibliography: mathematics-of-the-unknown

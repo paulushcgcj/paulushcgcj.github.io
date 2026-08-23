@@ -1,13 +1,15 @@
 ---
 title:  "The Mathematics of Technical Debt - How to Empirically Estimate Refactoring and Testing Effort"
 date:   2026-07-20 08:50:00 -0700
-last_modified_at: 2026-07-28 08:00:00 -0700
+last_modified_at: 2026-08-22 22:23:48 -0700
 categories: ["article", "tech", "engineering", "estimation", "refactoring"]
 author: paulushc
 license: CC-BY-4.0
 description: "Empirically estimate refactoring effort using cyclomatic complexity density and normal lines of code. A mathematical model for technical debt."
 image: /assets/2026/07/math-of-tech-debt.png
 permalink: /articles/mathematics-of-technical-debt
+pagination:
+    enabled: true
 header:
     teaser: /assets/2026/07/math-of-tech-debt.png
     overlay_image: /assets/2026/07/math-of-tech-debt.png
