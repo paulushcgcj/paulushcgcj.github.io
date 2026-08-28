@@ -1,7 +1,7 @@
 ---
 title: "Demystifying Java 21 Virtual Threads in Spring Boot 4: An Empirical Analysis of Concurrency Models and I/O Bottlenecks"
 date: 2026-08-22 22:23:48 -0700
-last_modified_at: 2026-08-22 22:23:48 -0700
+last_modified_at: 2026-08-26 22:21:05 -0700
 categories: [ "article", "tech", "java", "virtual-threads", "benchmark" ]
 author: paulushc
 license: CC-BY-4.0
@@ -45,7 +45,7 @@ Since the early days of the Servlet API, Java EE applications have relied on a s
 
 Because of these costs, containers such as Tomcat impose a default maximum thread pool size (e.g., `server.tomcat.threads.max=200` in Spring Boot). When an application receives more concurrent requests than there are available threads, the excess requests are queued, leading to increased latency and reduced throughput.
 
-To address this limitation, many developers have turned to **reactive programming** with [Spring WebFlux](https://spring.io/projects/spring-webflux) and [Project Reactor](https://projectreactor.io/). Reactive streams enable non-blocking I/O and event-loop architectures that can handle many more connections with far fewer threads. However, this model introduces its own challenges: a steep learning curve, intricate debugging, and a fundamentally different programming paradigm.
+To address this limitation, many developers have turned to **reactive programming** with [Spring WebFlux](https://docs.spring.io/spring-framework/reference/web/webflux.html) and [Project Reactor](https://projectreactor.io/). Reactive streams enable non-blocking I/O and event-loop architectures that can handle many more connections with far fewer threads. However, this model introduces its own challenges: a steep learning curve, intricate debugging, and a fundamentally different programming paradigm.
 
 ## 2. The Virtual Thread Paradigm Shift
 
@@ -104,9 +104,10 @@ The application runs on my daily driver, so the numbers below are what I'd expec
 
 The two specs worth flagging are the six-core CPU and the isolated database. Because there's no hyper-threading, the CPU-bound file workload's behavior here is a clean function of those six real cores — results will shift on a chip with more logical threads. And keeping PostgreSQL off the test box means the application and the database never fight over the same cores. If you reproduce this on a single machine, expect both to compete for the same CPU and the numbers to get a bit muddier.
 
-The application exposes two endpoints:
+The application exposes three endpoints:
 
 - `GET /api/slow-query` — executes `pg_sleep(1)` via `JdbcClient`, holding one Hikari connection for exactly 1 second. This is the database I/O workload.
+- `GET /api/fast-query` — executes `SELECT 1 AS benchmark` via `JdbcClient`, a constant-time probe with no table access, no I/O, and deterministic output. This isolates the thread model from database latency.
 - `GET /api/file-read` — reads 256 MiB from tmpfs and computes a per-byte checksum. This is the CPU-bound workload.
 
 ### 4.2 Simulating Blocking I/O
@@ -142,6 +143,22 @@ public class SlowOperationRepository {
      */
     public void simulateSlowDatabaseCall() {
         this.jdbcClient.sql("SELECT pg_sleep(1)").query().singleValue();
+    }
+
+    /**
+     * Executes a fast, constant-time probe against PostgreSQL.
+     *
+     * <p>{@code SELECT 1} is a constant scan with no table access, no I/O and
+     * deterministic output. It is used as a low-latency baseline for the benchmark.
+     *
+     * @return the constant {@code 1} returned by the database
+     */
+    public int fastDatabaseCall() {
+        final int value = this.jdbcClient.sql("SELECT 1 AS benchmark")
+            .query(Integer.class)
+            .single();
+        log.info("Fast query done");
+        return value;
     }
 }
 ```
@@ -180,6 +197,19 @@ public class SlowOperationController {
         repository.simulateSlowDatabaseCall();
         return "Query executed successfully";
     }
+
+    /**
+     * Runs a fast constant-time query against PostgreSQL.
+     *
+     * @return a success payload carrying the constant result, so the harness can assert
+     *     the call was executed and measure low-latency response time.
+     */
+    @GetMapping("/fast-query")
+    public ResponseDto<Integer> executeFastQuery() {
+        log.info("Requesting data from a fast query");
+        final int value = slowRepository.fastDatabaseCall();
+        return new ResponseDto<>("Fast query executed successfully", Optional.of(value));
+    }
 }
 ```
 
@@ -216,30 +246,45 @@ JFR (Java Flight Recorder) runs continuously during each scenario with `settings
 
 ### 5.1 Database Experiment A: Thread Model Under Load (Pool 600)
 
-With a generous connection pool (600 slots, well above PostgreSQL's `max_connections=1000`), neither HikariCP nor the database is the binding constraint — that leaves the Tomcat thread pool for platform threads, and effectively no ceiling at all for virtual threads.
+With a generous connection pool (600 slots, well above PostgreSQL's `max_connections=1000`), neither HikariCP nor the database is the binding constraint — that leaves the Tomcat thread pool for platform threads, and effectively no ceiling at all for virtual threads. But the story turns out to be more interesting than that, because the two containers don't behave the same way.
+
+#### Tomcat
 
 | Concurrency (N) | Threading Model | Throughput (req/s) | p50 (ms) | p95 (ms) | p99 (ms) |
 |---|---|---|---|---|---|
-| 50 | Platform | 47.78 | 1019.3 | 1118.9 | 2131.2 |
-| 50 | Virtual | 48.09 | 1004.8 | 1070.5 | 2099.6 |
-| 200 | Platform | 190.84 | 1014.7 | 1205.7 | 2003.2 |
-| 200 | Virtual | 189.33 | 1016.9 | 1132.9 | 1998.0 |
-| **500** | **Platform** | **192.55** | **2157.2** | **3172.4** | **3194.6** |
-| **500** | **Virtual** | **442.20** | **1025.3** | **1870.2** | **2027.5** |
-
-![Bar chart comparing platform and virtual thread throughput at 500 concurrent database connections: 192.55 versus 442.20 requests per second](/assets/2026/08/charts/virtual-threads-money-result.png)
-
-*At 500 concurrent connections with a HikariCP pool of 600, virtual threads achieved 442.20 requests per second versus 192.55 for platform threads — a 2.3× difference.*
+| 50 | Platform | 47.68 | 1007.3 | 1080.8 | 2156.9 |
+| 50 | Virtual | 48.09 | 1005.3 | 1074.5 | 2122.2 |
+| 200 | Platform | 191.92 | 1004.2 | 1033.0 | 1996.2 |
+| 200 | Virtual | 192.07 | 1003.9 | 1035.0 | 1998.6 |
+| **500** | **Platform** | **193.52** | **2091.0** | **3087.1** | **3102.9** |
+| **500** | **Virtual** | **447.87** | **1004.9** | **1966.1** | **2042.2** |
 
 At N=50 and N=200, both models perform identically — the database connection pool is the binding constraint, not the thread model. With `pg_sleep(1)` holding one connection per request, throughput scales linearly with N until the pool saturates.
 
-At N=500, the models diverge dramatically. Platform threads hit Tomcat's `server.tomcat.threads.max=200` hard ceiling: 300 requests queue behind the 200-thread pool, inflating p50 to 2.2 seconds. Virtual threads have no such cap — all 500 requests execute concurrently, achieving **442 req/s** (2.3x platform) with p50 flat at ~1 second. The throughput shortfall from the theoretical maximum (~485 req/s = 500 VUs / 1.03s) is attributable to k6's ramp-up and graceful-stop overhead, not a server-side bottleneck.
+At N=500, the models diverge dramatically on Tomcat. Platform threads hit the `server.tomcat.threads.max=200` hard ceiling: 300 requests queue behind the 200-thread pool, inflating p50 to 2.1 seconds. Virtual threads have no such cap — all 500 requests execute concurrently, achieving **448 req/s** (2.3× platform) with p50 flat at ~1 second.
 
-This is the core finding: **virtual threads break the Tomcat thread-pool ceiling**, but only when the connection pool is large enough to support the concurrency. The thread model is a toggle; the pool is the knob.
+#### Jetty
+
+| Concurrency (N) | Threading Model | Throughput (req/s) | p50 (ms) | p95 (ms) | p99 (ms) |
+|---|---|---|---|---|---|
+| 50 | Platform | 48.02 | 1004.3 | 1075.8 | 2197.0 |
+| 50 | Virtual | 48.06 | 1004.5 | 1026.0 | 2192.6 |
+| 200 | Platform | 187.90 | 1003.8 | 1184.7 | 2005.7 |
+| 200 | Virtual | 191.16 | 1004.2 | 1081.5 | 1981.9 |
+| **500** | **Platform** | **189.49** | **3060.7** | **3127.9** | **3185.7** |
+| **500** | **Virtual** | **192.03** | **2064.8** | **4104.6** | **6155.5** |
+
+On Jetty, the picture is strikingly different. At N=500, virtual threads achieve only **192 req/s** versus platform's **189 req/s** — essentially the same throughput. The p50 is lower (2065ms vs 3061ms), but the tail latency is worse (p99 of 6.2 seconds). Virtual threads on Jetty don't break the ceiling the way they do on Tomcat, which suggests the bottleneck has moved somewhere else — likely Jetty's own virtual-thread pool configuration (more on this in section 5.5).
+
+This is the core finding: **virtual threads break the Tomcat thread-pool ceiling** when the connection pool is large enough, but the gain is container-specific. The thread model is a toggle; the pool is the knob; and the container is the wiring that decides whether the toggle actually works.
+
+![Bar chart comparing platform and virtual thread throughput at 500 concurrent database connections, split by server: Tomcat shows 193.52 versus 447.87 req/s, Jetty shows 189.49 versus 192.03 req/s](/assets/2026/08/charts/virtual-threads-money-result.png)
+
+*At 500 concurrent connections with a HikariCP pool of 600, Tomcat virtual threads achieved 447.87 req/s versus 193.52 for platform threads — a 2.3× difference. Jetty showed no meaningful gain. (Author's benchmark data, CC BY 4.0)*
 
 ![p50 latency comparison for platform and virtual threads at 50, 200, and 500 concurrent database connections](/assets/2026/08/charts/virtual-threads-latency-p50.png)
 
-*The p50 latency stays near one second for virtual threads while platform-thread latency rises at N=500, after the 200-thread Tomcat limit is reached.*
+*The p50 latency stays near one second for virtual threads on Tomcat while platform-thread latency rises at N=500, after the 200-thread Tomcat limit is reached. (Author's benchmark data, CC BY 4.0)*
 
 ### 5.2 Database Experiment B: The HikariCP Bottleneck (Pool 10)
 
@@ -254,11 +299,43 @@ Reducing `maximumPoolSize` to 10 — HikariCP's default — eliminates all diffe
 | 500 | Platform | 7.54 | 37693.2 | 61254.9 | 64348.1 |
 | 500 | Virtual | 7.38 | 39137.0 | 61860.8 | 63904.1 |
 
-Throughput is capped at ~7-10 req/s regardless of concurrency or threading model — exactly 10 connections x 1 req/s, with the slight drop at N=500 attributable to pool-acquire contention under extreme queuing. The p50 tracks `N/10` seconds almost perfectly (5.1s at N=50, 20.2s at N=200, 38.9s at N=500).
+Throughput is capped at ~7-10 req/s regardless of concurrency or threading model — exactly 10 connections × 1 req/s, with the slight drop at N=500 attributable to pool-acquire contention under extreme queuing. The p50 tracks `N/10` seconds almost perfectly (5.1s at N=50, 20.2s at N=200, 38.9s at N=500).
 
 This confirms the thesis from section 3: **enabling virtual threads without tuning HikariCP yields suboptimal results.** The pool size, not the threading model, is the dominant constraint. Virtual threads handle the blocking more efficiently (no OS context switching), but they cannot create database connections that do not exist.
 
-### 5.3 CPU-Bound Workload: Where Virtual Threads Cannot Help
+### 5.3 Fast-Query Endpoint: Connection Pool Sensitivity
+
+The slow-query endpoint conflates thread-model benefits with connection-hold-time effects. To isolate the pure threading-model impact, we added a fast-query endpoint that executes `SELECT 1 AS benchmark` — a constant-time probe with no I/O latency. This removes the 1-second connection hold entirely, so the only variable is how efficiently the threading model handles concurrency.
+
+#### Pool 600: Virtual Threads Win
+
+| Server | Concurrency (N) | Platform (req/s) | Virtual (req/s) | Gain |
+|---|---|---|---|---|
+| Tomcat | 50 | 9,431 | 10,086 | 1.07× |
+| Tomcat | 200 | 14,968 | 16,782 | 1.12× |
+| Tomcat | 500 | 14,297 | 16,584 | **1.16×** |
+| Jetty | 50 | 7,782 | 9,205 | 1.18× |
+| Jetty | 200 | 13,322 | 15,350 | 1.15× |
+| Jetty | 500 | 11,893 | 17,168 | **1.44×** |
+
+With 600 connections available, virtual threads consistently outperform platform threads. The gain is modest at low concurrency (7-18%) but grows at N=500, where Jetty reaches 1.44× and Tomcat 1.16×. The thread model is the binding constraint here — virtual threads can schedule more work onto the carrier pool without hitting the OS thread ceiling.
+
+#### Pool 10: No Difference
+
+| Server | Concurrency (N) | Platform (req/s) | Virtual (req/s) | Gain |
+|---|---|---|---|---|
+| Tomcat | 50 | 3,664 | 3,698 | 1.01× |
+| Tomcat | 200 | 2,773 | 3,917 | 1.41× |
+| Tomcat | 500 | 3,371 | 3,864 | 1.15× |
+| Jetty | 50 | 3,971 | 3,836 | 0.97× |
+| Jetty | 200 | 3,546 | 4,174 | 1.18× |
+| Jetty | 500 | 3,794 | 3,701 | 0.98× |
+
+With only 10 connections, both threading models produce roughly the same throughput — around 3,000-4,000 req/s. The connection pool is the ceiling, and no amount of thread-model cleverness can schedule work that has no connection to run on.
+
+This is the cleanest validation of the article's core thesis: **the thread model is a toggle; the pool is the knob.** When the pool is large enough to matter, virtual threads win. When it isn't, they can't help. And the crossover point is exactly where HikariCP's default sits — which is why the "just enable virtual threads" advice without pool tuning is incomplete.
+
+### 5.4 CPU-Bound Workload: Where Virtual Threads Cannot Help
 
 The file-read endpoint reads 256 MiB from tmpfs and computes a per-byte checksum — a purely CPU-bound operation on a 6-core Intel i5-9600K:
 
@@ -273,7 +350,7 @@ The file-read endpoint reads 256 MiB from tmpfs and computes a per-byte checksum
 
 ![Three-panel throughput chart covering database pool 600, database pool 10, and the CPU-bound file workload](/assets/2026/08/charts/virtual-threads-workloads.png)
 
-*Throughput across all three workloads. Each panel uses its own vertical scale; compare platform and virtual bars within a panel rather than across panels.*
+*Throughput across all three workloads. Each panel uses its own vertical scale; compare platform and virtual bars within a panel rather than across panels. (Author's benchmark data, CC BY 4.0)*
 
 Throughput is flat at ~56 req/s across all N and both models — the CPU is saturated at 6 cores, and no threading model can execute more than 6 byte-sum loops simultaneously.
 
@@ -281,51 +358,73 @@ The latency story is different. Platform threads show predictable fair-share CFS
 
 This is the important caveat: **virtual threads are designed for I/O-bound work, not CPU-bound work.** When the blocking operation is a database call or HTTP request, virtual threads excel. When the work is pure computation, they offer no throughput advantage and can introduce severe tail latency.
 
-### 5.4 Container Independence: Tomcat vs. Jetty
+### 5.5 Container Divergence: Tomcat vs. Jetty
 
-Both Tomcat (11.0.22) and Jetty (12.1.10, EE11) were tested with identical configurations. After fixing a Jetty-specific configuration quirk (see below), all results are effectively identical:
+Both Tomcat (11.0.22) and Jetty (12.1.10, EE11) were tested with identical configurations, but the results tell a more nuanced story than "containers are interchangeable."
+
+At low concurrency (N=50, N=200), both servers produce near-identical numbers — the thread model and connection pool dominate, not the container. But at N=500 with virtual threads, a significant gap opens:
 
 | Scenario | Tomcat N=500 | Jetty N=500 |
 |---|---|---|
-| Platform (pool 600) | 192.55 req/s, p50 2157ms | 192.55 req/s, p50 2157ms |
-| Virtual (pool 600) | 442.20 req/s, p50 1025ms | 442.20 req/s, p50 1025ms |
-| Platform (pool 10) | 7.54 req/s, p50 37693ms | 7.54 req/s, p50 37693ms |
-| Virtual (pool 10) | 7.38 req/s, p50 39137ms | 7.38 req/s, p50 39137ms |
+| Platform (pool 600) | 193.52 req/s, p50 2091ms | 189.49 req/s, p50 3061ms |
+| Virtual (pool 600) | **447.87 req/s**, p50 1005ms | **192.03 req/s**, p50 2065ms |
+| Platform (pool 10) | 7.54 req/s, p50 37386ms | 9.14 req/s, p50 31631ms |
+| Virtual (pool 10) | 7.38 req/s, p50 39223ms | 7.57 req/s, p50 30208ms |
+
+The virtual-thread pool-600 row is the one that jumps out: Tomcat achieves 2.3× the throughput of platform threads, while Jetty shows essentially no gain. On Jetty, virtual threads at N=500 also exhibit worse tail latency (p99 of 6.2 seconds vs Tomcat's 2.0 seconds), suggesting carrier-thread contention or a different scheduling bottleneck.
 
 **Configuration quirk:** Spring Boot 4.1's `JettyVirtualThreadsWebServerFactoryCustomizer` creates a `VirtualThreadPool(maxTasks)` where `maxTasks` defaults to `server.jetty.threads.max` (200). This caps concurrent virtual threads at 200 — defeating the purpose. The fix is `server.jetty.threads.max: 0` in the virtual-thread profiles, which removes the cap entirely. Tomcat has no equivalent issue; its `TomcatVirtualThreadsWebServerFactoryCustomizer` calls `ProtocolHandler.setExecutor(VirtualThreadExecutor("tomcat-handler-"))` with no cap.
 
-This finding is significant for anyone evaluating Jetty as a virtual-thread target: **the default configuration silently limits concurrency.**
+Even with the cap removed, Jetty's virtual-thread integration doesn't match Tomcat's throughput at high concurrency. This could be related to how Jetty's thread-pool implementation schedules virtual-thread carriers, or to differences in how the two containers handle connection checkout under extreme load. The takeaway: **virtual threads are not container-agnostic in practice.** If you're evaluating Jetty as a virtual-thread target, expect to do more tuning than with Tomcat, and expect the ceiling to be lower.
 
-### 5.5 Resource Cost: Platform vs. Virtual Threads
+### 5.6 Resource Cost: Platform vs. Virtual Threads
 
 There is a common claim that virtual threads are dramatically cheaper in memory because a platform thread reserves ~1 MiB of stack. At 500 concurrent requests, that framing suggests ~500 MiB of thread overhead for platform threads versus a fraction of that for virtual threads. I ran the benchmark with `pidstat` tracking RSS (resident set size — the memory actually committed) so we could measure this instead of trusting the theory. The measured data tells a more honest, and more useful, story:
 
 | Scenario | Thread Model | Peak RSS | Peak VSZ |
 |---|---|---|---|
-| Experiment A (pool 600) | Platform | 393 MB | 12,770 MB |
-| Experiment A (pool 600) | Virtual | 456 MB | 12,575 MB |
-| Experiment B (pool 10) | Platform | 376 MB | 12,775 MB |
-| Experiment B (pool 10) | Virtual | 415 MB | 12,601 MB |
+| Experiment A — Tomcat (pool 600) | Platform | 393 MB | 12,770 MB |
+| Experiment A — Tomcat (pool 600) | Virtual | 456 MB | 12,575 MB |
+| Experiment A — Jetty (pool 600) | Platform | 419 MB | 12,760 MB |
+| Experiment A — Jetty (pool 600) | Virtual | 441 MB | 12,578 MB |
+| Experiment B — Tomcat (pool 10) | Platform | 376 MB | 12,775 MB |
+| Experiment B — Tomcat (pool 10) | Virtual | 415 MB | 12,601 MB |
+| Experiment B — Jetty (pool 10) | Platform | 398 MB | 12,760 MB |
+| Experiment B — Jetty (pool 10) | Virtual | 401 MB | 12,578 MB |
+| Fast-query — Tomcat (pool 600) | Platform | 657 MB | 12,760 MB |
+| Fast-query — Tomcat (pool 600) | Virtual | 1,340 MB | 12,580 MB |
+| Fast-query — Jetty (pool 600) | Platform | 852 MB | 12,760 MB |
+| Fast-query — Jetty (pool 600) | Virtual | 948 MB | 12,577 MB |
+| Fast-query — Tomcat (pool 10) | Platform | 532 MB | 12,760 MB |
+| Fast-query — Tomcat (pool 10) | Virtual | 521 MB | 12,598 MB |
+| Fast-query — Jetty (pool 10) | Platform | 582 MB | 12,760 MB |
+| Fast-query — Jetty (pool 10) | Virtual | 852 MB | 12,578 MB |
 | File workload | Platform | 425 MB | 12,770 MB |
 | File workload | Virtual | 362 MB | 12,611 MB |
 
 ![Peak RSS comparison for platform and virtual threads across database and file workloads](/assets/2026/08/charts/virtual-threads-memory-rss.png)
 
-*Peak resident memory stays broadly around 400 MB across the scenarios; virtual threads provide concurrency headroom, not a large RSS reduction in this application.*
+*Peak resident memory stays broadly around 400 MB across the scenarios; virtual threads provide concurrency headroom, not a large RSS reduction in this application. (Author's benchmark data, CC BY 4.0)*
 
-Resident memory is roughly flat — 362 to 456 MB — across every scenario, regardless of the thread model. In the Experiment A case the virtual-thread run actually peaked a little *higher* in RSS than the platform run (456 vs. 393 MB). For this heap-dominated Spring Boot application, virtual threads are essentially memory-neutral.
+Resident memory is broadly similar across the slow-query and file workloads — 362 to 456 MB — regardless of thread model. In the Experiment A case the virtual-thread run actually peaked a little *higher* in RSS than the platform run (456 vs. 393 MB). For this heap-dominated Spring Boot application, virtual threads are essentially memory-neutral on I/O-bound workloads.
+
+The fast-query scenarios tell a different story. Because `SELECT 1` completes in microseconds, k6 pushes orders of magnitude more requests through the JVM, which drives the garbage collector harder and inflates RSS. Tomcat with virtual threads and pool 600 peaked at 1,340 MB — nearly three times the slow-query figure — while platform threads on the same configuration hit 657 MB. Jetty shows a similar pattern (948 MB virtual vs. 852 MB platform). The high throughput itself is the memory cost: more requests means more short-lived objects, more GC cycles, and more committed pages. This is not a virtual-thread overhead per se — it is the JVM responding to sustained high request volume.
 
 The reason is that the ~1 MiB per platform thread is a *virtual address reservation*, not committed memory. The JVM reserves that stack range, but only the pages actually touched are backed by physical RAM, and the heap, metaspace, and JIT code dominate RSS either way. The VSZ column makes this visible: every scenario, including virtual threads, sits around 12.5 GB of virtual reservation because the heap reservation dwarfs the platform-stack reservation. So the tidy "500x reduction" framing overstates what really happens in a modern JVM.
 
-What the measured data *does* support is that virtual threads buy you headroom on the metric that matters at high concurrency: the thread-count ceiling. Platform threads at N=500 were capped by Tomcat's 200-thread limit; virtual threads had no such ceiling. That is a concurrency-limit win, not a memory win. And it comes with a real tradeoff I should flag: when work is CPU-bound (section 5.3), the carrier pool becomes the bottleneck, and virtual threads trade one kind of limit for another.
+What the measured data *does* support is that virtual threads buy you headroom on the metric that matters at high concurrency: the thread-count ceiling. Platform threads at N=500 were capped by Tomcat's 200-thread limit; virtual threads had no such ceiling. That is a concurrency-limit win, not a memory win. And it comes with a real tradeoff I should flag: when work is CPU-bound (section 5.4), the carrier pool becomes the bottleneck, and virtual threads trade one kind of limit for another.
 
 ## 6. Conclusion
 
-Virtual threads work. The benchmark shows a **2.3x throughput improvement** at 500 concurrent database connections, with flat p50 latency where platform threads queue and degrade. The gain is real, measurable, and achievable with a single YAML property change.
+Virtual threads work — but the story is more nuanced than a single throughput number.
 
-But the more important finding is what virtual threads *expose*: the connection pool is the real bottleneck. Enabling virtual threads on a Spring Boot service with the default HikariCP pool size of 10 gives you ~10 req/s — the same ~10 req/s you would get with platform threads. The thread model is a toggle; the pool is the knob.
+On Tomcat with a generous connection pool, virtual threads delivered a **2.3× throughput improvement** at 500 concurrent database connections, with flat p50 latency where platform threads queue and degrade. On Jetty, the same configuration showed no meaningful gain, reminding us that virtual threads are not a drop-in magic bullet — the container matters.
 
-For I/O-bound workloads — database queries, HTTP calls, message consumption — virtual threads are a clear win. For CPU-bound work, they offer no throughput advantage and can introduce carrier-thread starvation. The pragmatic approach is to enable virtual threads for I/O-bound endpoints and tune the connection pool to match your database's capacity.
+The fast-query endpoint told the cleanest story: with 600 connections, virtual threads beat platform threads by 1.16-1.44× at high concurrency. With 10 connections, both models produce identical throughput. The thread model is a toggle; the pool is the knob.
+
+But the more important finding is what virtual threads *expose*: the connection pool is the real bottleneck. Enabling virtual threads on a Spring Boot service with the default HikariCP pool size of 10 gives you ~10 req/s — the same ~10 req/s you would get with platform threads. And if you're on Jetty, you may need to dig into the container configuration before virtual threads deliver any benefit at all.
+
+For I/O-bound workloads — database queries, HTTP calls, message consumption — virtual threads are a clear win on Tomcat. For CPU-bound work, they offer no throughput advantage and can introduce carrier-thread starvation. The pragmatic approach is to enable virtual threads for I/O-bound endpoints, tune the connection pool to match your database's capacity, and benchmark your specific container before declaring victory.
 
 In **Part 2** of this series, we will explore how to incrementally adopt virtual threads in existing legacy codebases using `CompletableFuture`, and in **Part 3**, we will tackle the "WebFlux Reality Check," demonstrating how virtual threads can elegantly solve the infamous blocking I/O pain points (like filesystem operations and OpenFeign) within reactive pipelines.
 
